@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+require "rawbotz"
+
+include RawgentoModels
+
+def main
+  RawgentoModels.establish_connection
+  
+  result = RawgentoDB::Query.stock(RawgentoDB.settings)
+  now = DateTime.now
+  
+  stock.each do |s|
+    product = RawgentoModels::LocalProduct.find_by(product_id: s.product_id)
+    product.stock_items.create(qty: s.qty, date: now)
+  end
+end
+
+main
