@@ -1,0 +1,25 @@
+%h1 Products
+
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Product name
+      %th
+        Product ID
+      %th
+        Remote Name
+      %th
+        Supplier
+      %th
+        Last Stock
+  %tbody
+    - @products.each do |product|
+      %tr
+        %td
+          %a(href="/product/#{product.id}")= product.name
+        %td= product.product_id
+        %td
+          %a(href="/product/#{product.id}")= product.name
+        %td
+        %td

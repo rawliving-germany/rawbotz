@@ -1,0 +1,35 @@
+!!! 5
+%html
+  %head
+    %title Rawbotz
+    %meta(name="viewport" content="width=device-width, initial-scale=1")
+    %meta(charset="utf-8")
+    %link(rel="stylesheet" txpe="text/css" href="/pure-min.css")
+    %link(rel="stylesheet" txpe="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css")
+    %link(rel="stylesheet" txpe="text/css" href="/rawbotz.css")
+    %script{:type => 'text/javascript', :src => "/Chart.min.js"}
+  %body
+    .pure-g
+      .pure-u-1
+        .pure-menu.pure-menu-horizontal#menu
+          %center
+            %ul.pure-menu-list
+              %li.pure-menu-item
+                %a.pure-menu-link(href="/products")
+                  %i(class="fa fa-puzzle-piece")
+                  Products
+              %li.pure-menu-item
+                %a.pure-menu-link(href="/maintenance")
+                  %i(class="fa fa-exclamation")
+                  Maintenance
+      .pure-u-1#main
+        =yield
+      .pure-u-1
+        .pure-menu.pure-menu-horizontal#menu
+          %small
+            %center
+              %ul.pure-menu-list
+                %li.pure-menu-item
+                  %a.pure-menu-link(href="/products")
+                    %i(class="fa fa-puzzle-piece")
+                    Products

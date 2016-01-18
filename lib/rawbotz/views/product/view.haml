@@ -1,0 +1,69 @@
+%h1= @product.name
+
+%form.pure-form.pure-form-aligned(action="" method="post")
+  %input(type="hidden" name="_method" value="put")
+  %fieldset
+    .pure-control-group
+      %label(for="product_id") Product ID
+      %input#product_id(type="text" readonly value="#{@product.product_id}")
+    .pure-control-group
+      %label(for="supplier") Supplier
+      @product.supplier
+    .pure-control-group
+      %label(for="supplier") Remote Product
+      @product.remote_product
+    .pure-control-group
+      %label(for="packsize") Pack size
+      @product.packsize
+    .pure-control-group
+      %label(for="shelve") Shelve
+      @product.shelve
+
+%h2 Stock and Sales Values
+
+= @product.stock_items.each do |s|
+  = s.inspect
+  = s.date
+
+%div(style="width:60%")
+  %div
+    %div
+      %canvas(id="canvas" height="450" width="800")
+
+:javascript
+  var randomScalingFactor = function(){ return Math.round(Math.random()*100)}; // ??
+  Chart.defaults.global.multiTooltipTemplate = "<%= value %>";
+  var lineChartData = {
+    labels : [#{@sales.uniq.map{|s| "\"#{s[0]}\""}.reverse.join(',')}],
+  	datasets : [
+  		{
+  			label: "Product sales",
+  			fillColor : "rgba(220,220,220,0.2)",
+  			strokeColor : "rgba(220,220,220,1)",
+  			pointColor : "rgba(220,220,220,1)",
+  			pointStrokeColor : "#fff",
+  			pointHighlightFill : "#fff",
+  			pointHighlightStroke : "rgba(220,220,220,1)",
+  			data : [#{@sales.uniq.map{|s| "\"#{s[1]}\""}.reverse.join(',')}]
+  		},
+  		{
+  			label: "Product",
+  			fillColor : "rgba(220,220,220,0.2)",
+  			strokeColor : "rgba(220,220,220,1)",
+  			pointColor : "rgba(120,120,220,1)",
+  			pointStrokeColor : "#fff",
+  			pointHighlightFill : "#fff",
+  			pointHighlightStroke : "rgba(220,220,220,1)",
+        data : [#{(@product.stock_items.map(&:qty) * @sales.uniq.length).join(',')}]
+  		}
+  	]
+  }
+  
+  window.onload = function(){
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+    	responsive: true
+    });
+  }
+
+%h2 Orders
