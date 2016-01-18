@@ -1,5 +1,7 @@
 require "rawbotz/version"
 
+require 'rawbotz/app'
+
 module Rawbotz
-  # Your code goes here...
+  # More module level code would be placed here
 end
