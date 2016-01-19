@@ -20,10 +20,16 @@
       @product.shelve
 
 %h2 Stock and Sales Values
-
-= @product.stock_items.each do |s|
-  = s.inspect
-  = s.date
+%table.pure-table
+  %thead
+    %tr
+      %th Date
+      %th Qty
+  %tbody
+    - @product.stock_items.each do |s|
+      %tr
+        %td= s.date
+        %td= s.qty
 
 %div(style="width:60%")
   %div
