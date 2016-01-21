@@ -55,6 +55,12 @@ You can run `(bundle exec) exe/rawbotz`, `rackup` or put rawbotz behind a phusio
 
 Assuming an Ubuntu Server Setup, run `crontab -e` and add following line to fetch stock values every day at 03:00 am.
 
+### Other tools included
+
+#### rawbotz_update_local_products
+
+Updates Products from magento MySQL database.  See `--help` for more information.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment. Run `bundle exec rawbotz` to use the gem in this directory, ignoring other installed copies of this gem.

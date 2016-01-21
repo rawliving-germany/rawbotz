@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+require 'optparse'
+
+options = {}
+program_name = File.basename __FILE__
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.separator ""
+
+  opts.separator "RawgentoDB configuration file (MySQL options)"
+  opts.on("-c", "--config FILE", 'file path to rawgento-db YAML config file.') do |c|
+    options[:config] = c
+  end
+
+  opts.separator ""
+  opts.separator "Output options"
+  opts.on("-v", "--verbose", 'print debug output (WARNING: including PASSWORD)') do |v|
+    $stdout.sync = true
+    options[:verbose] = true
+  end
+
+  opts.separator ""
+  opts.separator "General"
+  opts.on_tail('--version', 'Show version.') do
+    puts "#{program_name} #{Rawbotz::VERSION}"
+    exit 0
+  end
+  opts.on('-h', '--help', 'Show this help.') do
+    puts opts
+    exit 0
+  end
+end
+optparse.parse!
+
+logger = Logger.new(STDOUT)
+logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+logger.debug "#{program_name} #{Rawbotz::VERSION}"
+
+logger.info("Fetching and updating local products from MySQL database")
+
+db_settings = RawgentoDB.settings options[:config]
+logger.debug("MySQL db settings:")
+logger.debug(db_settings.inspect)
+
+products = RawgentoDB::Query.products(db_settings)
+
+products.each do |p|
+  l = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: p.product_id)
+  l.save # It does not even have name ...
+  logger.info("Ensure product #{p.product_id} exists")
+end
+
+def update_attribute attribute_id, attribute_sym, settings, logger
+  RawgentoDB::Query.attribute_varchar(attribute_id, settings).each do |product_id, value|
+    p = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: product_id)
+    p.update({ attribute_sym => value }) # check if changed
+    logger.info "Updating #{attribute_sym.to_s} of #{product_id}: #{value}"
+  end
+end
+
+def update_attribute_from_option attribute_id, attribute_sym, settings, logger
+  RawgentoDB::Query.attribute_option(attribute_id, settings).each do |product_id, value|
+    p = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: product_id)
+    p.update({ attribute_sym => value }) # check if changed
+    logger.info "Updating #{attribute_sym.to_s} of #{product_id}: #{value}"
+  end
+end
+
+# TODO make the attribute ids configurable
+
+# Name
+update_attribute(71, :name, db_settings, logger)
+# Supplier
+update_attribute_from_option(182, :supplier, db_settings, logger)
+# Shelve
+update_attribute(214, :shelve_nr, db_settings, logger)
+# Packsize
+update_attribute(220, :packsize, db_settings, logger)
+
+logger.info("Finished updating local products.")
+
+exit 0
