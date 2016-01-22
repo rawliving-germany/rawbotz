@@ -1,0 +1,29 @@
+%h1 Link "#{@product.name}" to ...
+
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Product name
+      %th
+        Product ID
+      %th
+        Supplier
+  %tbody
+    - @remote_products.each do |product|
+      %tr
+        %td= product.name
+        %td= product.product_id
+        %td= product.supplier
+        %td
+          %form.pure-form.pure-form-aligned(action="" method="post")
+            -# fields ..
+            %input(type="hidden" name="remote_product_id" value="#{product.id}")
+            - if @product.remote_product.nil?
+              %button.pure-button.pure-button-primary(type="submit")
+                Link to this
+            - else
+              %button.pure-button.pure-button-error(type="submit")
+                Change Link to this
+
+

@@ -8,16 +8,20 @@
       %input#product_id(type="text" readonly value="#{@product.product_id}")
     .pure-control-group
       %label(for="supplier") Supplier
-      @product.supplier
+      = @product.supplier
     .pure-control-group
       %label(for="supplier") Remote Product
-      @product.remote_product
+      - if @product.remote_product.nil?
+        %a(href="/product/#{@product.id}/link") Link to ...
+      - else
+        %a(href="/remote_product/#{@product.remote_product.id}")
+          = @product.remote_product.name
     .pure-control-group
       %label(for="packsize") Pack size
-      @product.packsize
+      = @product.packsize
     .pure-control-group
       %label(for="shelve") Shelve
-      @product.shelve
+      = @product.shelve_nr
 
 %h2 Stock and Sales Values
 %table.pure-table

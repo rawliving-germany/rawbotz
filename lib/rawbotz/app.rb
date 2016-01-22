@@ -19,6 +19,22 @@ class RawbotzApp < Sinatra::Base
     haml "products/index".to_sym
   end
 
+  get '/product/:id/link' do
+    @product = RawgentoModels::LocalProduct.find(params[:id])
+    # filter by supplier ...
+    @remote_products = RawgentoModels::RemoteProduct.all
+    haml 'product/link_to'.to_sym
+  end
+
+  post '/product/:id/link' do
+    remote_product = RawgentoModels::RemoteProduct.find(params[:remote_product_id])
+    @product = RawgentoModels::LocalProduct.find(params[:id])
+    @product.remote_product = remote_product
+    @product.save
+    @remote_products = RawgentoModels::RemoteProduct.all
+    haml 'product/view'.to_sym
+  end
+
   get '/product/:id' do
     @product = RawgentoModels::LocalProduct.find(params[:id])
     #@sales = RawgentoDB::Query.sales(@product.product_id, RawgentoDB.settings)
