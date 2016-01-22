@@ -20,6 +20,9 @@
           %a(href="/product/#{product.id}")= product.name
         %td= product.product_id
         %td
-          %a(href="/product/#{product.id}")= product.name
+          - if product.remote_product.nil?
+            %a(href="/product/#{product.id}/link") Link to ...
+          - else
+            = product.remote_product.name
         %td= product.supplier
         %td
