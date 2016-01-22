@@ -12,9 +12,14 @@ def main
   result = RawgentoDB::Query.stock(RawgentoDB.settings)
   now = DateTime.now
   
-  stock.each do |s|
+  result.each do |s|
     product = RawgentoModels::LocalProduct.find_by(product_id: s.product_id)
-    product.stock_items.create(qty: s.qty, date: now)
+    if product.nil?
+      puts "No such product #{s.product_id}"
+    else
+      product.stock_items.create(qty: s.qty, date: now)
+      puts "Updated stock for #{s.product_id}"
+    end
   end
 end
 
