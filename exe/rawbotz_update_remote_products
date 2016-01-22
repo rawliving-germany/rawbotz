@@ -1,0 +1,121 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+
+require 'magento_remote'
+
+require 'optparse'
+
+options = { sleep_time: 1,
+            start_pid: 0,
+            limit: nil,
+            check_new: false,
+            max_dead: 100 }
+def options.print_default(sym); "(default: #{self[sym]})" end
+
+program_name = File.basename __FILE__
+$program_name = program_name
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.separator ""
+
+  opts.separator "Will read remote-shop.yml to get supplier_name ."
+
+  opts.separator ""
+  opts.separator "Parsing/scraping options"
+  opts.on("-s", "--start-pid PRODUCT_ID", Integer,
+          "start at product_id PRODUCT_ID #{options.print_default(:start_pid)}") do |v|
+    options[:start_pid] = v
+  end
+  opts.on("-w", "--wait SECONDS", Float,
+          "sleep SECONDS between two requests #{options.print_default(:sleep_time)}") do |v|
+    options[:sleep_time] = v
+  end
+  opts.on("-b", "--batches NUMBER", Integer,
+          "try NUMBER batches before assuming no further hits #{options.print_default(:max_dead)}") do |v|
+    options[:max_dead] = v
+  end
+  opts.on("-l", "--limit LIMIT", Integer,
+          "try LIMIT products #{options.print_default(:limit)}") do |v|
+    options[:limit] = v
+  end
+  opts.on("-n", "--check-new", Integer,
+          "check only for new products") do |v|
+    options[:check_new] = true
+  end
+
+  opts.separator ""
+  opts.separator "Output options"
+  opts.on("-v", "--verbose", 'print debug output (WARNING: including PASSWORD)') do |v|
+    $stdout.sync = true
+    options[:verbose] = true
+  end
+
+  opts.separator ""
+  opts.separator "General"
+  opts.on_tail('--version', 'Show version.') do
+    puts "#{program_name} #{Rawbotz::VERSION}"
+    exit 0
+  end
+  opts.on_tail('-h', '--help', 'Show this help.') do
+    puts opts
+    exit 0
+  end
+end
+optparse.parse!
+
+if options[:check_new] && options[:start_pid] != 0
+  STDERR.puts "Cannot define both check-new and start-pid options"
+  exit 1
+end
+
+def main options
+  logger = Logger.new(STDOUT)
+  logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+  
+  logger.debug "#{$program_name} #{Rawbotz::VERSION}"
+
+  mech_config = YAML.load_file "remote-shop.yml"
+  logger.debug(mech_config)
+  mech = MagentoMech.from_config(mech_config)
+  mech.log_to! logger
+
+  supplier_name = mech_config["supplier_name"]
+
+  number_dead = 0
+  current_pid = options[:start_pid]
+  if options[:check_new]
+    last_product_id = RawgentoModels::RemoteProduct.where(supplier: supplier_name).order(:product_id).last.product_id rescue 0
+    current_pid = last_product_id
+    logger.info "Check for new products (last found product_id was #{last_product_id}"
+  end
+
+  while true do
+    p = mech.scrape_products(current_pid, 1, options[:sleep_time])
+    if !p.empty?
+      logger.info "Found #{p[0].inspect}"
+      product_db = RawgentoModels::RemoteProduct.find_or_initialize_by(product_id: p[0][1], supplier: supplier_name)
+      product_db.update(name: p[0][0], product_id: p[0][1], supplier: supplier_name)
+      product_db.save
+      number_dead = 0
+    else
+      logger.info "None at #{current_pid}"
+      number_dead += 1
+    end
+    current_pid += 1
+    if options[:limit] && current_pid > options[:start_pid] + options[:limit]
+      logger.info "reached limit"
+      break
+    end
+    if number_dead > options[:max_dead]
+      logger.info "reached max dead"
+      break
+    end
+  end
+
+  logger.info "Last at #{RawgentoModels::RemoteProduct.where(supplier: supplier_name).order(:product_id).last.inspect}"
+end
+
+
+main options
