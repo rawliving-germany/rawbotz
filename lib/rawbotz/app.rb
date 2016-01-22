@@ -31,8 +31,7 @@ class RawbotzApp < Sinatra::Base
     @product = RawgentoModels::LocalProduct.find(params[:id])
     @product.remote_product = remote_product
     @product.save
-    @remote_products = RawgentoModels::RemoteProduct.all
-    haml 'product/view'.to_sym
+    redirect "/product/#{params[:id]}"
   end
 
   get '/product/:id' do
