@@ -4,23 +4,70 @@ require 'date'
 
 require "rawbotz"
 
+require 'optparse'
+
+options = {}
+program_name = File.basename __FILE__
+$program_name = program_name
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.separator ""
+
+  opts.separator "RawgentoDB configuration file (MySQL options)"
+  opts.on("-c", "--config FILE", 'file path to rawgento-db YAML config file.') do |c|
+    options[:config] = c
+  end
+
+  opts.separator ""
+  opts.separator "Output options"
+  opts.on("-v", "--verbose", 'print debug output (WARNING: including PASSWORD)') do |v|
+    $stdout.sync = true
+    options[:verbose] = true
+  end
+
+  opts.separator ""
+  opts.separator "General"
+  opts.on_tail('--version', 'Show version.') do
+    puts "#{program_name} #{Rawbotz::VERSION}"
+    exit 0
+  end
+  opts.on('-h', '--help', 'Show this help.') do
+    puts opts
+    exit 0
+  end
+end
+optparse.parse!
+
 include RawgentoModels
 
-def main
-  RawgentoModels.establish_connection
-  
+def main options
+  logger = Logger.new(STDOUT)
+  logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+  logger.debug "#{$program_name} #{Rawbotz::VERSION}"
+
+  if options[:config]
+    RawgentoModels.establish_connection options[:config]
+  else
+    RawgentoModels.establish_connection
+  end
+
   result = RawgentoDB::Query.stock(RawgentoDB.settings)
   now = DateTime.now
-  
+
+  logger.info("Starting stock update")
+
   result.each do |s|
     product = RawgentoModels::LocalProduct.find_by(product_id: s.product_id)
     if product.nil?
-      puts "No such product #{s.product_id}"
+      logger.info("No such product #{s.product_id}")
     else
       product.stock_items.create(qty: s.qty, date: now)
-      puts "Updated stock for #{s.product_id}"
+      logger.info("Updated stock for #{s.product_id}")
     end
   end
+  logger.info("Starting stock update")
 end
 
-main
+main options
