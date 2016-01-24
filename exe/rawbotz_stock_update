@@ -6,7 +6,7 @@ require "rawbotz"
 
 require 'optparse'
 
-options = {}
+options = {config: RawgentoModels::CONF_FILE}
 program_name = File.basename __FILE__
 $program_name = program_name
 
@@ -16,6 +16,11 @@ optparse = OptionParser.new do |opts|
 
   opts.separator "RawgentoDB configuration file (MySQL options)"
   opts.on("-c", "--config FILE", 'file path to rawgento-db YAML config file.') do |c|
+    if !File.exist? c
+      STDERR.puts "Cannot load conf file #{c}"
+      exit 2
+    end
+
     options[:config] = c
   end
 
@@ -47,13 +52,14 @@ def main options
 
   logger.debug "#{$program_name} #{Rawbotz::VERSION}"
 
-  if options[:config]
-    RawgentoModels.establish_connection options[:config]
-  else
-    RawgentoModels.establish_connection
+  if !File.exist? options[:config]
+    logger.warn "Cannot load conf file #{options[:config]}"
+    exit 2
   end
 
-  result = RawgentoDB::Query.stock(RawgentoDB.settings)
+  RawgentoModels.establish_connection options[:config]
+
+  result = RawgentoDB::Query.stock(RawgentoDB.settings(options[:config]))
   now = DateTime.now
 
   logger.info("Starting stock update")
@@ -67,7 +73,8 @@ def main options
       logger.info("Updated stock for #{s.product_id}")
     end
   end
-  logger.info("Starting stock update")
+
+  logger.info("Finished with stock update")
 end
 
 main options
