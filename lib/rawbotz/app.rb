@@ -2,9 +2,6 @@ require 'sinatra/base'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 
-require 'rawgento_models'
-require 'rawgento_db'
-
 class RawbotzApp < Sinatra::Base
   configure :development do
     RawgentoModels.establish_connection
