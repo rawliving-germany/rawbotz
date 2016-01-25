@@ -12,6 +12,7 @@ These are
 - Font Awesome (http://) in `lib/rawbotz/public/font-awesome-4.5.0`
 - Pure CSS (http://) in `lib/rawbotz/public/pure-min.css`
 - Chart.JS (http://) in `lib/rawbotz/public/Chart.min.js`
+- jquery and jquery-ui (http://) in `lib/rawbotz/public/jquery-2.2.0.min.js` and `lib/rawbotz/public/jui`
 
 The copyright and license information is contained in the respective file headers. All other files are Copyright 2016 Felix Wolfsteller and licensed under the AGPLv3 (or any later).
 
