@@ -10,7 +10,7 @@
       %th
         Supplier
   %tbody
-    - @remote_products.each do |product|
+    - @remote_products.linked.each do |product|
       %tr
         %td= product.name
         %td= product.product_id
