@@ -11,6 +11,15 @@ class RawbotzApp < Sinatra::Base
     end
   end
 
+  helpers do
+    def local_product_link product
+      "<a href=\"/product/#{product.id}\">#{product.name}</a>"
+    end
+    def remote_product_link product
+      "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
+    end
+  end
+
   get '/' do
     haml :index
   end
