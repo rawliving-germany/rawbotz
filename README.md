@@ -35,7 +35,18 @@ Until rawgento_models, `rawgento_db` and `magento_remote` have settled, please a
 
 ### Configuration
 
-Until a better migration approach is found, refer to the `rawgento_model` gems installation instruction about how to set up a database.
+You have two options, 1) configure each component individually, or use the unified approach.
+Note that how the configuration works is still not settled.
+
+#### Component-wise Configuration
+
+Look in the corresponding gems to check how their configuration has to be done:
+
+  * [rawgento_db s rawgento_db-config.yml](https://github.com/rawliving-germany/rawgento_db)
+  * [rawgento_models s db/config.yml](https://github.com/rawliving-germany/rawgento_models)
+  * [magento_remotes config](https://github.com/fwolfst/magento_remote)
+
+##### In Quick
 
 Configure your database in db/config.yml (Rails style, `rawgento_models`).
 
@@ -48,9 +59,59 @@ Configure your magento mysql-connection in rawgento_db-config.yml (`rawgento_db`
 
 Finally, configure the remote shops credentials (`magento_remote`)
 
+#### Unified appraoch
+
+Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you can pass the path to this configuration file to the various executables in `exe/`.
+
+    # Rawbotz own database
+    default: &default
+      adapter: sqlite3
+      database: /home/rawbotz/database.sqlite
+      encoding: utf8
+      pool: 5
+      timeout: 5000
+    
+    development:
+      <<: *default
+    test:
+      <<: *default
+      database: db/rawgento_test.db
+    
+    # Local Magento MySQL database
+    host: 127.0.0.1
+    port: 3306
+    database: magento_shop_dbname
+    username: magento_db_username
+    password: magento_db_password
+    # Attributes needed
+    attribute_ids:
+      name: 11
+      supplier_name: 666
+      shelve_nr: 42
+      packsize: 1337
+    
+    # Remote Magento Web Interface (for our mech)
+    remote_shop:
+      base_uri: https://magentoshop.remote
+      user: mylogin@email.address
+      pass: whatnottobenamed
+    
+    supplier_name: MagentoShop Remote
+
+#### Setup the database
+
+Run `rake db:setup` or `rake db:migrate` to setup the database.
+
+#### Populate the database with local and remote products
+
+#### Setup mailing
+
+I guess we will have to configure pony soon.
+
 ### Deployment or web-app startup
 
 You can run `(bundle exec) exe/rawbotz`, `rackup` or put rawbotz behind a phusion passenger.
+There is a `-c` option to pass in a config file.
 
 ### Stock History Update via cron
 
