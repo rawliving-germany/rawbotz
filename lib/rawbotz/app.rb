@@ -4,11 +4,17 @@ require 'haml'
 
 class RawbotzApp < Sinatra::Base
   configure do
+    # Setup local rawbotz database
     if Rawbotz.conf_file_path
       RawgentoModels.establish_connection Rawbotz.conf_file_path
     else
       RawgentoModels.establish_connection
     end
+
+    # Configure local mysql database
+    RawgentoDB.settings(Rawbotz.conf_file_path)
+
+    # And RemoteShop
   end
 
   helpers do

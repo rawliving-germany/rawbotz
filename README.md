@@ -35,7 +35,7 @@ Until rawgento_models, `rawgento_db` and `magento_remote` have settled, please a
 
 ### Configuration
 
-You have two options, 1) configure each component individually, or use the unified approach.
+You have two options, 1) configure each component individually with their default configurationj files, or 2) use the unified approach and specify a single configuration file.
 Note that how the configuration works is still not settled.
 
 #### Component-wise Configuration
@@ -97,6 +97,9 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       pass: whatnottobenamed
     
     supplier_name: MagentoShop Remote
+
+Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
+To have fun with rack use `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
 
 #### Setup the database
 
