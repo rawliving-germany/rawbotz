@@ -41,38 +41,39 @@
       %canvas(id="canvas" height="450" width="800")
 
 :javascript
+  // animate true?
   var randomScalingFactor = function(){ return Math.round(Math.random()*100)}; // ??
   Chart.defaults.global.multiTooltipTemplate = "<%= value %>";
   var lineChartData = {
     labels : [#{@sales.uniq.map{|s| "\"#{s[0]}\""}.reverse.join(',')}],
-  	datasets : [
-  		{
-  			label: "Product sales",
-  			fillColor : "rgba(220,220,220,0.2)",
-  			strokeColor : "rgba(220,220,220,1)",
-  			pointColor : "rgba(220,220,220,1)",
-  			pointStrokeColor : "#fff",
-  			pointHighlightFill : "#fff",
-  			pointHighlightStroke : "rgba(220,220,220,1)",
-  			data : [#{@sales.uniq.map{|s| "\"#{s[1]}\""}.reverse.join(',')}]
-  		},
-  		{
-  			label: "Product",
-  			fillColor : "rgba(220,220,220,0.2)",
-  			strokeColor : "rgba(220,220,220,1)",
-  			pointColor : "rgba(120,120,220,1)",
-  			pointStrokeColor : "#fff",
-  			pointHighlightFill : "#fff",
-  			pointHighlightStroke : "rgba(220,220,220,1)",
+    datasets : [
+      {
+        label: "Product sales",
+        fillColor : "rgba(220,220,220,0.2)",
+        strokeColor : "rgba(220,220,220,1)",
+        pointColor : "rgba(220,220,220,1)",
+        pointStrokeColor : "#fff",
+        pointHighlightFill : "#fff",
+        pointHighlightStroke : "rgba(220,220,220,1)",
+        data : [#{@sales.uniq.map{|s| "\"#{s[1]}\""}.reverse.join(',')}]
+      },
+      {
+        label: "Product",
+        fillColor : "rgba(220,220,220,0.2)",
+        strokeColor : "rgba(220,220,220,1)",
+        pointColor : "rgba(120,120,220,1)",
+        pointStrokeColor : "#fff",
+        pointHighlightFill : "#fff",
+        pointHighlightStroke : "rgba(220,220,220,1)",
         data : [#{(@product.stock_items.map(&:qty) * @sales.uniq.length).join(',')}]
-  		}
-  	]
+      }
+    ]
   }
-  
+
   window.onload = function(){
     var ctx = document.getElementById("canvas").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartData, {
-    	responsive: true
+      responsive: true
     });
   }
 
