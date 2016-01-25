@@ -46,6 +46,8 @@ db_settings = RawgentoDB.settings options[:config]
 logger.debug("MySQL db settings:")
 logger.debug(db_settings.inspect)
 
+RawgentoModels.establish_connection options[:config]
+
 products = RawgentoDB::Query.products(db_settings)
 
 products.each do |p|
@@ -70,16 +72,22 @@ def update_attribute_from_option attribute_id, attribute_sym, settings, logger
   end
 end
 
-# TODO make the attribute ids configurable
+attribute_ids = YAML.load_file options[:config]
+name_attribute_id = attribute_ids["attribute_ids"]["name"]
+supplier_attribute_id = attribute_ids["attribute_ids"]["supplier_name"]
+shelve_attribute_id = attribute_ids["attribute_ids"]["shelve_nr"]
+packsize_attribute_id = attribute_ids["attribute_ids"]["packsize"]
+
+logger.debug "Attribute-ids: Name: #{name_attribute_id}, Supplier: #{supplier_attribute_id}, Shelve-Nr: #{shelve_attribute_id}, Packsize: #{packsize_attribute_id}"
 
 # Name
-update_attribute(71, :name, db_settings, logger)
+update_attribute(name_attribute_id, :name, db_settings, logger)
 # Supplier
-update_attribute_from_option(182, :supplier, db_settings, logger)
+update_attribute_from_option(supplier_attribute_id, :supplier, db_settings, logger)
 # Shelve
-update_attribute(214, :shelve_nr, db_settings, logger)
+update_attribute(shelve_attribute_id, :shelve_nr, db_settings, logger)
 # Packsize
-update_attribute(220, :packsize, db_settings, logger)
+update_attribute(packsize_attribute_id, :packsize, db_settings, logger)
 
 logger.info("Finished updating local products.")
 

@@ -1,5 +1,39 @@
 #!/usr/bin/env ruby
 
 require "rawbotz"
+require 'optparse'
+
+options = {}
+program_name = File.basename __FILE__
+$program_name = program_name
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.separator ""
+
+  opts.separator "Single rawbotz configuration file"
+  opts.on("-c", "--config FILE", 'file path to rawgento-db YAML config file.') do |c|
+    if !File.exist? c
+      STDERR.puts "Cannot load conf file #{c}"
+      exit 2
+    end
+
+    Rawbotz.conf_file_path = c
+  end
+
+  opts.separator ""
+  opts.separator "General"
+  opts.on_tail('--version', 'Show version.') do
+    puts "#{program_name} #{Rawbotz::VERSION}"
+    exit 0
+  end
+  opts.on('-h', '--help', 'Show this help.') do
+    puts opts
+    exit 0
+  end
+end
+optparse.parse!
+
+require "rawbotz/app"
 
 RawbotzApp.run!

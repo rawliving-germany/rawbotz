@@ -3,8 +3,12 @@ require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 
 class RawbotzApp < Sinatra::Base
-  configure :development do
-    RawgentoModels.establish_connection
+  configure do
+    if Rawbotz.conf_file_path
+      RawgentoModels.establish_connection Rawbotz.conf_file_path
+    else
+      RawgentoModels.establish_connection
+    end
   end
 
   get '/' do

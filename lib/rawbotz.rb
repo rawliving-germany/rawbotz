@@ -6,5 +6,11 @@ require 'rawgento_db'
 # require app yourself!
 
 module Rawbotz
-  # More module level code would be placed here
+  @@conf_file_path = nil
+  def self.conf_file_path=(conf_file_path)
+    @@conf_file_path = conf_file_path
+  end
+  def self.conf_file_path
+    @@conf_file_path
+  end
 end
