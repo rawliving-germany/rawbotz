@@ -31,7 +31,8 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/products' do
-    @products = RawgentoModels::LocalProduct.all
+    @products = RawgentoModels::LocalProduct
+    @suppliers = RawgentoModels::LocalProduct.uniq.pluck(:supplier)
     haml "products/index".to_sym
   end
 

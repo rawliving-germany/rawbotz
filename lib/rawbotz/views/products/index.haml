@@ -1,28 +1,58 @@
-%h1 Products
+= haml "products/menu".to_sym
 
-%table.pure-table
-  %thead
-    %tr
-      %th
-        Product name
-      %th
-        Product ID
-      %th
-        Remote Name
-      %th
-        Supplier
-      %th
-        Last Stock
-  %tbody
-    - @products.each do |product|
-      %tr
-        %td
-          %a(href="/product/#{product.id}")= product.name
-        %td= product.product_id
-        %td
-          - if product.remote_product.nil?
-            %a(href="/product/#{product.id}/link") Link to ...
-          - else
-            = product.remote_product.name
-        %td= product.supplier
-        %td
+%h1 Products by Supplier
+
+-#.dialogBox(style="border:1px solid gray;")
+-#  %a.ajaxLink(href="/test")
+-#    kalick
+-#
+-#:javascript
+-#  var $modalDialog = $('<div/>', {
+-#      'class': 'exampleModal',
+-#      'id': 'exampleModal1'
+-#  })
+-#  .appendTo('body')
+-#  .dialog({
+-#      resizable: false,
+-#      autoOpen: false,
+-#      height: 400,
+-#      width: 450,
+-#      show: 'fold',
+-#      buttons: {
+-#          "Close": function () {
+-#              $modalDialog.dialog("close");
+-#          }
+-#      },
+-#      modal: true
+-#  });
+-#
+-#  $(function () {
+-#      $('a.ajaxLink').on('click', function (e) {
+-#          e.preventDefault();
+-#          // TODO: Undo comments, below
+-#          var url = $('a.ajaxLink:first').attr('href');
+-#          $modalDialog.load(url);
+-#          $modalDialog.dialog("open");
+-#      });
+-#  });
+
+:javascript
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+
+#tabs
+  %ul
+    %li
+      %a(href="#tab_all_products") All
+    - @suppliers.each_with_index do |supplier, idx|
+      %li
+        %a(href="#tab_#{idx}")="#{supplier} (#{@products.supplied_by(supplier).count})"
+  #tab_all_products
+    %h2 All Products
+    = haml "products/table".to_sym, locals: {products: @products.all}
+  - @suppliers.each_with_index do |supplier, idx|
+    %div{id:"tab_#{idx}"}
+      %h2 Products of #{supplier || "Unknown Supplier"}
+      = haml "products/table".to_sym, locals: {products: @products.supplied_by(supplier)}
+
