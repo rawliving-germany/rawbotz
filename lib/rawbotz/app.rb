@@ -37,8 +37,8 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/products/links' do
-    @local_products = RawgentoModels::LocalProduct.supplied_by()
-    @remote_products = RawgentoModels::RemoteProduct.supplied_by()
+    @local_products = RawgentoModels::LocalProduct#.supplied_by()
+    @remote_products = RawgentoModels::RemoteProduct#.supplied_by()
     haml "products/links".to_sym
   end
 

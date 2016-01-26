@@ -1,0 +1,59 @@
+= haml "products/menu".to_sym
+
+%h1 Links
+
+In tabs linked vs not linked two-way
+
+:javascript
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+
+#tabs
+  %ul
+    %li
+      %a(href="#local_unlinked")Local unlinked
+    %li
+      %a(href="#local_linked")Local linked
+    %li
+      %a(href="#remote_linked")Remote linked
+    %li
+      %a(href="#remote_unlinked")Remote unlinked
+  #local_linked
+    %table.pure-table.pure-table-horizontal
+      %thead
+        %tr
+          %th Local Product
+          %th Remote Product
+          %th Action
+      %tbody
+        - @local_products.linked.find_each do |local_product|
+          %tr
+            %td=local_product_link(local_product)
+            %td=remote_product_link(local_product.remote_product)
+            %td
+              Change ...
+  #local_unlinked
+    %table.pure-table.pure-table-horizontal
+      %thead
+        %tr
+          %th Local Product
+          %th Suggested Remote Products
+          %th Action
+      %tbody
+        - @local_products.unlinked.find_each do |local_product|
+          %tr
+            %td=local_product_link(local_product)
+            %td
+              -local_product.link_suggestions.each do |suggested_product|
+                %form.pure-form.pure-form-aligned(action="/product/#{local_product.id}/link" method="post")
+                  %input(type="hidden" name="remote_product_id" value="#{suggested_product.id}")
+                  %button.pure-button.pure-button-primary(type="submit")
+                    %small
+                      Link to
+                    = suggested_product.name
+                %br
+            %td
+              Change ...
+  #remote_linked
+  #remote_unlinked

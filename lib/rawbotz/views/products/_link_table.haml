@@ -1,0 +1,35 @@
+%table.pure-table
+  %thead
+    %tr
+      %th Product Name
+      %th Product ID
+      %th Supplier
+      %th Action
+  %tbody
+    -# find_each does not work on link_suggestions array
+    - products.each do |product|
+      %tr
+        %td= product.name
+        %td= product.product_id
+        %td= product.supplier
+        %td
+          %form.pure-form.pure-form-aligned(action="" method="post")
+            -# fields ..
+            %input(type="hidden" name="remote_product_id" value="#{product.id}")
+            - if @product.remote_product.nil?
+              - if product.local_product
+                Currently linked to #{product.local_product.name}
+                %button.pure-button.pure-button-primary(type="submit")
+                  Change link to this
+              - else
+                %button.pure-button.pure-button-primary(type="submit")
+                  Create link
+            - else
+              -#Currently linked to #{product_link @prod
+              - if product.local_product
+                Currently already linked to #{product.local_product.name}
+                %button.pure-button.pure-button-error(type="submit")
+                  Change Link
+              - else
+                %button.pure-button.pure-button-error(type="submit")
+                  Change Link
