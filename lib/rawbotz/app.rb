@@ -15,6 +15,7 @@ class RawbotzApp < Sinatra::Base
     RawgentoDB.settings(Rawbotz.conf_file_path)
 
     # And RemoteShop
+    set :supplier, YAML.load_file(Rawbotz.conf_file_path)["supplier_name"]
   end
 
   helpers do
