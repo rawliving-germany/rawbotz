@@ -65,6 +65,22 @@ class RawbotzApp < Sinatra::Base
     haml "order/view".to_sym
   end
 
+  get '/remote_orders' do
+    #@products = RawgentoModels::RemoteProduct.all
+    @last_orders =  []
+    @last_orders = Rawbotz.mech.last_orders
+    haml "remote_orders/index".to_sym
+  end
+
+  get '/remote_order/:id' do
+    #@products = RawgentoModels::RemoteProduct.all
+    @remote_order_items = Rawbotz.mech.products_from_order params[:id]
+    @remote_products_qty = @remote_order_items.map do |remote_product|
+      [RawgentoModels::RemoteProduct.find_by(name: remote_product[0]), remote_product[2]]
+    end
+    haml "remote_order/view".to_sym
+  end
+
   get '/remote_products' do
     @products = RawgentoModels::RemoteProduct.all
     haml "remote_products/index".to_sym

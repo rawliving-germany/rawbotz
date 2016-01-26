@@ -1,0 +1,29 @@
+%h1 Remote Order
+
+%table.pure-table
+  %thead
+    %tr
+      %th Remote Name
+      %th Remote SKU
+      %th Local Name
+      %th Qty
+      %th Refund
+      %th Shelve
+  %tbody
+    - @remote_products_qty.each do |p, q|
+      %tr
+        %td=p.inspect
+        %td=p.name
+        %td
+          -if p.local_product
+            %a(href="/product/#{p.local_product.id}")
+              = p.local_product.name
+          -else
+            Unknown (.. click to link ..)
+        %td=q
+        %td
+          -if p.local_product
+            = p.local_product.inspect
+            = p.local_product.shelve_nr
+          -else
+            Unknown (.. click to link

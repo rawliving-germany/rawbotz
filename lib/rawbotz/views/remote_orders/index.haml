@@ -1,0 +1,19 @@
+%h1 Remote Orders
+
+%table.pure-table
+  %tr
+    %th Date
+    %th Volumen
+    %th Action
+  - @last_orders.each do |p|
+    %tr
+      %td=p[0]
+      %td=p[1]
+      %td
+        %a(href="#{p[2]}")
+          Visit remote shop
+        %br
+        %a(href="/remote_order/#{p[2][/\d+/]}")
+          View
+
+
