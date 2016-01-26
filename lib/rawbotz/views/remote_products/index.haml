@@ -1,0 +1,30 @@
+= haml "products/menu".to_sym
+
+%h1 Remote Products
+
+%h2 of supplier #{settings.supplier}
+
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Product Name
+      %th
+        Product ID
+      %th
+        Local Name
+      %th
+        Supplier
+  %tbody
+    - @products.each do |product|
+      %tr
+        %td
+          %a(href="/remote_product/#{product.id}")= product.name
+        %td= product.product_id
+        %td
+          - if product.local_product.nil?
+            -#%a(href="/product/#{product.id}/link") Link to ...
+            Not linked
+          - else
+            = local_product_link product.local_product
+        %td= product.supplier
