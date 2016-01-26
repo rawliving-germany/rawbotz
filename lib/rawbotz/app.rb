@@ -43,6 +43,28 @@ class RawbotzApp < Sinatra::Base
     haml "products/links".to_sym
   end
 
+  get '/orders' do
+    @orders = RawgentoModels::Order.all
+    haml "orders/index".to_sym
+  end
+
+  get '/order/new' do
+    @order = RawgentoModels::Order.create
+
+    # Restrict to supplier
+    understocked = RawgentoDB::Query.understocked
+    understocked.each do |product_id, name, in_stock, min_qty|
+      local_product = RawgentoModels::LocalProduct.find_by(product_id: product_id)
+      @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
+    end
+    haml "order/new".to_sym
+  end
+
+  get '/order/:id' do
+    @order = RawgentoModels::Order.find(params[:id])
+    haml "order/view".to_sym
+  end
+
   get '/remote_products' do
     @products = RawgentoModels::RemoteProduct.all
     haml "remote_products/index".to_sym

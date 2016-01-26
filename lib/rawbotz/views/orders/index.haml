@@ -1,0 +1,21 @@
+%h1 Orders
+
+%a(href="/order/new") New Order
+
+%br
+%br
+
+%table.pure-table
+  %thead
+    %tr
+      %th Date
+      %th Number Items
+      %th Action
+  %tbody
+    - @orders.each do |order|
+      %tr
+        %td=order.created_at
+        %td=order.order_items.count
+        %td
+          %a(href="/order/#{order.id}")
+            View

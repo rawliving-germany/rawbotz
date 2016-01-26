@@ -1,0 +1,19 @@
+%h1 View Order
+
+%h2 General
+%dl
+  %dt
+    Created at
+  %dd
+    = @order.created_at
+  %dt
+    Updated at
+  %dd
+    = @order.updated_at
+
+%h2 Content
+= @order.order_items.count
+Items.
+
+%h2 Action
+(Find remote order? Delete?)
