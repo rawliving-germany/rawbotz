@@ -32,7 +32,8 @@ In tabs linked vs not linked two-way
             %td=local_product_link(local_product)
             %td=remote_product_link(local_product.remote_product)
             %td
-              Change ...
+              %a(href="/products/#{local_product.id}")
+                Change Link
   #local_unlinked
     %table.pure-table.pure-table-horizontal
       %thead
@@ -48,12 +49,14 @@ In tabs linked vs not linked two-way
               -local_product.link_suggestions.each do |suggested_product|
                 %form.pure-form.pure-form-aligned(action="/product/#{local_product.id}/link" method="post")
                   %input(type="hidden" name="remote_product_id" value="#{suggested_product.id}")
+                  %input(type="hidden" name="redirect_to" value="links")
                   %button.pure-button.pure-button-primary(type="submit")
                     %small
                       Link to
                     = suggested_product.name
                 %br
             %td
-              Change ...
+              %a(href="/product/#{local_product.id}/link")
+                Link
   #remote_linked
   #remote_unlinked

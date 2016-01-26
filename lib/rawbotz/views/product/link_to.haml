@@ -21,9 +21,9 @@
       %h2 Suggestions
       = haml "products/_link_table".to_sym, locals: {products: @product.link_suggestions }
   #tab_unlinked
-    %h2 Unlinked
+    %h2 Unlinked Remote Products
     = haml "products/_link_table".to_sym, locals: {products: @remote_products.unlinked}
   #tab_linked
-    %h2 Linked
+    %h2 Already Linked Remote Products
     = haml "products/_link_table".to_sym, locals: {products: @remote_products.linked}
 
