@@ -87,6 +87,8 @@ def main options
   mech = MagentoMech.from_config(mech_config)
   mech.log_to! logger
 
+  RawgentoModels.establish_connection options[:config]
+
   supplier_name = mech_config["supplier_name"]
 
   number_dead = 0
