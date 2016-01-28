@@ -10,7 +10,8 @@ options = { sleep_time: 1,
             start_pid: 0,
             limit: nil,
             check_new: false,
-            max_dead: 100 }
+            max_dead: 100,
+            conf_file: 'remote-shop.yml'}
 def options.print_default(sym); "(default: #{self[sym]})" end
 
 program_name = File.basename __FILE__
@@ -20,8 +21,13 @@ optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{program_name} [OPTIONS]"
   opts.separator ""
 
-  opts.separator "Will read remote-shop.yml to get supplier_name ."
+  opts.separator "Will read remote shop conf from config file."
 
+  opts.separator ""
+  opts.separator "Configuration file (remote shop info, local db info)"
+  opts.on("-c", "--config FILE", 'file path to YAML config file.') do |c|
+    options[:config] = c
+  end
   opts.separator ""
   opts.separator "Parsing/scraping options"
   opts.on("-s", "--start-pid PRODUCT_ID", Integer,
@@ -73,10 +79,10 @@ end
 def main options
   logger = Logger.new(STDOUT)
   logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
-  
+
   logger.debug "#{$program_name} #{Rawbotz::VERSION}"
 
-  mech_config = YAML.load_file "remote-shop.yml"
+  mech_config = YAML.load_file options[:config]
   logger.debug(mech_config)
   mech = MagentoMech.from_config(mech_config)
   mech.log_to! logger
