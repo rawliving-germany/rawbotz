@@ -82,7 +82,7 @@ def main options
 
   logger.debug "#{$program_name} #{Rawbotz::VERSION}"
 
-  mech_config = YAML.load_file options[:config]
+  mech_config = (YAML.load_file options[:config])["remote_shop"]
   logger.debug(mech_config)
   mech = MagentoMech.from_config(mech_config)
   mech.log_to! logger
