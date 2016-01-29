@@ -21,8 +21,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "sinatra"
   spec.add_dependency 'haml'
-  spec.add_dependency "rawgento_models", "~> 0.0.3"
-  spec.add_dependency "rawgento_db"
+  spec.add_dependency "rawgento_models", "~> 0.0.5"
+  spec.add_dependency "rawgento_db", "~> 0.0.3"
   spec.add_dependency "magento_remote"
 
   spec.add_development_dependency "bundler", "~> 1.11"

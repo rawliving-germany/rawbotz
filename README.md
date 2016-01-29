@@ -31,33 +31,12 @@ Anyway, the application is so specific to RawLiving Germanys needs that you prob
 
 ## Usage
 
-Until rawgento_models, `rawgento_db` and `magento_remote` have settled, please adjust the `Gemfile` or checkout these gems in the parent folder.
+Until rawgento_models, `rawgento_db` and `magento_remote` have settled, please adjust the `Gemfile` and checkout these gems in the parent folder.
 
 ### Configuration
 
-You have two options, 1) configure each component individually with their default configurationj files, or 2) use the unified approach and specify a single configuration file.
-Note that how the configuration works is still not settled.
+Rawbotz combines the configuration files of `rawgento_db`, `rawgento_models` and `magento_remote` in a single file (default: `rawbotz.conf`).  In theory, the components configure themselves using their respective default configuration file paths.
 
-#### Component-wise Configuration
-
-Look in the corresponding gems to check how their configuration has to be done:
-
-  * [rawgento_db s rawgento_db-config.yml](https://github.com/rawliving-germany/rawgento_db)
-  * [rawgento_models s db/config.yml](https://github.com/rawliving-germany/rawgento_models)
-  * [magento_remotes config](https://github.com/fwolfst/magento_remote)
-
-##### In Quick
-
-Configure your database in db/config.yml (Rails style, `rawgento_models`).
-
-Configure your magento mysql-connection in rawgento_db-config.yml (`rawgento_db`):
-    host: myshop.shop
-    port: 3306
-    database: magento_myshop
-    username: magento_myshop_dbuser
-    password: magento_myshop_dbpassword
-
-Finally, configure the remote shops credentials (`magento_remote`)
 
 #### Unified appraoch
 
@@ -99,7 +78,30 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
     supplier_name: MagentoShop Remote
 
 Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
-To have fun with rack use `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
+To have fun with rack use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
+
+#### Reference to the configurable required components
+
+Look in the corresponding gems to check how their configuration has to be done:
+
+  * [rawgento_db s rawgento_db-config.yml](https://github.com/rawliving-germany/rawgento_db)
+  * [rawgento_models s db/config.yml](https://github.com/rawliving-germany/rawgento_models)
+  * [magento_remotes config](https://github.com/fwolfst/magento_remote)
+
+##### In Quick
+
+Configure your database in db/config.yml (Rails style, `rawgento_models`).
+
+Configure your magento mysql-connection in rawgento_db-config.yml (`rawgento_db`):
+    host: myshop.shop
+    port: 3306
+    database: magento_myshop
+    username: magento_myshop_dbuser
+    password: magento_myshop_dbpassword
+
+Finally, configure the remote shops credentials (`magento_remote`)
+
+## Setup
 
 #### Setup the database
 
