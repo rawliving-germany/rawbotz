@@ -1,9 +1,8 @@
 require "rawbotz/version"
+require "rawbotz/remote_shop"
 
 require 'rawgento_models'
 require 'rawgento_db'
-
-# require app yourself!
 
 module Rawbotz
   @@conf_file_path = nil
