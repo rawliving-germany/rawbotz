@@ -1,54 +1,27 @@
 #!/usr/bin/env ruby
 
 require "rawbotz"
-require 'optparse'
+require "rawbotz/option_parser"
 
 options = {}
 program_name = File.basename __FILE__
 
-optparse = OptionParser.new do |opts|
+optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{program_name} [OPTIONS]"
   opts.separator ""
-
-  opts.separator "RawgentoDB configuration file (MySQL options)"
-  opts.on("-c", "--config FILE", 'file path to rawgento-db YAML config file.') do |c|
-    options[:config] = c
-  end
-
-  opts.separator ""
-  opts.separator "Output options"
-  opts.on("-v", "--verbose", 'print debug output (WARNING: including PASSWORD)') do |v|
-    $stdout.sync = true
-    options[:verbose] = true
-  end
-
-  opts.separator ""
-  opts.separator "General"
-  opts.on_tail('--version', 'Show version.') do
-    puts "#{program_name} #{Rawbotz::VERSION}"
-    exit 0
-  end
-  opts.on('-h', '--help', 'Show this help.') do
-    puts opts
-    exit 0
-  end
 end
 optparse.parse!
 
 logger = Logger.new(STDOUT)
-logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
 
 logger.debug "#{program_name} #{Rawbotz::VERSION}"
 
 logger.info("Fetching and updating local products from MySQL database")
 
-db_settings = RawgentoDB.settings options[:config]
-logger.debug("MySQL db settings:")
-logger.debug(db_settings.inspect)
+#logger.debug("MySQL db settings:")
 
-RawgentoModels.establish_connection options[:config]
-
-products = RawgentoDB::Query.products(db_settings)
+products = RawgentoDB::Query.products
 
 products.each do |p|
   l = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: p.product_id)
@@ -56,38 +29,37 @@ products.each do |p|
   logger.info("Ensure product #{p.product_id} exists")
 end
 
-def update_attribute attribute_id, attribute_sym, settings, logger
-  RawgentoDB::Query.attribute_varchar(attribute_id, settings).each do |product_id, value|
+def update_attribute attribute_id, attribute_sym, logger
+  RawgentoDB::Query.attribute_varchar(attribute_id).each do |product_id, value|
     p = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: product_id)
     p.update({ attribute_sym => value }) # check if changed
     logger.info "Updating #{attribute_sym.to_s} of #{product_id}: #{value}"
   end
 end
 
-def update_attribute_from_option attribute_id, attribute_sym, settings, logger
-  RawgentoDB::Query.attribute_option(attribute_id, settings).each do |product_id, value|
+def update_attribute_from_option attribute_id, attribute_sym, logger
+  RawgentoDB::Query.attribute_option(attribute_id).each do |product_id, value|
     p = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: product_id)
     p.update({ attribute_sym => value }) # check if changed
     logger.info "Updating #{attribute_sym.to_s} of #{product_id}: #{value}"
   end
 end
 
-attribute_ids = YAML.load_file options[:config]
-name_attribute_id = attribute_ids["attribute_ids"]["name"]
-supplier_attribute_id = attribute_ids["attribute_ids"]["supplier_name"]
-shelve_attribute_id = attribute_ids["attribute_ids"]["shelve_nr"]
-packsize_attribute_id = attribute_ids["attribute_ids"]["packsize"]
+name_attribute_id = Rawbotz.attribute_ids["name"]
+supplier_attribute_id = Rawbotz.attribute_ids["supplier_name"]
+shelve_attribute_id = Rawbotz.attribute_ids["shelve_nr"]
+packsize_attribute_id = Rawbotz.attribute_ids["packsize"]
 
 logger.debug "Attribute-ids: Name: #{name_attribute_id}, Supplier: #{supplier_attribute_id}, Shelve-Nr: #{shelve_attribute_id}, Packsize: #{packsize_attribute_id}"
 
 # Name
-update_attribute(name_attribute_id, :name, db_settings, logger)
+update_attribute(name_attribute_id, :name, logger)
 # Supplier
-update_attribute_from_option(supplier_attribute_id, :supplier, db_settings, logger)
+update_attribute_from_option(supplier_attribute_id, :supplier, logger)
 # Shelve
-update_attribute(shelve_attribute_id, :shelve_nr, db_settings, logger)
+update_attribute(shelve_attribute_id, :shelve_nr, logger)
 # Packsize
-update_attribute(packsize_attribute_id, :packsize, db_settings, logger)
+update_attribute(packsize_attribute_id, :packsize, logger)
 
 logger.info("Finished updating local products.")
 
