@@ -3,6 +3,8 @@ require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 
 class RawbotzApp < Sinatra::Base
+  enable :sessions
+
   configure do
     # Setup local rawbotz database
     if Rawbotz.conf_file_path
@@ -24,6 +26,13 @@ class RawbotzApp < Sinatra::Base
     end
     def remote_product_link product
       "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
+    end
+    def flash
+      @flash = session[:flash]# || {}
+    end
+    def add_flash kind, msg
+      session[:flash] ||= {}
+      (session[:flash][kind] ||= []) << msg
     end
   end
 

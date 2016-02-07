@@ -30,10 +30,28 @@
                   %i(class="fa fa-puzzle-piece")
                   Remote Orders
               %li.pure-menu-item
+                %a.pure-menu-link(href="/remote_cart/")
+                  %i(class="fa fa-puzzle-piece")
+                  Current Cart
+              %li.pure-menu-item
                 %a.pure-menu-link(href="/maintenance")
                   %i(class="fa fa-exclamation")
                   Maintenance
       .pure-u-1#main
+        - if flash
+          - if msg = flash.delete(:error)
+            #flash.ui-state-error
+              = msg.join(" | ")
+          - if msg = flash.delete(:success)
+            #flash.ui-state-highlight
+              = msg.join(" | ")
+          - if msg = flash.delete(:failure)
+            #flash.ui-state-highlight
+              = msg.join(" | ")
+          - if msg = flash.delete(:info)
+            #flash.ui-state-highlight
+              = msg.join(" | ")
+
         =yield
       .pure-u-1
         .pure-menu.pure-menu-horizontal#menu
