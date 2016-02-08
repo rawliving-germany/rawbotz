@@ -3,6 +3,8 @@ require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 
 class RawbotzApp < Sinatra::Base
+  include RawgentoModels
+
   enable :sessions
 
   configure do
@@ -41,36 +43,36 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/products' do
-    @products = RawgentoModels::LocalProduct
-    @suppliers = RawgentoModels::LocalProduct.uniq.pluck(:supplier)
+    @products = LocalProduct
+    @suppliers = LocalProduct.uniq.pluck(:supplier)
     haml "products/index".to_sym
   end
 
   get '/products/links' do
-    @local_products = RawgentoModels::LocalProduct.supplied_by(settings.supplier)
-    @remote_products = RawgentoModels::RemoteProduct.supplied_by(settings.supplier)
+    @local_products = LocalProduct.supplied_by(settings.supplier)
+    @remote_products = RemoteProduct.supplied_by(settings.supplier)
     haml "products/links".to_sym
   end
 
   get '/orders' do
-    @orders = RawgentoModels::Order.all
+    @orders = Order.all
     haml "orders/index".to_sym
   end
 
   get '/order/new' do
-    @order = RawgentoModels::Order.create
+    @order = Order.create(state: :new)
 
     # Restrict to supplier
     understocked = RawgentoDB::Query.understocked
-    understocked.each do |product_id, name, in_stock, min_qty|
-      local_product = RawgentoModels::LocalProduct.find_by(product_id: product_id)
+    understocked.each do |product_id, name, min_qty, in_stock|
+      local_product = LocalProduct.find_by(product_id: product_id)
       @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
     end
     haml "order/new".to_sym
   end
 
   get '/order/:id' do
-    @order = RawgentoModels::Order.find(params[:id])
+    @order = Order.find(params[:id])
     haml "order/view".to_sym
   end
 
