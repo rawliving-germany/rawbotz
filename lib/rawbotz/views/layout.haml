@@ -30,7 +30,7 @@
                   %i(class="fa fa-puzzle-piece")
                   Remote Orders
               %li.pure-menu-item
-                %a.pure-menu-link(href="/remote_cart/")
+                %a.pure-menu-link(href="/remote_cart")
                   %i(class="fa fa-puzzle-piece")
                   Current Cart
               %li.pure-menu-item
@@ -53,6 +53,7 @@
               = msg.join(" | ")
 
         =yield
+        %br
       .pure-u-1
         .pure-menu.pure-menu-horizontal#menu
           %small
