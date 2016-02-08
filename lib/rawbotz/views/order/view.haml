@@ -10,10 +10,36 @@
     Updated at
   %dd
     = @order.updated_at
+  %dt
+    State
+  %dd
+    = @order.state
 
 %h2 Content
 = @order.order_items.count
 Items.
+
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Item
+      %th
+        Wished Qty
+      %th
+        Ordered Qty
+      %th
+        Stock at time
+  %tbody
+    - @order.order_items.find_each do |item|
+      %tr
+        %td=item.local_product.name
+        %td
+          =item.num_wished
+        %td
+          =item.num_ordered
+        %td
+          =item.current_stock
 
 %h2 Action
 (Find remote order? Delete?)
