@@ -4,6 +4,8 @@ require "rawbotz/remote_shop"
 require 'rawgento_models'
 require 'rawgento_db'
 
+require 'ostruct'
+
 module Rawbotz
   @@conf_file_path = nil
   def self.conf_file_path=(conf_file_path)
@@ -29,5 +31,10 @@ module Rawbotz
       exit 1
     end
     # As a bonus, set mechs config (TODO)
+  end
+
+  def self.new_mech
+    config_values = YAML::load_file(@@conf_file_path)["remote_shop"]
+    MagentoMech.from_config OpenStruct.new(config_values)
   end
 end
