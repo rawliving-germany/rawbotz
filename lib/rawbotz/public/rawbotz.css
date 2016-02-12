@@ -19,3 +19,6 @@ h3 {
 #menu {
   background-color: rgb(230,230,210);
 }
+td {
+  vertical-align: top;
+}
