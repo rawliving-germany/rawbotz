@@ -105,8 +105,6 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/remote_orders' do
-    #@products = RawgentoModels::RemoteProduct.all
-    @last_orders =  []
     @last_orders = Rawbotz.mech.last_orders
     haml "remote_orders/index".to_sym
   end
