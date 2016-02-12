@@ -136,11 +136,27 @@ class RawbotzApp < Sinatra::Base
   end
 
   post '/product/:id/link' do
-    remote_product = RawgentoModels::RemoteProduct.find(params[:remote_product_id])
+    remote_product = RemoteProduct.find(params[:remote_product_id])
     @product = RawgentoModels::LocalProduct.find(params[:id])
     @product.remote_product = remote_product
     @product.save
-    redirect "/product/#{params[:id]}"
+
+    if request.xhr?
+      # return product link
+      remote_product_link remote_product
+    else
+      add_flash :success, "Linked Product"
+
+      if params[:redirect_to] == "link_wizard"
+        redirect '/products/link_wizard'
+      elsif params[:redirect_to] == "links"
+        redirect "/product/#{params[:id]}"
+      elsif params[:redirect_to]
+        redirect "/products/links"
+      else
+        redirect "/product/#{params[:id]}"
+      end
+    end
   end
 
   get '/product/:id' do
