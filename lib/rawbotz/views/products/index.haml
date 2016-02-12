@@ -54,5 +54,8 @@
   - @suppliers.each_with_index do |supplier, idx|
     %div{id:"tab_#{idx}"}
       %h2 Products of #{supplier || "Unknown Supplier"}
-      = haml "products/table".to_sym, locals: {products: @products.supplied_by(supplier)}
+      - if supplier == settings.supplier
+        = haml "products/table_with_linking".to_sym, locals: {products: @products.supplied_by(supplier)}
+      - else
+        = haml "products/table".to_sym, locals: {products: @products.supplied_by(supplier)}
 

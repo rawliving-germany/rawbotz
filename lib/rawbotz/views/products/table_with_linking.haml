@@ -1,0 +1,30 @@
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Product name
+      %th
+        Product ID
+      %th
+        Remote Name
+      %th
+        Supplier
+      %th
+        Last Stock
+  %tbody
+    - products.each do |product|
+      %tr
+        %input.local_product_id(type="hidden" value="#{product.id}")
+        %td
+          %a(href="/product/#{product.id}")= product.name
+        %td= product.product_id
+        %td
+          - if product.remote_product.nil?
+            %a(href="/product/#{product.id}/link") Linking view
+            = haml "widgets/_ajax_link".to_sym, locals: {local_product: product, redirect_to: 'products'}
+          - else
+            = product.remote_product.name
+        %td= product.supplier
+        %td
+          %a(href="") Show modal
+
