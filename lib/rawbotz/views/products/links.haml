@@ -2,7 +2,7 @@
 
 %h1 Links
 
-In tabs linked vs not linked two-way
+%h1 Product Linking
 
 :javascript
   $(function() {
@@ -12,9 +12,9 @@ In tabs linked vs not linked two-way
 #tabs
   %ul
     %li
-      %a(href="#local_unlinked")Local unlinked (#{settings.supplier})
+      %a(href="#local_unlinked")Local unlinked (#{settings.supplier}) (#{@local_products.unlinked.count})
     %li
-      %a(href="#local_linked")Local linked (#{settings.supplier})
+      %a(href="#local_linked")Local linked (#{settings.supplier}) (#{@local_products.linked.count})
     %li
       %a(href="#remote_linked")Remote linked
     %li
