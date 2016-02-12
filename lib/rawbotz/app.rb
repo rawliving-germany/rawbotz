@@ -54,6 +54,19 @@ class RawbotzApp < Sinatra::Base
     haml "products/links".to_sym
   end
 
+  get '/products/link_wizard' do
+    @unlinked_count = LocalProduct.unlinked.count
+    @local_product = LocalProduct.supplied_by(settings.supplier).unlinked.at(0)
+    params[:idx] = 0
+    haml "products/link_wizard".to_sym
+  end
+
+  get '/products/link_wizard/:idx' do
+    @unlinked_count = LocalProduct.unlinked.count
+    @local_product = LocalProduct.supplied_by(settings.supplier).unlinked.at(params[:idx].to_i || 0)
+    haml "products/link_wizard".to_sym
+  end
+
   get '/orders' do
     @orders = Order.all
     haml "orders/index".to_sym

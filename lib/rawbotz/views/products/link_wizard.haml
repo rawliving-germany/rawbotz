@@ -1,0 +1,34 @@
+%h1 Link Wizard
+
+#{@unlinked_count} unlinked local products
+
+%h2= @local_product.name
+
+%center
+  %table.pure-table
+    %tr
+      %td
+        = haml "widgets/_link".to_sym, locals: {local_product: @local_product, redirect_to: "link_wizard"}
+        %form.pure-form(action="/product/#{@local_product.id}/link" method="POST")
+          %input(type="hidden" name="remote_product_id" id="remote_product_id")
+          %input(type="hidden" name="redirect_to" value="link_wizard")
+          %input#search-remote(placeholder="search ...")
+          %button.pure-button
+            Link!
+      %td
+        Suggenstions:
+        %br
+        - @local_product.link_suggestions.each do |suggested_product|
+          %form.pure-form(action="/product/#{@local_product.id}/link" method="POST")
+            %input(type="hidden" name="remote_product_id" id="remote_product_id" value="#{suggested_product.id}")
+            %input(type="hidden" name="redirect_to" value="link_wizard")
+            %button.pure-button
+              = suggested_product.name
+          %br
+      %td
+        %a.pure-button(href="/products/link_wizard/#{params[:idx].to_i + 1}")
+          Skip
+%br
+%p#message
+%br
+
