@@ -1,0 +1,45 @@
+%table.pure-table.pure-table-bordered
+  %thead
+    %tr
+      %th Product ID
+      %th Product Name
+      %th Current Stock
+      %th Min Stock
+      %th Stock/Sales history
+      %th Order
+      %th Packsize
+  %tbody
+    - order_items.each do |order_item|
+      %tr
+        %td
+          - if order_item.local_product
+            = order_item.local_product.product_id
+          - else
+            No local product!
+        %td
+          - if order_item.local_product
+            = local_product_link order_item.local_product
+          - else
+            Product not in Database!
+        %td= order_item.current_stock
+        %td= order_item.min_stock
+        %td
+          - if order_item.remote_product_id.present?
+            - input_id = "qty_#{order_item.id}"
+            %input(size=2 name="#{input_id}" id="#{input_id}" value="#{order_item.num_wished}")
+            %button.pure-button.order_none None
+            -# put icon in buton, make smaller
+            -#%button.pure-button.order_none(onClick="document.getElementById('#{input_id}').value = '0';") None
+            - if order_item.local_product.packsize
+              %button.pure-button.add_pack(data-num="#{order_item.local_product.packsize}")
+                %small
+                  1 Pack (...)
+              %button.pure-button.add_pack(data-num="#{order_item.local_product.packsize * 2}")
+                %small
+                  2 Pack (...)
+            (last time X)
+          - else
+            No remote product
+        %td
+        %td= order_item.local_product.packsize
+

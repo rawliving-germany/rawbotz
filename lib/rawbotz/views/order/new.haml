@@ -1,0 +1,60 @@
+%h1 New Order
+
+%form.pure-form.pure-form-aligned(action="" method="post")
+  %input(type="hidden" name="_method" value="put")
+
+  :javascript
+    $(function() {
+      $( "#tabs" ).tabs();
+    });
+
+  #tabs
+    %ul
+      %li
+        %a(href="#under_min")Under min
+      %li
+        %a(href="#tabs-2")all
+      %li
+        %a(href="#tabs-2")ordered
+      %li
+        %a(href="#tabs-3")ignored
+    #under_min
+      %table.pure-table.pure-table-bordered
+        %thead
+          %tr
+            %th Product ID
+            %th Product Name
+            %th Current Stock
+            %th Min Stock
+            %th Stock/Sales history
+            %th Order
+            %th Packsize
+        %tbody
+          - @order.order_items.each do |order_item|
+            %tr
+              %td
+                - if order_item.local_product
+                  = order_item.local_product.product_id
+                - else
+                  Order not in view
+              %td
+                - if order_item.local_product
+                  = local_product_link order_item.local_product
+                - else
+                  Product not in Database!
+              %td= order_item.current_stock
+              %td= order_item.min_stock
+              %td
+                - input_id = "qty_#{order_item.id}"
+                %input(size=2 id="#{input_id}")
+                %button.pure-button.order_none None
+                - if order_item.local_product.packsize
+                  %button.pure-button
+                    %small
+                      1 Pack (...)
+                  %button.pure-button
+                    %small
+                      2 Pack (...)
+                (last time X)
+              %td
+              %td= order_item.local_product.packsize
