@@ -6,8 +6,6 @@
       %th
         Product ID
       %th
-        Remote Name
-      %th
         Supplier
       %th
         Last Stock
@@ -17,12 +15,6 @@
         %td
           %a(href="/product/#{product.id}")= product.name
         %td= product.product_id
-        %td
-          - if product.remote_product.nil?
-            %a(href="/product/#{product.id}/link") Link to ...
-          - else
-            = product.remote_product.name
         %td= product.supplier
         %td
           %a(href="") Show modal
-
