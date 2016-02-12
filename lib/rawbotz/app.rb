@@ -79,15 +79,24 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/order/new' do
-    @order = Order.create(state: :new)
+    if !Order.current.present?
+      @order = Order.create(state: :new)
 
-    # Restrict to supplier
-    understocked = RawgentoDB::Query.understocked
-    understocked.each do |product_id, name, min_qty, in_stock|
-      local_product = LocalProduct.find_by(product_id: product_id)
-      @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
+      # Restrict to supplier
+      understocked = RawgentoDB::Query.understocked
+      understocked.each do |product_id, name, min_qty, in_stock|
+        local_product = LocalProduct.find_by(product_id: product_id)
+        if local_product.supplier == settings.supplier
+          @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
+        end
+      end
+      add_flash :success, "New Order created"
+    else
+      add_flash :message, "Already one Order in progress"
+      @order = Order.current
     end
-    haml "order/new".to_sym
+    redirect "/order/#{@order.id}"
+    #haml "order/new".to_sym
   end
 
   get '/order/:id' do
