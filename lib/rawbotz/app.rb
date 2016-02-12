@@ -67,6 +67,12 @@ class RawbotzApp < Sinatra::Base
     haml "products/link_wizard".to_sym
   end
 
+  post '/remote_products/search' do
+    @products = RemoteProduct.supplied_by(settings.supplier)
+      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(10).pluck(:name, :id)
+    @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
+  end
+
   get '/orders' do
     @orders = Order.all
     haml "orders/index".to_sym
