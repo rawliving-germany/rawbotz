@@ -1,7 +1,5 @@
 = haml "products/menu".to_sym
 
-%h1 Links
-
 %h1 Product Linking
 
 :javascript
@@ -15,10 +13,10 @@
       %a(href="#local_unlinked")Local unlinked (#{settings.supplier}) (#{@local_products.unlinked.count})
     %li
       %a(href="#local_linked")Local linked (#{settings.supplier}) (#{@local_products.linked.count})
-    %li
-      %a(href="#remote_linked")Remote linked
-    %li
-      %a(href="#remote_unlinked")Remote unlinked
+    -#%li
+    -#  %a(href="#remote_linked")Remote linked
+    -#%li
+    -#  %a(href="#remote_unlinked")Remote unlinked
   #local_linked
     %table.pure-table.pure-table-horizontal
       %thead
@@ -58,5 +56,5 @@
             %td
               %a(href="/product/#{local_product.id}/link")
                 Link
-  #remote_linked
-  #remote_unlinked
+  -##remote_linked
+  -##remote_unlinked
