@@ -1,6 +1,10 @@
 %h1 Orders
 
-%a(href="/order/new") New Order
+- if Order.current.present?
+  %a(href="/order/#{Order.current.id}")
+    Current Order
+- else
+  %a(href="/order/new") New Order
 
 %br
 %br
@@ -11,6 +15,7 @@
       %th Date
       %th Number Items
       %th Action
+      %th State
   %tbody
     - @orders.each do |order|
       %tr
@@ -19,3 +24,4 @@
         %td
           %a(href="/order/#{order.id}")
             View
+        %td=order.state

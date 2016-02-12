@@ -19,27 +19,74 @@
 = @order.order_items.count
 Items.
 
-%table.pure-table
-  %thead
-    %tr
-      %th
-        Item
-      %th
-        Wished Qty
-      %th
-        Ordered Qty
-      %th
-        Stock at time
-  %tbody
-    - @order.order_items.find_each do |item|
-      %tr
-        %td=item.local_product.name
-        %td
-          =item.num_wished
-        %td
-          =item.num_ordered
-        %td
-          =item.current_stock
+- if @order.state == "new"
+  %form.pure-form.pure-form-aligned(action="" method="post")
+    -#%input(type="hidden" name="_method" value="put")
 
-%h2 Action
-(Find remote order? Delete?)
+    :javascript
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+
+    #tabs
+      - supplier_name = settings.supplier
+      - understocked_items = @order.order_items.select{|i| i.local_product.supplier==supplier_name && i.num_wished.nil?}
+      - unordered_items = []
+      - ordered_items = @order.order_items.select{|i| i.num_wished.present? && i.num_wished != 0}
+      - ignored_items = @order.order_items.select{|i| i.local_product.supplier==supplier_name && i.num_wished == 0}
+      - other_items = []
+      - all_items = []
+      %ul
+        %li
+          %a(href="#under_min")undecided [#{understocked_items.count}]
+        %li
+          %a(href="#ordered")ordered [#{ordered_items.count}]
+        %li
+          %a(href="#ignored")ignored [#{ignored_items.count}]
+        %li
+          %a(href="#more")more
+      #under_min
+        under min, other supplier?
+        = haml "order/_item_table".to_sym, locals: {order_items: understocked_items}
+      #ordered
+        = haml "order/_item_table".to_sym, locals: {order_items: ordered_items}
+      #ignored
+        = haml "order/_item_table".to_sym, locals: {order_items: ignored_items}
+      #more
+        %p
+          Add another item?
+    %br
+    %h2 Action
+    %center
+      (Find remote order? Delete?)
+      %button.pure-button.pure-button-secondary(name="action" value="save")
+        Save
+      %button.pure-button.pure-button-primary(name="action" value="order")
+        Order!
+      %button.pure-button.pure-button-primary(name="action" value="delete")
+        Delete
+- else
+  %table.pure-table
+    %thead
+      %tr
+        %th
+          Item
+        %th
+          Wished Qty
+        %th
+          Ordered Qty
+        %th
+          Stock at time
+    %tbody
+      - @order.order_items.find_each do |item|
+        %tr
+          %td=item.local_product.name
+          %td
+            =item.num_wished
+          %td
+            =item.num_ordered
+          %td
+            =item.current_stock
+  %h2 Action
+  (Find remote order? Delete?)
+
