@@ -74,7 +74,7 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/orders' do
-    @orders = Order.all
+    @orders = Order.all.order(created_at: :desc)
     haml "orders/index".to_sym
   end
 
