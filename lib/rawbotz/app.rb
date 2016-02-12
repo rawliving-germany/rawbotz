@@ -123,6 +123,11 @@ class RawbotzApp < Sinatra::Base
     haml "remote_products/index".to_sym
   end
 
+  get '/remote_product/:id' do
+    @product = RawgentoModels::RemoteProduct.find(params[:id])
+    haml "remote_product/view".to_sym
+  end
+
   get '/product/:id/link' do
     @product = RawgentoModels::LocalProduct.find(params[:id])
     # filter by supplier ...
