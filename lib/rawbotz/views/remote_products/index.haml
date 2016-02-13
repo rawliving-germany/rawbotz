@@ -2,7 +2,7 @@
 
 %h1 Remote Products
 
-%h2 of supplier #{settings.supplier}
+%h2 of supplier #{settings.supplier} (#{@products.count})
 
 %table.pure-table
   %thead
@@ -16,7 +16,7 @@
       %th
         Supplier
   %tbody
-    - @products.each do |product|
+    - @products.find_each do |product|
       %tr
         %td
           %a(href="/remote_product/#{product.id}")= product.name
