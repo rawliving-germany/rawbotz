@@ -1,0 +1,29 @@
+%h1 Remote Cart
+
+Currently #{@cart_content.size} items in cart.
+
+%table.pure-table
+  %thead
+    %tr
+      %th
+        Product
+      %th
+        Local Name
+      %th
+        Quantity
+  %tbody
+    - @cart_products.each do |product, qty|
+      - if product.nil?
+        %tr
+          %td unknown product
+          %td unknown product
+          %td unknown product
+      - else
+        %tr
+          %td
+            = remote_product_link product
+          %td
+            = local_product_link(product.local_product) rescue "unlinked"
+          %td
+            = qty
+  

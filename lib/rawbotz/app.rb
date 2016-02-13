@@ -104,6 +104,14 @@ class RawbotzApp < Sinatra::Base
     haml "order/view".to_sym
   end
 
+  get '/remote_cart' do
+    @cart_content = Rawbotz.mech.get_cart_content
+    @cart_products = @cart_content.map do |name, qty|
+      [RemoteProduct.find_by(name: name), qty]
+    end
+    haml "remote_cart/index".to_sym
+  end
+
   get '/remote_orders' do
     @last_orders = Rawbotz.mech.last_orders
     haml "remote_orders/index".to_sym
