@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+require "rawbotz"
+require 'rawbotz/option_parser'
+
+options = {}
+program_name = File.basename __FILE__
+$program_name = program_name
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{program_name} [OPTIONS] ORDER_ID"
+  opts.separator ""
+
+  opts.on("-m", "--[no]-mail") do |m|
+    options[:mail] = m
+  end
+end
+optparse.parse!
+options = optparse.options
+
+include RawgentoModels
+
+def main options
+  logger = Logger.new(STDOUT)
+  logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+  logger.debug "#{$program_name} #{Rawbotz::VERSION}"
+
+  logger.info("Checking queue")
+
+  queue = RawgentoModels::Order.queued
+  logger.info("-> #{queue.count} orders to process")
+
+  if queue.count == 0
+    logger.info("Nothing to do, exiting.")
+    exit 0
+  end
+
+  order = queue.first
+
+  #OrderProcessor
+  logger.info("#{order.order_items.length} items in Order")
+
+  if order.state != :new
+    logger.warn("Order in state #{order.state}!")
+  end
+  order.update(state: :processing)
+
+  mech = Rawbotz.new_mech
+  # check and "merge" cart content
+  #logger.debug mech.get_cart_content
+
+  # for items in order ... send mech, update item by available products
+  logger.info ("#{order.order_items.processible.count} products to order.")
+  mech.login
+
+  order.order_items.processible.find_each do |item|
+    if item.remote_product_id.present? && item.num_wished.present?
+      logger.info ("Will put in cart: #{item.remote_product_id}: #{item.num_wished}")
+      logger.debug ("  Local  Product: #{item.local_product.name}")
+      logger.debug ("  Remote Product: #{item.local_product.remote_product.name}")
+
+      ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished
+
+      item.update(num_ordered: ordered_qty.to_i)
+
+      if item.out_of_stock?
+        logger.info "Product out of stock"
+      elsif !item.all_ordered?
+        logger.info "Only #{item.num_ordered} (of #{item.num_wished}) could be ordered."
+      else
+        logger.info "Ordered #{item.num_ordered} (of #{item.num_wished})."
+      end
+    else
+      logger.warn("Cannot order this item (no rem. prod/num_wished)")
+      logger.warn(item.attributes)
+    end
+  end
+
+  # Check cart content
+
+  #order.update(state: :ordered)
+  logger.info("Finished order")
+  # send mail
+end
+
+main options
+exit 0
