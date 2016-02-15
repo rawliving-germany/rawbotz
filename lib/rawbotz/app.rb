@@ -127,7 +127,9 @@ class RawbotzApp < Sinatra::Base
     end
 
     mail_body << "Mit freundlichen Grüßen ...\nZu senden an...\n"
-    mail_subject = "Bestellung an #{supplier}"
+    mail_subject = "Bestellung an #{supplier.name}"
+
+    Rawbotz::mail(mail_subject, mail_body)
 
     add_flash :success, "Order details send via mail"
     redirect "/"
