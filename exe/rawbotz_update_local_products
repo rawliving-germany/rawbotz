@@ -37,11 +37,12 @@ def update_attribute attribute_id, attribute_sym, logger
   end
 end
 
-def update_attribute_from_option attribute_id, attribute_sym, logger
+def update_supplier_from_option attribute_id, logger
   RawgentoDB::Query.attribute_option(attribute_id).each do |product_id, value|
     p = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: product_id)
-    p.update({ attribute_sym => value }) # check if changed
-    logger.info "Updating #{attribute_sym.to_s} of #{product_id}: #{value}"
+    supplier = RawgentoModels::Supplier.find_or_create_by(name: value)
+    p.update(supplier: supplier)
+    logger.info "Updating supplier of #{product_id}: #{value}"
   end
 end
 
@@ -55,7 +56,7 @@ logger.debug "Attribute-ids: Name: #{name_attribute_id}, Supplier: #{supplier_at
 # Name
 update_attribute(name_attribute_id, :name, logger)
 # Supplier
-update_attribute_from_option(supplier_attribute_id, :supplier, logger)
+update_supplier_from_option(supplier_attribute_id, logger)
 # Shelve
 update_attribute(shelve_attribute_id, :shelve_nr, logger)
 # Packsize
