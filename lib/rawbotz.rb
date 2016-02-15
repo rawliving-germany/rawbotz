@@ -5,6 +5,8 @@ require 'rawgento_models'
 require 'rawgento_db'
 
 require 'ostruct'
+require 'yaml'
+require 'pony'
 
 module Rawbotz
   @@conf_file_path = nil
@@ -33,8 +35,37 @@ module Rawbotz
     # As a bonus, set mechs config (TODO)
   end
 
+  def self.logger
+    @logger ||= Logger.new(STDOUT)
+  end
+  def self.logger= logger
+    @logger = logger
+  end
+  def self.configure_logger options
+    @logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+  end
+
   def self.new_mech
     config_values = YAML::load_file(@@conf_file_path)["remote_shop"]
     MagentoMech.from_config OpenStruct.new(config_values)
+  end
+
+  def self.mail subject, body
+    # From config, this should be memoized
+    settings = YAML::load_file(Rawbotz::conf_file_path)["mail"]
+    pony_via_options = { address: settings["host"],
+                         user_name: settings["user"],
+                         port: settings["port"].to_i,
+                         authentication: :login,
+                         password: settings["pass"]}
+
+    Pony.mail({
+      to: settings["to"],
+      from: settings["from"],
+      subject: subject,
+      body: body,
+      via: :smtp,
+      via_options: pony_via_options
+    })
   end
 end
