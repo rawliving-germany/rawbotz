@@ -73,6 +73,12 @@ class RawbotzApp < Sinatra::Base
     @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
   end
 
+  post '/products/search' do
+    @products = LocalProduct
+      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(10).pluck(:name, :id)
+    @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
+  end
+
   get '/orders' do
     @orders = Order.all.order(created_at: :desc)
     haml "orders/index".to_sym
