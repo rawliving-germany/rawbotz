@@ -1,0 +1,7 @@
+%h1 Non-Remote Order
+
+%ul
+  - Supplier.find_each do |supplier|
+    %li
+      %a(href="/order/non_remote/#{supplier.id}")
+        =supplier.name

@@ -84,6 +84,53 @@ class RawbotzApp < Sinatra::Base
     haml "orders/index".to_sym
   end
 
+  get '/orders/non_remote' do
+    haml "orders/non_remotes".to_sym
+  end
+
+  get '/order/non_remote/:supplier_id' do
+    @supplier = Supplier.find(params[:supplier_id])
+    # This did not work as "Order" without persistence
+    @products = LocalProduct.supplied_by(@supplier)
+
+    #understocked = RawgentoDB::Query.understocked
+    #understocked.each do |product_id, name, min_qty, in_stock|
+    #  local_product = LocalProduct.find_by(product_id: product_id)
+    #    if local_product.supplier == @supplier
+    #      @order.build_order_item(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
+    #    else
+    #      puts "not Dr Georg"
+    #    end
+    #  end
+    #end
+
+    haml "order/non_remote".to_sym
+  end
+
+  post '/order/non_remote/:supplier_id' do
+    supplier = Supplier.find(params.delete("supplier_id"))
+    # Some of these mails might want to be templated
+
+    mail_body = "Dear #{supplier.name}\n\n"
+    params.each do |p, val|
+      if val && val.to_i > 0
+        qty = val.to_i
+        product = LocalProduct.find(p)
+        mail_body << "#{product.name}: #{qty}"
+        if product.packsize
+          mail_body << " (#{(qty/product.packsize)} Gebinde)"
+        end
+        mail_body << "\n"
+      end
+    end
+
+    mail_body << "Mit freundlichen Grüßen ...\nZu senden an...\n"
+    mail_subject = "Bestellung an #{supplier}"
+
+    add_flash :success, "Order details send via mail"
+    redirect "/"
+  end
+
   get '/order/new' do
     if !Order.current.present?
       @order = Order.create(state: :new)
