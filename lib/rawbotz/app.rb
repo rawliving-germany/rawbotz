@@ -114,10 +114,10 @@ class RawbotzApp < Sinatra::Base
     # Some of these mails might want to be templated
 
     mail_body = "Dear #{supplier.name}\n\n"
-    params.each do |p, val|
+    params.select{|p| p.start_with?("product_")}.each do |p, val|
       if val && val.to_i > 0
         qty = val.to_i
-        product = LocalProduct.find(p)
+        product = LocalProduct.find(p[8..-1])
         mail_body << "#{product.name}: #{qty}"
         if product.packsize
           mail_body << " (#{(qty/product.packsize)} Gebinde)"
