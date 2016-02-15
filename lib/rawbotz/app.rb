@@ -110,6 +110,26 @@ class RawbotzApp < Sinatra::Base
     haml "order/view".to_sym
   end
 
+  post '/order/:id' do
+    @order = Order.find(params[:id])
+    params.each do |k,v|
+      if k && k.start_with?("qty_") && v != ""
+        OrderItem.find(k[4..-1]).update(num_wished: v.to_i)
+      end
+    end
+    if params['action'] == 'order'
+      @order.update(state: :queued)
+      add_flash :success, 'Order queued'
+      redirect '/orders'
+    elsif params['action'] == 'delete'
+      @order.update(state: :deleted)
+      add_flash :success, 'Order marked deleted'
+      redirect '/orders'
+    else
+      haml "order/view".to_sym
+    end
+  end
+
   get '/remote_cart' do
     @cart_content = Rawbotz.mech.get_cart_content
     @cart_products = @cart_content.map do |name, qty|
