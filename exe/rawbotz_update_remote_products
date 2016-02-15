@@ -91,14 +91,15 @@ def main options
   logger.debug("Established connection to rawbotz database.")
 
   supplier_name = mech_config["supplier_name"]
+  supplier = RawgentoModels::Supplier.find_or_create_by(name: supplier_name)
 
   number_dead = 0
   current_pid = options[:start_pid]
   if options[:check_new]
 
     # max (product_id)
-    last_product_id = RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier_name).order(product_id: :desc).first.product_id rescue 0
-    logger.debug "Nr Remote Products: #{RawgentoModels::RemoteProduct.where(supplier: supplier_name).count}"
+    last_product_id = RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id rescue 0
+    logger.debug "Nr Remote Products: #{RawgentoModels::RemoteProduct.where(supplier: supplier).count}"
     current_pid = last_product_id
     options[:start_pid] = last_product_id
     logger.info "Check for new products (last found product_id was #{last_product_id})"
