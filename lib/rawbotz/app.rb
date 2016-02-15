@@ -26,7 +26,11 @@ class RawbotzApp < Sinatra::Base
 
   helpers do
     def local_product_link product
-      "<a href=\"/product/#{product.id}\">#{product.name}</a>"
+      if product.present?
+        "<a href=\"/product/#{product.id}\">#{product.name}</a>"
+      else
+        "Product not in database"
+      end
     end
     def remote_product_link product
       "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
@@ -114,10 +118,10 @@ class RawbotzApp < Sinatra::Base
     # Some of these mails might want to be templated
 
     mail_body = "Dear #{supplier.name}\n\n"
-    params.select{|p| p.start_with?("product_")}.each do |p, val|
+    params.select{|p| p.start_with?("item_")}.each do |p, val|
       if val && val.to_i > 0
         qty = val.to_i
-        product = LocalProduct.find(p[8..-1])
+        product = LocalProduct.find(p[5..-1])
         mail_body << "#{product.name}: #{qty}"
         if product.packsize
           mail_body << " (#{(qty/product.packsize)} Gebinde)"
@@ -164,8 +168,8 @@ class RawbotzApp < Sinatra::Base
   post '/order/:id' do
     @order = Order.find(params[:id])
     params.each do |k,v|
-      if k && k.start_with?("qty_") && v != ""
-        OrderItem.find(k[4..-1]).update(num_wished: v.to_i)
+      if k && k.start_with?("item_") && v != ""
+        OrderItem.find(k[5..-1]).update(num_wished: v.to_i)
       end
     end
     if params['action'] == 'order'
