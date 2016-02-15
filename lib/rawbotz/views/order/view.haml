@@ -2,24 +2,7 @@
 
 %h1 View Order
 
-%h2 General
-%dl
-  %dt
-    Created at
-  %dd
-    = @order.created_at
-  %dt
-    Updated at
-  %dd
-    = @order.updated_at
-  %dt
-    State
-  %dd
-    = @order.state
-
-%h2 Content
-= @order.order_items.count
-Items.
+= haml "order/_head".to_sym, locals: {order: @order}
 
 - if @order.state == "new"
   %form.pure-form.pure-form-aligned(action="" method="post")

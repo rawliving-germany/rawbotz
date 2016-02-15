@@ -17,7 +17,7 @@
           %td
             = product.name
           %td
-            %input(name="product_#{product.id}" size="2")
+            %input.qty(name="item_#{product.id}" size="2")
             - if product.packsize.present?
               %button.pure-button.plus-pack(data-packsize="#{product.packsize}")
                 %i.fa.fa-plus-square

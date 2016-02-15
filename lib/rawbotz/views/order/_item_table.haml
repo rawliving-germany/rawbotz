@@ -17,29 +17,24 @@
           - else
             No local product!
         %td
-          - if order_item.local_product
-            = local_product_link order_item.local_product
-          - else
-            Product not in Database!
+          = local_product_link order_item.local_product
         %td= order_item.current_stock
         %td= order_item.min_stock
         %td
           - if order_item.remote_product_id.present?
-            - input_id = "qty_#{order_item.id}"
-            %input(size=2 name="#{input_id}" id="#{input_id}" value="#{order_item.num_wished}")
-            %button.pure-button.order_none None
-            -# put icon in buton, make smaller
-            -#%button.pure-button.order_none(onClick="document.getElementById('#{input_id}').value = '0';") None
-            - if order_item.local_product.packsize
-              %button.pure-button.add_pack(data-num="#{order_item.local_product.packsize}")
-                %small
-                  1 Pack (...)
-              %button.pure-button.add_pack(data-num="#{order_item.local_product.packsize * 2}")
-                %small
-                  2 Pack (...)
-            (last time X)
+            %input.qty(name="item_#{order_item.id}" size="1" value="#{order_item.num_wished}")
+            %button.pure-button.order-none
+              %i.fa.fa-remove
+            - packsize = order_item.local_product.packsize
+            - if packsize
+              %button.pure-button.plus-pack(data-packsize="#{packsize}")
+                %i.fa.fa-plus-square
+                %i.fa.fa-cube
+              %button.pure-button.minus-pack(data-packsize="#{packsize}")
+                %i.fa.fa-minus-square
+                %i.fa.fa-cube
+            -#(last time X)
           - else
             No remote product
         %td
         %td= order_item.local_product.packsize
-

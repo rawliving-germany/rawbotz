@@ -1,0 +1,20 @@
+%h2 General
+%dl
+  %dt
+    Created at
+  %dd
+    = order.created_at
+  %dt
+    Updated at
+  %dd
+    = order.updated_at
+  %dt
+    State
+  %dd
+    = order.state
+
+%h2 Content
+= order.order_items.count
+Items.
+
+
