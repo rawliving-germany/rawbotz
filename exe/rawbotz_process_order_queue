@@ -2,6 +2,8 @@
 
 require 'date'
 
+require 'terminal-table'
+
 require "rawbotz"
 require 'rawbotz/option_parser'
 
@@ -66,7 +68,61 @@ def main options
 
   logger.info("Finished order")
 
-  # send mail
+  logger.info("Checking current cart")
+  diffs = order_processor.check_against_cart
+
+  if !diffs[:perfect].empty?
+    puts Terminal::Table.new title: "Perfect",
+      headings: ['Product', 'In Cart'],
+      rows: diffs[:perfect].map { |p,q|
+        [p.local_product.remote_product.name,q]
+      },
+      style: {width: 60}
+    puts
+    puts
+  end
+
+  if !diffs[:modified].empty?
+    puts Terminal::Table.new title: "Modified",
+      headings: ['Product', 'Wished', 'In Cart'],
+      rows: diffs[:modified].map { |p,q|
+        [p.local_product.remote_product.name, p.num_wished, q]
+      },
+      style: {width:60}
+    puts
+    puts
+  end
+
+  if !diffs[:miss].empty?
+    puts Terminal::Table.new title: "Missing (?)",
+      :headings => ['Product', 'In Cart'],
+      :rows => diffs[:miss].map{|p,q| [p.local_product.remote_product.name,q]},
+      style: {width:60}
+    puts
+    puts
+  end
+
+  if !diffs[:under_avail].empty?
+    puts Terminal::Table.new title: "Not available as such",
+      :headings => ['Product', 'Wanted', 'In Cart'],
+      :rows => diffs[:under_avail].map{|p,q| [p.local_product.remote_product.name,item.num_wished, q]},
+      style: {width:60}
+    puts
+    puts
+  end
+
+  if !diffs[:extra].empty?
+    puts Terminal::Table.new title: "Extra (not in rawbotz)",
+      :headings => ['Product', 'In Cart'],
+      :rows => diffs[:extra],
+      style: {width:60}
+  end
+
+  if options[:mail]
+    logger.debug("Sending mail")
+    Rawbotz::mail("rawbotz order finished",
+                  "Finished Order nr #{order.id}. Result: [tbd]")
+  end
 end
 
 main options
