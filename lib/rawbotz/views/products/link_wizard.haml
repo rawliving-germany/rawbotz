@@ -7,7 +7,7 @@
     Nothing to do! Congratulations!
     %i.fa.fa-birthday-cake
 -else
-  #{@unlinked_count} unlinked local products from #{settings.supplier.name}
+  #{@unlinked_count}/#{settings.supplier.local_products.count} unlinked local products from #{settings.supplier.name}
 
   %h2= @local_product.name
 
