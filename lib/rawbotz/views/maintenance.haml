@@ -1,14 +1,81 @@
 %h1 Maintenance
 
 %h2 Info
+
 %h3 Remote Shop
 %center
   %small
-    %b
-      Name
-    = settings.supplier_name
-%h3 Local Shop Database
+    %table.pure-table.settings
+      %tr
+        %td
+          %b Name
+        %td
+          = settings.supplier_name
+      %tr
+        %td
+          %b URI
+        %td
+          = settings.conf["remote_shop"]["base_uri"]
+      %tr
+        %td
+          %b Account
+        %td
+          = settings.conf["remote_shop"]["user"]
+
+%h3 Local Shop Database (mysql)
+%center
+  %small
+    %table.pure-table.settings
+      %tr
+        %td
+          %b Host
+        %td
+          = settings.conf["host"]
+      %tr
+        %td
+          %b Port
+        %td
+          = settings.conf["port"]
+      %tr
+        %td
+          %b Name
+        %td
+          = settings.conf["database"]
+
 %h3 Rawbotz Database
+%center
+  %small
+    %table.pure-table.settings
+      %tr
+        %td
+          %b Path
+        %td
+          = settings.conf["default"]["database"]
+
+%h3 Mail
+%center
+  %small
+    %table.pure-table.settings
+      %tr
+        %td
+          %b To
+        %td
+          = settings.conf["mail"]["to"]
+      %tr
+        %td
+          %b From
+        %td
+          = settings.conf["mail"]["from"]
+      %tr
+        %td
+          %b Host
+        %td
+          = settings.conf["mail"]["host"]
+      %tr
+        %td
+          %b Port
+        %td
+          = settings.conf["mail"]["port"]
 
 %h2 Actions
 .pure-u-1-5
@@ -24,6 +91,10 @@
           %a.pure-menu-link(href="/")
             %i(class="fa fa-import")
             Maintenance...
+        %li.pure-menu-item
+          %a.pure-menu-link(href="/")
+            %i(class="fa fa-import")
+            Trigger Order
 .pure-u-1-5
 
 %h2 Systems Information
@@ -44,7 +115,7 @@ Built on top of
     Write less but better HTML.
 
   %dt
-    %a(href="http://") ActiveRecord
+    %a(href="http://rubyonrails.org") ActiveRecord
   %dd
     Popular ORM from the Ruby on Rails universe
 
@@ -54,21 +125,21 @@ Built on top of
     Small but solid CSS framework.
 
   %dt
-    %a(href="http://") Font Awesome
+    %a(href="https://fortawesome.github.io/") Font Awesome
   %dd
     (Font) Awesome icons.
 
   %dt
-    %a(href="http://") Chart.js
+    %a(href="http://chartjs.org") Chart.js
   %dd
     For JavaScript Charts.
 
   %dt
-    %a(href="http://") jquery.js
+    %a(href="http://jquery.com") jQuery
   %dd
     For JavaScript.
 
   %dt
-    %a(href="http://") jquery-ui.js
+    %a(href="https://jqueryui.com") jQuery UI
   %dd
     For JavaScript UI goodies.
