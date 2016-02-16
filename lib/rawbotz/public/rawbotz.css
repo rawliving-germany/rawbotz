@@ -19,6 +19,24 @@ h3 {
 #menu {
   background-color: rgb(230,230,210);
 }
+#submenu {
+  background-color: rgb(230,230,210);
+  box-shadow: 0 8px 10px -8px #333;
+  border-radius: 0px 0px 55px 55px;
+}
+#headicon {
+  position:absolute;
+  top:5px;
+  left:8px;
+  font-size:25px;
+  color:#777;
+}
+.supplier {
+  margin: 10px;
+}
 td {
   vertical-align: top;
+}
+th {
+  font-weight: 400;
 }
