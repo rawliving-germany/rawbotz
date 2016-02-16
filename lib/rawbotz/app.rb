@@ -249,7 +249,7 @@ class RawbotzApp < Sinatra::Base
       # return product link
       remote_product_link remote_product
     else
-      add_flash :success, "Linked Product"
+      add_flash :success, "Linked Product '#{@product.name}' to '#{@product.remote_product.name}'"
 
       if params[:redirect_to] == "link_wizard"
         redirect '/products/link_wizard'
