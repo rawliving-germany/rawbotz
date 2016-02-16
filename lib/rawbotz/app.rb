@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 require 'rawbotz/icon_helper'
+require 'tilt/haml'
 
 class RawbotzApp < Sinatra::Base
   include RawgentoModels
