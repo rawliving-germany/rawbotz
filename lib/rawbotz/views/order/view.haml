@@ -64,7 +64,8 @@
     %tbody
       - @order.order_items.find_each do |item|
         %tr
-          %td=item.local_product.name
+          %td
+            = local_product_link item.local_product
           %td
             =item.num_wished
           %td
