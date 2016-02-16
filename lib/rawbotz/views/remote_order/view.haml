@@ -21,9 +21,11 @@
           -if p.local_product
             %a(href="/product/#{p.local_product.id}")
               = p.local_product.name
-          -else
+          -elsif p.is_a? RemoteProduct
             %a(href="/remote_product/#{p.id}/link")
               Link (broken)
+          -else
+            not in database
         %td=q
         %td
         %td
