@@ -24,7 +24,7 @@
             = haml "widgets/_ajax_link".to_sym, locals: {local_product: product, redirect_to: 'products'}
           - else
             = product.remote_product.name
-        %td= product.supplier
+        %td= product.supplier.try(:name)
         %td
           %a(href="") Show modal
 

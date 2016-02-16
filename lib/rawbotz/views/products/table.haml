@@ -15,6 +15,6 @@
         %td
           %a(href="/product/#{product.id}")= product.name
         %td= product.product_id
-        %td= product.supplier
+        %td= product.supplier.try(:name)
         %td
           %a(href="") Show modal

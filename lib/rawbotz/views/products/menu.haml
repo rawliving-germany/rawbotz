@@ -1,11 +1,14 @@
+.icon#headicon
+  = products_icon
+
 .pure-u-1
-  .pure-menu.pure-menu-horizontal#menu
+  .pure-menu.pure-menu-horizontal#submenu
     %small
       %center
         %ul.pure-menu-list
           %li.pure-menu-item
             %a.pure-menu-link(href="/products")
-              %i(class="fa fa-puzzle-piece")
+              = index_icon
               Local Products
         %ul.pure-menu-list
           %li.pure-menu-item
@@ -20,5 +23,5 @@
         %ul.pure-menu-list
           %li.pure-menu-item
             %a.pure-menu-link(href="/products/link_wizard")
-              %i(class="fa fa-link")
+              %i(class="fa fa-magic")
               Product Link Wizard

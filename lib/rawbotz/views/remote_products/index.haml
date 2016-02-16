@@ -2,7 +2,7 @@
 
 %h1 Remote Products
 
-%h2 of supplier #{settings.supplier} (#{@products.count})
+%h2 of supplier #{settings.supplier.name} (#{@products.count})
 
 %table.pure-table
   %thead
@@ -27,4 +27,4 @@
             Not linked
           - else
             = local_product_link product.local_product
-        %td= product.supplier
+        %td= product.supplier.try(:name)

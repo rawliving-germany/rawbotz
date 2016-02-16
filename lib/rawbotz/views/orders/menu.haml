@@ -1,19 +1,24 @@
+.icon#headicon
+  = order_icon
+
 .pure-u-1
-  .pure-menu.pure-menu-horizontal#menu
+  .pure-menu.pure-menu-horizontal#submenu
     %small
       %center
         %ul.pure-menu-list
           %li.pure-menu-item
             %a.pure-menu-link(href="/orders")
-              %i(class="fa fa-puzzle-piece")
+              = index_icon
               Orders
-        %ul.pure-menu-list
           %li.pure-menu-item
-            %a.pure-menu-link(href="/remote_products")
-              %i(class="fa fa-globe")
+            %a.pure-menu-link(href="/order/new")
+              %i(class="fa fa-plus")
               New or current
-        %ul.pure-menu-list
           %li.pure-menu-item
             %a.pure-menu-link(href="/orders/non_remote")
-              %i(class="fa fa-link")
-              others
+              %i(class="fa fa-envelope-o")
+              Other Suppliers
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/remote_orders")
+              %i(class="fa fa-globe")
+              Remote
