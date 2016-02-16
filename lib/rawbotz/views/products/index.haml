@@ -2,40 +2,6 @@
 
 %h1 Products by Supplier
 
--#.dialogBox(style="border:1px solid gray;")
--#  %a.ajaxLink(href="/test")
--#    kalick
--#
--#:javascript
--#  var $modalDialog = $('<div/>', {
--#      'class': 'exampleModal',
--#      'id': 'exampleModal1'
--#  })
--#  .appendTo('body')
--#  .dialog({
--#      resizable: false,
--#      autoOpen: false,
--#      height: 400,
--#      width: 450,
--#      show: 'fold',
--#      buttons: {
--#          "Close": function () {
--#              $modalDialog.dialog("close");
--#          }
--#      },
--#      modal: true
--#  });
--#
--#  $(function () {
--#      $('a.ajaxLink').on('click', function (e) {
--#          e.preventDefault();
--#          // TODO: Undo comments, below
--#          var url = $('a.ajaxLink:first').attr('href');
--#          $modalDialog.load(url);
--#          $modalDialog.dialog("open");
--#      });
--#  });
-
 :javascript
   $(function() {
     $( "#tabs" ).tabs();
