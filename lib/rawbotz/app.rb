@@ -38,8 +38,12 @@ class RawbotzApp < Sinatra::Base
     def remote_product_link product
       if product.is_a? LocalProduct
         remote_product_link product.remote_product
-      elsif product
-        "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
+      elsif product.try(:id)
+        "<a href=\"/remote_product/#{product.id}\">"\
+        "<i class=\"fa fa-globe\"></i>#{product.name}</a>"
+      elsif product.name
+        # Used in RemoteOrder view.
+        "#{product.name}"
       else
         "not linked"
       end
