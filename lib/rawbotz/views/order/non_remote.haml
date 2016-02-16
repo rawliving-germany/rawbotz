@@ -2,36 +2,41 @@
 
 %h1 Non-Remote Order for supplier #{@supplier.name}
 
-%form.pure-form(action="" method="post")
-  %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
-  %table.pure-table
-    %thead
-      %tr
-        %th Name
-        %th Qty
-        %th Packsize
-        -#%th Stock and Sales
-    %tbody
-      - @products.find_each do |product|
+%center
+  %form.pure-form(action="" method="post")
+    %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
+    %table.pure-table
+      %thead
         %tr
-          %td
-            = product.name
-          %td
-            %input.qty(name="item_#{product.id}" size="2")
-            - if product.packsize.present?
-              %button.pure-button.plus-pack(data-packsize="#{product.packsize}")
-                %i.fa.fa-plus-square
-                %i.fa.fa-cube
-              %button.pure-button.minus-pack(data-packsize="#{product.packsize}")
-                %i.fa.fa-minus-square
-                %i.fa.fa-cube
-              %button.pure-button.order-none
-                %i.fa.fa-remove
-          %td
-            = product.try(:packsize)
+          %th Name
+          %th Qty
+          %th Packsize
+          -#%th Stock and Sales
+      %tbody
+        - @products.find_each do |product|
+          %tr
+            %td
+              = product.name
+            %td
+              %input.qty(name="item_#{product.id}" size="2")
+              - if product.packsize.present?
+                %button.pure-button.plus-pack(data-packsize="#{product.packsize}")
+                  %i.fa.fa-plus-square
+                  %i.fa.fa-cube
+                %button.pure-button.minus-pack(data-packsize="#{product.packsize}")
+                  %i.fa.fa-minus-square
+                  %i.fa.fa-cube
+                %button.pure-button.order-none
+                  %i.fa.fa-remove
+            %td
+              - if product.packsize.present?
+                = product.packsize
+              - else
+                %i.fa.fa-ban
 
-  %br
-  %center
-    %button.pure-button.pure-button-primary
-      %i.fa.fa-envelope
-      Send me the mail!
+
+    %br
+    %center
+      %button.pure-button.pure-button-primary
+        %i.fa.fa-envelope
+        Send me the mail!
