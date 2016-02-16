@@ -258,7 +258,7 @@ class RawbotzApp < Sinatra::Base
       if params[:redirect_to] == "link_wizard"
         redirect '/products/link_wizard'
       elsif params[:redirect_to] == "links"
-        redirect "/product/#{params[:id]}"
+        redirect "/products/links"
       elsif params[:redirect_to]
         redirect "/products/links"
       else
