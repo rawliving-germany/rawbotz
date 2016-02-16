@@ -100,7 +100,8 @@ def main options
   logger.debug("Supplier is #{supplier.name}")
 
   number_dead = 0
-  number_found = 0
+  product_count = RawgentoModels::RemoteProduct.count
+
 
   current_pid = options[:start_pid]
   if options[:check_new]
@@ -121,7 +122,6 @@ def main options
       product_db.update!(name: p[0][0], product_id: p[0][1].to_i, supplier: supplier)
       product_db.save!
       number_dead = 0
-      number_found += 1
     else
       logger.info "None at #{current_pid}"
       number_dead += 1
@@ -138,12 +138,12 @@ def main options
   end
 
   logger.info "Last at #{RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id}"
-  logger.info "Found #{number_found} remote products"
+  logger.info "Found #{RawgentoModels::RemoteProduct.count - product_count} remote products"
 
   if options[:mail]
     logger.debug("Sending mail")
     Rawbotz::mail("rawbotz remote product update",
-                  "Found #{number_found} remote products")
+                  "Found #{RawgentoModels::RemoteProduct.count - product_count} remote products")
   end
 end
 

@@ -31,7 +31,7 @@ rescue
   exit 1
 end
 
-product_count = LocalProduct.count
+product_count = RawgentoModels::LocalProduct.count
 
 products.each do |p|
   l = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: p.product_id)
@@ -74,12 +74,12 @@ update_attribute(packsize_attribute_id, :packsize, logger)
 
 logger.info("Finished updating local products.")
 
-logger.info("Found #{LocalProduct.count - product_count}  new products")
+logger.info("Found #{RawgentoModels::LocalProduct.count - product_count}  new products")
 
 if options[:mail]
   logger.debug("Sending mail")
   Rawbotz::mail("rawbotz local product update",
-                "Found #{LocalProduct.count - product_count} remote products")
+                "Found #{RawgentoModels::LocalProduct.count - product_count} new local products")
 end
 
 exit 0
