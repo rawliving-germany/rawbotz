@@ -23,7 +23,11 @@
       - @orders.each do |order|
         %tr
           %td=order.created_at
-          %td=order.order_items.count
+          %td
+            = order.order_items.count
+            (
+            = order.order_items.processible.count
+            )
           %td
             %a.pure-button(href="/order/#{order.id}")
               %i.fa.fa-eye
