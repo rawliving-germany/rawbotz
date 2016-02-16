@@ -32,16 +32,14 @@ then
   then
     echo "starting rawbotz"
     ./start_rb.sh
-  fi
-  if [ "$_ret" = "2" ]
+  elif [ "$_ret" = "2" ]
   then
     bundle exec rawbotz_update_local_products -v -c "$RAWBOTZ_CONF" | sed -e 's/.* -- : //' | dialog --progressbox "Update local magento products" $PROGRESS_HEIGHT $PROGRESS_WIDTH
-  fi
-  if [ "$_ret" = "3" ]
+  elif [ "$_ret" = "3" ]
   then
-    rawbotz_update_remote_products -c "$RAWBOTZ_CONF" | sed -e 's/.* -- : //' | dialog --progressbox "Updating Remote Products" $PROGRESS_HEIGHT $PROGRESS_WIDTH
-  fi
-  if [ "$_ret" = "4" ]
+    # program "unbuffer?"
+    bundle exec rawbotz_update_remote_products -c "$RAWBOTZ_CONF" -n -w 0 | stdbuf -oL -eL sed -e 's/.* -- : //' | dialog --progressbox "Updating Remote Products" $PROGRESS_HEIGHT $PROGRESS_WIDTH
+  elif [ "$_ret" = "4" ]
   then
     rawbotz_stock_update -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Saving current stock data" $PROGRESS_HEIGHT $PROGRESS_WIDTH
   else
