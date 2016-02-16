@@ -42,6 +42,10 @@ optparse = OptionParser.new do |opts|
           "try NUMBER batches before assuming no further hits #{options.print_default(:max_dead)}") do |v|
     options[:max_dead] = v
   end
+  opts.on("-m", "--[no-]mail",
+          "send mail with result") do |v|
+    options[:mail] = v
+  end
   opts.on("-l", "--limit LIMIT", Integer,
           "try LIMIT products #{options.print_default(:limit)}") do |v|
     options[:limit] = v
@@ -96,6 +100,8 @@ def main options
   logger.debug("Supplier is #{supplier.name}")
 
   number_dead = 0
+  number_found = 0
+
   current_pid = options[:start_pid]
   if options[:check_new]
 
@@ -115,6 +121,7 @@ def main options
       product_db.update!(name: p[0][0], product_id: p[0][1].to_i, supplier: supplier)
       product_db.save!
       number_dead = 0
+      number_found += 1
     else
       logger.info "None at #{current_pid}"
       number_dead += 1
@@ -131,6 +138,13 @@ def main options
   end
 
   logger.info "Last at #{RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id}"
+  logger.info "Found #{number_found} remote products"
+
+  if options[:mail]
+    logger.debug("Sending mail")
+    Rawbotz::mail("rawbotz remote product update",
+                  "Found #{number_found} remote products")
+  end
 end
 
 

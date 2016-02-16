@@ -9,6 +9,11 @@ program_name = File.basename __FILE__
 optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{program_name} [OPTIONS]"
   opts.separator ""
+
+  opts.on("-m", "--[no-]mail",
+          "send mail with result") do |v|
+    options[:mail] = v
+  end
 end
 optparse.parse!
 
@@ -70,5 +75,11 @@ update_attribute(packsize_attribute_id, :packsize, logger)
 logger.info("Finished updating local products.")
 
 logger.info("Found #{LocalProduct.count - product_count}  new products")
+
+if options[:mail]
+  logger.debug("Sending mail")
+  Rawbotz::mail("rawbotz local product update",
+                "Found #{LocalProduct.count - product_count} remote products")
+end
 
 exit 0
