@@ -22,9 +22,11 @@ logger.info("Fetching and updating local products from MySQL database")
 begin
   products = RawgentoDB::Query.products
 rescue
-  logger.error "Could not connec to to MySQL database or other error"
+  logger.error "Could not connect to MySQL database or other error"
   exit 1
 end
+
+product_count = LocalProduct.count
 
 products.each do |p|
   l = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: p.product_id)
@@ -66,5 +68,7 @@ update_attribute(shelve_attribute_id, :shelve_nr, logger)
 update_attribute(packsize_attribute_id, :packsize, logger)
 
 logger.info("Finished updating local products.")
+
+logger.info("Found #{LocalProduct.count - product_count}  new products")
 
 exit 0

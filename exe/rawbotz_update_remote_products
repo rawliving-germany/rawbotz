@@ -77,6 +77,7 @@ if options[:check_new] && options[:start_pid] != 0
 end
 
 def main options
+  STDOUT.sync = true
   logger = Logger.new(STDOUT)
   logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
