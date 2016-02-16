@@ -218,10 +218,10 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/remote_order/:id' do
-    #@products = RawgentoModels::RemoteProduct.all
+    @remote_order_id = params[:id]
     @remote_order_items = Rawbotz.mech.products_from_order params[:id]
     @remote_products_qty = @remote_order_items.map do |remote_product|
-      [RawgentoModels::RemoteProduct.find_by(name: remote_product[0]), remote_product[2]]
+      [RemoteProduct.find_by(name: remote_product[1]) || OpenStruct.new(name: remote_product[1]), remote_product[2]]
     end
     haml "remote_order/view".to_sym
   end
