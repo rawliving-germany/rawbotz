@@ -31,7 +31,6 @@
         %li
           %a(href="#more")more
       #under_min
-        under min, other supplier?
         = haml "order/_item_table".to_sym, locals: {order_items: understocked_items}
       #ordered
         = haml "order/_item_table".to_sym, locals: {order_items: ordered_items}
