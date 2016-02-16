@@ -92,6 +92,7 @@ def main options
 
   supplier_name = mech_config["supplier_name"]
   supplier = RawgentoModels::Supplier.find_or_create_by(name: supplier_name)
+  logger.debug("Supplier is #{supplier.name}")
 
   number_dead = 0
   current_pid = options[:start_pid]
@@ -128,8 +129,9 @@ def main options
     end
   end
 
-  logger.info "Last at #{RawgentoModels::RemoteProduct.where(supplier: supplier_name).order(:product_id).last.inspect}"
+  logger.info "Last at #{RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id}"
 end
 
 
 main options
+exit 0
