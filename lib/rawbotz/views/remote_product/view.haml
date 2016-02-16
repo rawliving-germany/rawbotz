@@ -17,12 +17,14 @@
         create link
       - else
         = local_product_link @product.local_product
-    .pure-control-group
-      %label(for="packsize") Pack size
-      -#= @product.local_product.packsize
-    .pure-control-group
-      %label(for="shelve") Shelve
-      -#= @product.shelve_nr
+    - if packsize = @product.local_product.try(:packsize)
+      .pure-control-group
+        %label(for="packsize") Pack size
+        = packsize
+    - if shelve = @product.local_product.try(:shelve_nr)
+      .pure-control-group
+        %label(for="shelve") Shelve
+        = shelve
 
 -#%h2 Stock and Sales Values
 -#%table.pure-table
