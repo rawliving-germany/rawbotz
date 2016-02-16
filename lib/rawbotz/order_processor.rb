@@ -29,6 +29,41 @@ module Rawbotz
       end
     end
 
+    # Returns diff -> perfect: [], ...
+    def check_against_cart
+      diff = {perfect: [], under_avail: [], extra: [], modified: [], miss: []}.to_h
+      # have logger
+      mech = Rawbotz::new_mech
+      mech.login
+      cart_c = mech.get_cart_content
+      cart = cart_c.map{|i| [i[0],i[1]]}.to_h
+
+      @order.order_items.processible.find_each do |item|
+        remote_name = item.local_product.try(:remote_product).try(:name)
+        qty = cart.delete remote_name
+        # missing case: more than wanted
+        if !qty.nil?
+          # Is in cart
+          if qty.to_i == item.num_wished && qty.to_i == item.num_ordered
+            diff[:perfect] << [item, qty.to_i]
+          elsif qty.to_i == item.num_ordered
+            diff[:under_avail] << [item, qty.to_i]
+          else
+            # + information qty.to_i
+            diff[:modified] << [item, qty.to_i]
+          end
+        else
+          diff[:miss] << [item, nil]
+          # probably not available
+        end
+      end
+      cart.each do |name, qty|
+        diff[:extra] << [name, qty]
+      end
+
+      diff
+    end
+
     private
 
     def log_product_handling item
