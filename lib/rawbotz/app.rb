@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
+require 'rawbotz/icon_helper'
 
 class RawbotzApp < Sinatra::Base
   include RawgentoModels
@@ -43,6 +44,7 @@ class RawbotzApp < Sinatra::Base
       (session[:flash][kind] ||= []) << msg
     end
   end
+  helpers Rawbotz::IconHelper
 
   get '/' do
     haml :index
