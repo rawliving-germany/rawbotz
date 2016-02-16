@@ -109,6 +109,10 @@ Run `rake db:setup` or `rake db:migrate` to setup the database.
 
 #### Populate the database with local and remote products
 
+E.g. with `bundle exec exe/rawbotz_update_local_products -c rawbotz.conf` .
+
+E.g. with `bundle exec exe/rawbotz_update_remote_products -c rawbotz.conf`
+
 #### Setup mailing
 
 I guess we will have to configure pony soon.
@@ -117,6 +121,8 @@ I guess we will have to configure pony soon.
 
 You can run `(bundle exec) exe/rawbotz`, `rackup` or put rawbotz behind a phusion passenger.
 There is a `-c` option to pass in a config file.
+
+As usual, for `rackup` you can specify port (`-p`) and host (`-o`) parameters.  The path to config file has to be exposed as RAWBOTZ_CONFIG env var.
 
 ### Stock History Update via cron
 

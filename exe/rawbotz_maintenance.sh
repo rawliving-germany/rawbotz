@@ -22,6 +22,7 @@ dialog --menu "Rawbotz Menu" 18 30 8 \
   2 "Update local magento products" \
   3 "Look for new remote products" \
   4 "Save current stock data" \
+  5 "Trigger Order queue processing" \
   2> tmp
 
 if [ "$?" = 0 ]
@@ -42,6 +43,9 @@ then
   elif [ "$_ret" = "4" ]
   then
     rawbotz_stock_update -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Saving current stock data" $PROGRESS_HEIGHT $PROGRESS_WIDTH
+  elif [ "$_ret" = "5" ]
+  then
+    rawbotz_process_order_queue -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Processing Order Queue" $PROGRESS_HEIGHT $PROGRESS_WIDTH
   else
     echo "Bad choice."
     exit 1
