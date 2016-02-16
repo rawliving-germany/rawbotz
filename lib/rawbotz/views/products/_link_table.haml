@@ -11,7 +11,7 @@
       %tr
         %td= product.name
         %td= product.product_id
-        %td= product.supplier
+        %td= product.supplier.try(:name)
         %td
           %form.pure-form.pure-form-aligned(action="" method="post")
             -# fields ..

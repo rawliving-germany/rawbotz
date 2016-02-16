@@ -10,13 +10,13 @@
 #tabs
   %ul
     %li
-      %a(href="#local_unlinked")Local unlinked (#{settings.supplier}) (#{@local_products.unlinked.count})
+      %a(href="#local_unlinked")Local unlinked (#{settings.supplier.name}) (#{@local_products.unlinked.count})
     %li
-      %a(href="#local_linked")Local linked (#{settings.supplier}) (#{@local_products.linked.count})
-    -#%li
-    -#  %a(href="#remote_linked")Remote linked
-    -#%li
-    -#  %a(href="#remote_unlinked")Remote unlinked
+      %a(href="#local_linked")Local linked (#{settings.supplier.name}) (#{@local_products.linked.count})
+    %li
+      %a(href="#remote_linked")Remote linked (#{@remote_products.supplied_by(settings.supplier).linked.count})
+    %li
+      %a(href="#remote_unlinked")Remote unlinked (#{@remote_products.supplied_by(settings.supplier).unlinked.count})
   #local_linked
     %table.pure-table.pure-table-horizontal
       %thead
@@ -56,5 +56,7 @@
             %td
               %a(href="/product/#{local_product.id}/link")
                 Link
-  -##remote_linked
-  -##remote_unlinked
+  #remote_linked
+    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(Supplier.find_by(name: settings.supplier)).linked}
+  #remote_unlinked
+    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(Supplier.find_by(name: settings.supplier)).unlinked}

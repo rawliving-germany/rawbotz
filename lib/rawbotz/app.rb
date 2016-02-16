@@ -36,7 +36,18 @@ class RawbotzApp < Sinatra::Base
       end
     end
     def remote_product_link product
-      "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
+      if product.is_a? LocalProduct
+        remote_product_link product.remote_product
+      elsif product
+        "<a href=\"/remote_product/#{product.id}\">#{product.name}</a>"
+      else
+        "not linked"
+      end
+    end
+    def product_link product
+      return local_product_link(product) if product.is_a?(LocalProduct)
+      return remote_product_link(product) if product.is_a?(RemoteProduct)
+      "no product"
     end
     def flash
       @flash = session[:flash]# || {}

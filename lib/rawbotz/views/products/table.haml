@@ -7,14 +7,14 @@
         Product ID
       %th
         Supplier
-      %th
-        Last Stock
+      -#%th
+      -#  Last Stock
   %tbody
     - products.each do |product|
       %tr
         %td
-          %a(href="/product/#{product.id}")= product.name
+          = product_link product
         %td= product.product_id
         %td= product.supplier.try(:name)
-        %td
-          %a(href="") Show modal
+        -#%td
+        -#  %a(href="") Show modal
