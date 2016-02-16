@@ -19,9 +19,12 @@ logger.debug "#{program_name} #{Rawbotz::VERSION}"
 
 logger.info("Fetching and updating local products from MySQL database")
 
-#logger.debug("MySQL db settings:")
-
-products = RawgentoDB::Query.products
+begin
+  products = RawgentoDB::Query.products
+rescue
+  logger.error "Could not connec to to MySQL database or other error"
+  exit 1
+end
 
 products.each do |p|
   l = RawgentoModels::LocalProduct.find_or_initialize_by(product_id: p.product_id)
