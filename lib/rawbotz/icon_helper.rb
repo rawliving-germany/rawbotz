@@ -12,5 +12,8 @@ module Rawbotz
     def index_icon
       '<i class="fa fa-th-list"></i>'
     end
+    def link_icon
+      '<i class="fa fa-link"></i>'
+    end
   end
 end
