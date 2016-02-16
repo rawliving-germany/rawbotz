@@ -10,7 +10,7 @@
       %input#product_id(type="text" readonly value="#{@product.product_id}")
     .pure-control-group
       %label(for="supplier") Supplier
-      = @product.supplier.name
+      = @product.supplier.try(:name)
     .pure-control-group
       %label(for="supplier") Remote Product
       - if @product.remote_product.nil?
