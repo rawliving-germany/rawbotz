@@ -43,7 +43,7 @@ module Rawbotz
     @logger = logger
   end
   def self.configure_logger options
-    @logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
+    logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
   end
 
   def self.new_mech
