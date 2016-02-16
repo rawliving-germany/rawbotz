@@ -30,7 +30,8 @@
             %td=local_product_link(local_product)
             %td=remote_product_link(local_product.remote_product)
             %td
-              %a(href="/product/#{local_product.id}/link")
+              %a.pure-button(href="/product/#{local_product.id}/link")
+                = link_icon
                 Change Link
   #local_unlinked
     %table.pure-table.pure-table-striped
@@ -50,14 +51,15 @@
                   %input(type="hidden" name="redirect_to" value="links")
                   %button.pure-button.pure-button-primary(type="submit")
                     %small
-                      Link to
-                    = suggested_product.name
+                      %small
+                        Link to
+                      = suggested_product.name
                 %br
             %td
               %a.pure-button.pure-button-primary(href="/product/#{local_product.id}/link")
                 = link_icon
                 Link
   #remote_linked
-    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(Supplier.find_by(name: settings.supplier)).linked}
+    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(settings.supplier).linked}
   #remote_unlinked
-    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(Supplier.find_by(name: settings.supplier)).unlinked}
+    = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(settings.supplier).unlinked}
