@@ -16,8 +16,7 @@
       - if @product.remote_product.nil?
         %a(href="/product/#{@product.id}/link") Link to ...
       - else
-        %a(href="/remote_product/#{@product.remote_product.id}")
-          = @product.remote_product.name
+        = remote_product_link @product
     .pure-control-group
       %label(for="packsize") Pack size
       = @product.packsize
