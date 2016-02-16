@@ -39,7 +39,7 @@ then
   fi
   if [ "$_ret" = "3" ]
   then
-    rawbotz_update_remote_products -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Updating Remote Products" $PROGRESS_HEIGHT $PROGRESS_WIDTH
+    rawbotz_update_remote_products -c "$RAWBOTZ_CONF" | sed -e 's/.* -- : //' | dialog --progressbox "Updating Remote Products" $PROGRESS_HEIGHT $PROGRESS_WIDTH
   fi
   if [ "$_ret" = "4" ]
   then
