@@ -1,4 +1,4 @@
-%table.pure-table
+%table.pure-table.pure-table-striped
   %thead
     %tr
       %th Product Name
@@ -14,22 +14,25 @@
         %td= product.supplier.try(:name)
         %td
           %form.pure-form.pure-form-aligned(action="" method="post")
-            -# fields ..
             %input(type="hidden" name="remote_product_id" value="#{product.id}")
             - if @product.remote_product.nil?
               - if product.local_product
                 Currently linked to #{product.local_product.name}
                 %button.pure-button.pure-button-primary(type="submit")
-                  Change link to this
+                  = link_icon
+                  Set link
               - else
                 %button.pure-button.pure-button-primary(type="submit")
+                  = link_icon
                   Create link
             - else
               -#Currently linked to #{product_link @prod
               - if product.local_product
                 Currently already linked to #{product.local_product.name}
                 %button.pure-button.pure-button-error(type="submit")
-                  Change Link
+                  = link_icon
+                  Set Link
               - else
                 %button.pure-button.pure-button-error(type="submit")
-                  Change Link
+                  = link_icon
+                  Set Link

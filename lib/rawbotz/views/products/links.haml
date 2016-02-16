@@ -18,7 +18,7 @@
     %li
       %a(href="#remote_unlinked")Remote unlinked (#{@remote_products.supplied_by(settings.supplier).unlinked.count})
   #local_linked
-    %table.pure-table.pure-table-horizontal
+    %table.pure-table.pure-table-striped
       %thead
         %tr
           %th Local Product
@@ -30,10 +30,10 @@
             %td=local_product_link(local_product)
             %td=remote_product_link(local_product.remote_product)
             %td
-              %a(href="/products/#{local_product.id}")
+              %a(href="/product/#{local_product.id}/link")
                 Change Link
   #local_unlinked
-    %table.pure-table.pure-table-horizontal
+    %table.pure-table.pure-table-striped
       %thead
         %tr
           %th Local Product
@@ -54,7 +54,8 @@
                     = suggested_product.name
                 %br
             %td
-              %a(href="/product/#{local_product.id}/link")
+              %a.pure-button.pure-button-primary(href="/product/#{local_product.id}/link")
+                = link_icon
                 Link
   #remote_linked
     = haml "remote_products/_table".to_sym, locals: {products: @remote_products.supplied_by(Supplier.find_by(name: settings.supplier)).linked}
