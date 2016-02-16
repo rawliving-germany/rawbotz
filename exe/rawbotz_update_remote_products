@@ -109,9 +109,9 @@ def main options
     p = mech.scrape_products(current_pid, 1, options[:sleep_time])
     if !p.empty?
       logger.info "Found #{p[0].inspect}"
-      product_db = RawgentoModels::RemoteProduct.find_or_initialize_by(product_id: p[0][1], supplier: supplier_name)
-      product_db.update(name: p[0][0], product_id: p[0][1], supplier: supplier_name)
-      product_db.save
+      product_db = RawgentoModels::RemoteProduct.find_or_initialize_by(product_id: p[0][1].to_i, supplier: supplier)
+      product_db.update!(name: p[0][0], product_id: p[0][1].to_i, supplier: supplier)
+      product_db.save!
       number_dead = 0
     else
       logger.info "None at #{current_pid}"

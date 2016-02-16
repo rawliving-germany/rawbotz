@@ -76,8 +76,8 @@ class RawbotzApp < Sinatra::Base
   end
 
   get '/products/link_wizard' do
-    @unlinked_count = LocalProduct.unlinked.count
-    @local_product = LocalProduct.supplied_by(settings.supplier).unlinked.at(0)
+    @unlinked_count = settings.supplier.local_products.unlinked.count
+    @local_product = settings.supplier.local_products.unlinked.first
     params[:idx] = 0
     haml "products/link_wizard".to_sym
   end
@@ -90,13 +90,13 @@ class RawbotzApp < Sinatra::Base
 
   post '/remote_products/search' do
     @products = RemoteProduct.supplied_by(settings.supplier)
-      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(10).pluck(:name, :id)
+      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
     @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
   end
 
   post '/products/search' do
     @products = LocalProduct
-      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(10).pluck(:name, :id)
+      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
     @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
   end
 
