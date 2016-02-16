@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+require "rawbotz"
+require 'rawbotz/option_parser'
+
+options = {}
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS] ORDER_ID"
+  opts.separator ""
+
+  opts.on("-m", "--[no]-mail", "Send mail with result") do |m|
+    options[:mail] = true
+  end
+
+  opts.on("-f", "--force", "Force order even if state is not queued") do |m|
+    options[:force] = true
+  end
+end
+optparse.parse!
+
+options = optparse.options
+Rawbotz::configure_logger options
+
+include RawgentoModels
+
+def main options
+  Rawbotz::logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
+
+  if ARGV.length != 1
+    Rawbotz::logger.error("Need an argument (order_id)")
+    exit 4
+  end
+
+  Rawbotz::logger.info("Starting order")
+
+  order = RawgentoModels::Order.find(ARGV[0].to_i)
+  if !order.present?
+    Rawbotz::logger.error("No Order with #{ARGV[0].to_i} found.")
+    exit 5
+  end
+
+  Rawbotz::logger.info("#{order.order_items.length} items in Order")
+  if order.state != :new
+    Rawbotz::logger.warn("Order in state #{order.state}!")
+    if !options[:force]
+      Rawbotz::logger.warn("Run with -f,--force flag to ignore")
+      exit 6
+    end
+  end
+
+  order.update(state: :processing)
+
+  order_processor = Rawbotz::OrderProcessor.new(order, Rawbotz::logger)
+
+  order_processor.process!
+
+  Rawbotz::logger.info("Finished order")
+
+  order.update(state: :ordered)
+
+  if options[:mail]
+    settings = YAML::load_file(Rawbotz::conf_file_path)["mail"]
+    pony_via_options = { address: settings["host"],
+                         user_name: settings["user"],
+                         port: settings["port"].to_i,
+                         authentication: :login,
+                         password: settings["pass"]}
+    Rawbotz::logger.info("Attempting mail send to #{settings['to']}")
+    Pony.mail({
+      to: settings["to"],
+      from: settings["from"],
+      subject: "test",
+      body: "great",
+      via: :smtp,
+      via_options: pony_via_options
+    })
+  else
+    Rawbotz::logger.info("Not sending mail (invoke with -m to do so)")
+  end
+
+  diff = order_processor.check_against_cart
+end
+
+main options
+exit 0
