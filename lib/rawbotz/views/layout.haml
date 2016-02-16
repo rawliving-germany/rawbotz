@@ -12,33 +12,12 @@
     %script{:type => 'text/javascript', :src => "/jui/jquery-ui.min.js"}
     %link(rel="stylesheet" type='text/css' href="/jui/jquery-ui.min.css")
     %script{:type => 'text/javascript', :src => "/rawbotz.js"}
+    %script{:type => 'text/javascript', :src => "/rawbotz_link_line.js"}
     %script{:type => 'text/javascript', :src => "/rawbotz_ajax_product_link.js"}
   %body
     .pure-g
       .pure-u-1
-        .pure-menu.pure-menu-horizontal#menu
-          %center
-            %ul.pure-menu-list
-              %li.pure-menu-item
-                %a.pure-menu-link(href="/orders")
-                  %i(class="fa fa-shopping-bag")
-                  Orders
-              %li.pure-menu-item
-                %a.pure-menu-link(href="/products")
-                  %i(class="fa fa-puzzle-piece")
-                  Products
-              %li.pure-menu-item
-                %a.pure-menu-link(href="/remote_orders")
-                  %i(class="fa fa-puzzle-piece")
-                  Remote Orders
-              %li.pure-menu-item
-                %a.pure-menu-link(href="/remote_cart")
-                  %i(class="fa fa-puzzle-piece")
-                  Current Cart
-              %li.pure-menu-item
-                %a.pure-menu-link(href="/maintenance")
-                  %i(class="fa fa-exclamation")
-                  Maintenance
+        = haml "_menu".to_sym
       .pure-u-1#main
         - if flash
           - if msg = flash.delete(:error)
