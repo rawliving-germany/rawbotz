@@ -19,13 +19,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "sinatra"
-  spec.add_dependency 'pony'
-  spec.add_dependency 'haml'
+  spec.add_dependency "sinatra", '~> 1.4'
+  spec.add_dependency 'pony', '~> 1.11'
+  spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency "rawgento_models", '~> 0.0.9'
   spec.add_dependency "rawgento_db", "~> 0.0.3"
   spec.add_dependency "magento_remote"
-  spec.add_dependency "terminal-table"
+  spec.add_dependency "terminal-table", '~> 1.5'
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
