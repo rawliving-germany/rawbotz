@@ -76,6 +76,9 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       pass: whatnottobenamed
     
     supplier_name: MagentoShop Remote
+    
+    local_shop:
+      base_uri: https://magentoshop.mine
 
 Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
 To have fun directly with rack instead use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
@@ -107,17 +110,32 @@ Note that a script with basic support for maintenance-tasks is underway (exe/raw
 
 #### Setup the database
 
-Run `rake db:setup` or `rake db:migrate` to setup the database.
+Run `rake db:setup` (if `db/schema.rb` is present) or `rake db:migrate` to setup the database.
+Unfortunately, there is no way to pass in the config file, so for now you have to create `db/config.yml` (which can be nearly the same as `rawbotz.conf`) temporarily.
 
 #### Populate the database with local and remote products
 
 E.g. with `bundle exec exe/rawbotz_update_local_products -c rawbotz.conf` .
+This will query your magento MySQL database and create 'local' products, expect the command to run a while (minutes).
 
 E.g. with `bundle exec exe/rawbotz_update_remote_products -c rawbotz.conf`
+This will query the remote magento shop (scraping it via html GET requests) and create 'remote' products, expect the command to run a while longer (more minutes).  You might need to adapt parameters, depending on the remote shop.  `bundle exec exe/rawbotz_update_remote_products --help` gives you a hint on how to optimize your settings.
 
 #### Setup mailing
 
-I guess we will have to configure pony soon.
+Mails are sent via pony.
+
+Create following `rawbotz.conf` section:
+
+    mail:
+      to: your@email.address
+      from: senders@email.address
+      host: email.address
+      user: senders@email.user
+      pass: senders.email.password
+      port: 587
+
+.
 
 ### Deployment or web-app startup
 
