@@ -137,8 +137,12 @@ def main options
     end
   end
 
-  logger.info "Last at #{RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id}"
-  logger.info "Found #{RawgentoModels::RemoteProduct.count - product_count} remote products"
+  if RawgentoModels::RemoteProduct.any?
+    logger.info "Last at #{RawgentoModels::RemoteProduct.unscoped.where(supplier: supplier).order(product_id: :desc).first.product_id}"
+    logger.info "Found #{RawgentoModels::RemoteProduct.count - product_count} remote products"
+  else
+    logger.warn "No remote products found!"
+  end
 
   if options[:mail]
     logger.debug("Sending mail")
