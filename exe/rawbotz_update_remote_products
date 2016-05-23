@@ -123,7 +123,9 @@ def main options
       product_db.save!
       number_dead = 0
     else
-      logger.info "None at #{current_pid}"
+      extra = options[:limit] ? "#{current_pid - (options[:start_pid] + options[:limit])}" : ""
+      extra += " #{options[:max_dead] - number_dead}"
+      logger.info "None at #{current_pid} - try #{extra} more"
       number_dead += 1
     end
     current_pid += 1
