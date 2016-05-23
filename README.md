@@ -31,7 +31,7 @@ Anyway, the application is so specific to RawLiving Germanys needs that you prob
 
 ## Usage
 
-Until rawgento_models, `rawgento_db` and `magento_remote` have settled, please adjust the `Gemfile` and checkout these gems in the parent folder.
+Until `rawgento_models`, `rawgento_db` and `magento_remote` (gems by same author) have settled, please adjust the `Gemfile` and checkout these gems in the parent folder.
 
 ### Configuration
 
@@ -78,7 +78,7 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
     supplier_name: MagentoShop Remote
 
 Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
-To have fun with rack use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
+To have fun directly with rack instead use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
 
 #### Reference to the configurable required components
 
@@ -102,6 +102,8 @@ Configure your magento mysql-connection in rawgento_db-config.yml (`rawgento_db`
 Finally, configure the remote shops credentials (`magento_remote`)
 
 ## Setup
+
+Note that a script with basic support for maintenance-tasks is underway (exe/rawbotz_maintenance.sh).
 
 #### Setup the database
 
