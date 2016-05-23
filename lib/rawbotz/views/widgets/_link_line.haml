@@ -1,0 +1,15 @@
+- if locals[:direction] == :remote_local
+  .link_line
+    .result(style="display:none;")
+    .ajax_link_area.pure-form
+      %input.search-local-ajax(placeholder="search ...")
+      %input.local_product_id(type="hidden")
+      %input.remote_product_id(type="hidden" value="#{product_id}")
+      %a.product_link_action.pure-button(href="")
+        Link
+- else
+  .ajax_link_area.pure-form
+    %input.search-remote-ajax(placeholder="search ...")
+    %input.remote_product_id(type="hidden")
+    %a.ajax_product_link(href="")
+      Link! LR
