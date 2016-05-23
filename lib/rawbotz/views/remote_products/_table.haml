@@ -1,0 +1,15 @@
+%table.pure-table.pure-table-horizontal
+  %thead
+    %tr
+      %th Remote Product
+      %th Local Product
+  %tbody
+    - products.find_each do |product|
+      %tr
+        %td=remote_product_link(product)
+        %td
+          - if product.local_product.present?
+            = local_product_link product.local_product
+          - else
+            = haml "widgets/_link_line".to_sym, locals: {direction: :remote_local, product_id: product.id}
+
