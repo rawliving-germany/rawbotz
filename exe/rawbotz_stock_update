@@ -7,11 +7,9 @@ require "rawbotz"
 require 'optparse'
 
 options = {config: RawgentoModels::CONF_FILE}
-program_name = File.basename __FILE__
-$program_name = program_name
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
   opts.separator ""
 
   opts.separator "RawgentoDB configuration file (MySQL options)"
@@ -34,7 +32,7 @@ optparse = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "General"
   opts.on_tail('--version', 'Show version.') do
-    puts "#{program_name} #{Rawbotz::VERSION}"
+    puts "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
     exit 0
   end
   opts.on('-h', '--help', 'Show this help.') do
@@ -50,7 +48,7 @@ def main options
   logger = Logger.new(STDOUT)
   logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
-  logger.debug "#{$program_name} #{Rawbotz::VERSION}"
+  logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
 
   if !File.exist? options[:config]
     logger.warn "Cannot load conf file #{options[:config]}"
