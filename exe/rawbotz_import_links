@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+require "rawbotz/option_parser"
+
+require 'csv'
+
+options = {}
+program_name = File.basename __FILE__
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{program_name} [OPTIONS] <CSVFILE>"
+  opts.separator ""
+
+  opts.on("-d", "--dry-run", "Simulate, do not actually write to db") do |d|
+    options[:dry_run] = d
+  end
+end
+optparse.parse!
+
+logger = Logger.new(STDOUT)
+logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+logger.debug "#{program_name} #{Rawbotz::VERSION}"
+
+if ARGV.length != 1
+  STDERR.puts "Need to supply an argument!"
+  STDERR.puts optparse.banner
+  exit 2
+end
+
+logger.info("Read csv input file #{ARGV[0]}")
+
+if options[:dry_run]
+  logger.info("In dry-run-mode, will not actually write to database.")
+end
+
+begin
+  CSV.foreach(ARGV[0]) do |line|
+    local_pid = line[0]
+    remote_pid = line[1]
+
+    local_product = RawgentoModels::LocalProduct.find_by(product_id: local_pid)
+    remote_product = RawgentoModels::RemoteProduct.find_by(product_id: remote_pid)
+
+    if local_product.nil?
+      logger.error "Local Product with product-id #{local_pid} could not be found"
+      next
+    elsif remote_product.nil?
+      logger.error "Remote Product with product-id #{remote_pid} could not be found"
+      next
+    end
+    if local_product.remote_product == remote_product
+      logger.info "Link #{local_pid} -> #{remote_pid} already present"
+      next
+    end
+    if !options[:dry_run]
+      local_product.remote_product = remote_product
+      local_product.save
+    end
+    logger.info "Linked #{local_pid} -> #{remote_pid}"
+    logger.debug "Linked #{local_product.name} -> #{remote_product.name}"
+  end
+rescue Exception => e
+  logger.error "Could not read csv input file"
+  logger.error e.inspect
+  logger.error e.backtrace
+  exit 1
+end
+
+if options[:dry_run]
+  logger.info("In dry-run-mode, did not actually write to database.")
+end
+
+exit 0
