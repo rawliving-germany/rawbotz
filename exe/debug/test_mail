@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+require 'rawbotz/option_parser'
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS] ORDER_ID"
+  opts.separator ""
+end
+optparse.parse!
+options = optparse.options
+
+mail = Rawbotz::mail("rawbotz test mail", "Success.\nHere the body.")
+
+exit 0
