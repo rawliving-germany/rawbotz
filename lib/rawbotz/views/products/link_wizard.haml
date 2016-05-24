@@ -9,7 +9,8 @@
 -else
   #{@unlinked_count}/#{settings.supplier.local_products.count} unlinked local products from #{settings.supplier.name}
 
-  %h2= @local_product.name
+  %h2
+    = product_link @local_product
 
   %center
     %table.pure-table
