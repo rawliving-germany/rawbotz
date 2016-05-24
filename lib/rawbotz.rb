@@ -60,13 +60,15 @@ module Rawbotz
                          authentication: :login,
                          password: settings["pass"]}
 
-    Pony.mail({
-      to: settings["to"],
-      from: settings["from"],
-      subject: subject,
-      body: body,
-      via: :smtp,
-      via_options: pony_via_options
-    })
+    [*settings["to"]].each do |receipient|
+      Pony.mail({
+        to: receipient,
+        from: settings["from"],
+        subject: subject,
+        body: body,
+        via: :smtp,
+        via_options: pony_via_options
+      })
+    end
   end
 end

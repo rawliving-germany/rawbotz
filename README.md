@@ -79,6 +79,14 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
     
     local_shop:
       base_uri: https://magentoshop.mine
+    
+    mail:
+      to: your@email.address
+      from: senders@email.address
+      host: email.address
+      user: senders@email.user
+      pass: senders.email.password
+      port: 587
 
 Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
 To have fun directly with rack instead use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
@@ -135,6 +143,12 @@ Create following `rawbotz.conf` section:
       pass: senders.email.password
       port: 587
 
+.  Multiple receipients can be addressed like this:
+
+    mail:
+      to:
+        - your@email.address
+        - colleagues@mail.address
 .
 
 ### Deployment or web-app startup
