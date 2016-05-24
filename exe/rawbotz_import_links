@@ -31,7 +31,7 @@ end
 
 logger.info("Read csv input file #{ARGV[0]}")
 
-if options[:dry_run]
+if optparse.options[:dry_run]
   logger.info("In dry-run-mode, will not actually write to database.")
 end
 
@@ -68,7 +68,7 @@ rescue Exception => e
   exit 1
 end
 
-if options[:dry_run]
+if optparse.options[:dry_run]
   logger.info("In dry-run-mode, did not actually write to database.")
 end
 
