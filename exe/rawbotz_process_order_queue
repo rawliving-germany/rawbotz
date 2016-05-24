@@ -63,12 +63,13 @@ def main options
   diffs = order_processor.check_against_cart
 
   # Option to put to stdout
-  puts Rawbotz::CLI::OrderResultTable.tables diffs
+  diff_table = Rawbotz::CLI::OrderResultTable.tables diffs
+  puts diff_table
 
   if options[:mail]
     logger.debug("Sending mail")
     Rawbotz::mail("rawbotz order finished",
-                  "Finished Order nr #{order.id}. Result: [tbd]")
+                  "Finished Order nr #{order.id}. Result: [tbd]\n\n#{diff_table}")
   end
 end
 
