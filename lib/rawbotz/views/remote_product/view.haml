@@ -9,6 +9,10 @@
       %label(for="product_id") Product ID
       %input#product_id(type="text" readonly value="#{@product.product_id}")
     .pure-control-group
+      %label(for="product_page") Product Page
+      %a(href="#{settings.conf['remote_shop']['base_uri']}catalog/product/view/id/#{@product.product_id}" target="blank")
+        #{settings.conf['remote_shop']['base_uri']}/catalog/product/view/id/#{@product.product_id}
+    .pure-control-group
       %label(for="supplier") Supplier
       = @product.supplier.try(:name)
     .pure-control-group
