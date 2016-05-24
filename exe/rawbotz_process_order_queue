@@ -68,8 +68,9 @@ def main options
 
   if options[:mail]
     logger.debug("Sending mail")
-    Rawbotz::mail("rawbotz order finished",
+    mail = Rawbotz::mail("rawbotz order finished",
                   "Finished Order nr #{order.id}. Result: [tbd]\n\n#{diff_table}")
+    logger.debug("Mail sent: #{mail}")
   end
 end
 
