@@ -14,9 +14,9 @@
     %li
       %a(href="#local_linked")Local linked (#{settings.supplier.name}) (#{@local_products.linked.count})
     %li
-      %a(href="#remote_linked")Remote linked (#{@remote_products.supplied_by(settings.supplier).linked.count})
+      %a(href="#remote_linked")Remote linked (#{settings.supplier.remote_products.linked.count})
     %li
-      %a(href="#remote_unlinked")Remote unlinked (#{@remote_products.supplied_by(settings.supplier).unlinked.count})
+      %a(href="#remote_unlinked")Remote unlinked (#{settings.supplier.remote_products.unlinked.count})
   #local_linked
     %table.pure-table.pure-table-striped
       %thead
