@@ -4,7 +4,7 @@
       %th Remote Product
       %th Local Product
   %tbody
-    - products.find_each do |product|
+    - products.each do |product|
       %tr
         %td=remote_product_link(product)
         %td

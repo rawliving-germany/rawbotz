@@ -25,7 +25,7 @@
           %th Remote Product
           %th Action
       %tbody
-        - @local_products.linked.find_each do |local_product|
+        - @local_products.linked.each do |local_product|
           %tr
             %td=local_product_link(local_product)
             %td=remote_product_link(local_product.remote_product)
@@ -41,7 +41,7 @@
           %th Suggested Remote Products
           %th Action
       %tbody
-        - @local_products.unlinked.find_each do |local_product|
+        - @local_products.unlinked.each do |local_product|
           %tr
             %td=local_product_link(local_product)
             %td
