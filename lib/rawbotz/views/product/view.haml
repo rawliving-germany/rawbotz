@@ -10,12 +10,14 @@
       %input#product_id(type="text" readonly value="#{@product.product_id}")
     .pure-control-group
       %label(for="product_page") Product Page (Shop frontend)
-      %a(href="#{settings.conf['local_shop']['base_uri']}catalog/product/view/id/#{@product.product_id}" target="blank")
-        #{settings.conf['local_shop']['base_uri']}/catalog/product/view/id/#{@product.product_id}
+      - frontend_url = Rawbotz::LocalShop.product_page_frontend(@product, settings.conf)
+      %a(href="#{frontend_url}" target="blank")
+        = frontend_url
     .pure-control-group
       %label(for="product_page") Product Page (Shop backend)
-      %a(href="#{settings.conf['local_shop']['base_uri']}index.php/rawadmin/catalog_product/edit/id/#{@product.product_id}" target="blank")
-        #{settings.conf['local_shop']['base_uri']}index.php/rawadmin/catalog_product/edit/id/#{@product.product_id}
+      - backend_url = Rawbotz::LocalShop.product_page_backend(@product, settings.conf)
+      %a(href="#{backend_url}" target="blank")
+        = backend_url
     .pure-control-group
       %label(for="supplier") Supplier
       = @product.supplier.try(:name)

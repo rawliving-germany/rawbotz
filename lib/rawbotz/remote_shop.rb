@@ -12,4 +12,10 @@ module Rawbotz
   def self.attribute_ids
     @@attribute_ids ||= (YAML.load_file Rawbotz.conf_file_path)["attribute_ids"]
   end
+  module RemoteShop
+    def self.product_page_url(product, settings)
+      # settings could be memoized
+      "#{settings['remote_shop']['base_uri']}catalog/product/view/id/#{product.product_id}"
+    end
+  end
 end
