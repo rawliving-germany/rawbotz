@@ -248,6 +248,26 @@ class RawbotzApp < Sinatra::Base
     haml 'product/link_to'.to_sym
   end
 
+  post '/product/:id/hide' do
+    @product = RawgentoModels::LocalProduct.find(params[:id])
+    @product.active = false
+    @product.save
+
+    add_flash :success, "Product '#{@product.name}' is now hidden"
+
+    redirect "/product/#{params[:id]}"
+  end
+
+  post '/product/:id/unhide' do
+    @product = RawgentoModels::LocalProduct.unscoped.find(params[:id])
+    @product.active = true
+    @product.save
+
+    add_flash :success, "Product '#{@product.name}' is now not hidden anymore"
+
+    redirect "/product/#{params[:id]}"
+  end
+
   post '/product/:id/link' do
     remote_product = RemoteProduct.find(params[:remote_product_id])
     @product = RawgentoModels::LocalProduct.find(params[:id])
