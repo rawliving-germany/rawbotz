@@ -3,11 +3,8 @@
 require "rawbotz"
 require "rawbotz/option_parser"
 
-options = {}
-program_name = File.basename __FILE__
-
 optparse = Rawbotz::OptionParser.new do |opts, options|
-  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
   opts.separator ""
 
   opts.on("-m", "--[no-]mail",
@@ -16,6 +13,7 @@ optparse = Rawbotz::OptionParser.new do |opts, options|
   end
 end
 optparse.parse!
+options = optparse.options
 
 logger = Logger.new(STDOUT)
 logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
