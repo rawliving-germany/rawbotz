@@ -1,0 +1,11 @@
+- if product.active?
+  %form.pure-form.pure-form-aligned(action="/product/#{product.id}/hide" method="post")
+    %button.pure-button.pure-button-primary(type="submit")
+      %i.fa.fa-ban
+      Hide
+- else
+  %form.pure-form.pure-form-aligned(action="/product/#{product.id}/unhide" method="post")
+    %button.pure-button.pure-button-primary(type="submit")
+      %i.fa.fa-eye
+      Unhide
+

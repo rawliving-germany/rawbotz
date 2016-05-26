@@ -38,16 +38,7 @@
 - if !@product.remote_product.present?
   = haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: 'product'}
   %br
-- if @product.active?
-  %form.pure-form.pure-form-aligned(action="/product/#{@product.id}/hide" method="post")
-    %button.pure-button.pure-button-primary(type="submit")
-      %i.fa.fa-ban
-      Hide
-- else
-  %form.pure-form.pure-form-aligned(action="/product/#{@product.id}/unhide" method="post")
-    %button.pure-button.pure-button-primary(type="submit")
-      %i.fa.fa-eye
-      Unhide
+= haml :"_hide_unhide_button", locals: {product: @product}
 
 - if @product.stock_items.present?
   %h2 Stock and Sales Values

@@ -39,6 +39,9 @@
         %td
           %a.pure-button(href="/products/link_wizard/#{params[:idx].to_i + 1}")
             Skip
+          %br
+          %br
+          = haml :"_hide_unhide_button", locals: {product: @local_product}
   %br
   %p#message
   %br

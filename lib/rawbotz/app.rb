@@ -255,7 +255,7 @@ class RawbotzApp < Sinatra::Base
 
     add_flash :success, "Product '#{@product.name}' is now hidden"
 
-    redirect "/product/#{params[:id]}"
+    redirect back
   end
 
   post '/product/:id/unhide' do
@@ -265,7 +265,7 @@ class RawbotzApp < Sinatra::Base
 
     add_flash :success, "Product '#{@product.name}' is now not hidden anymore"
 
-    redirect "/product/#{params[:id]}"
+    redirect back
   end
 
   post '/product/:id/link' do
