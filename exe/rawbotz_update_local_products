@@ -18,7 +18,7 @@ options = optparse.options
 logger = Logger.new(STDOUT)
 logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
 
-logger.debug "#{program_name} #{Rawbotz::VERSION}"
+logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
 
 logger.info("Fetching and updating local products from MySQL database")
 
