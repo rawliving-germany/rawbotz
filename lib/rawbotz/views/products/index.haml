@@ -15,6 +15,8 @@
       %li
         %a(href="#tab_#{idx}")="#{supplier.name} (#{@products.supplied_by(supplier).count})"
     %li
+      %a(href="#tab_no_supplier") [no supplier] (#{@products.where(supplier_id: nil})
+    %li
       %a(href="#tab_hidden_products") Hidden (#{@products.all_hidden.count})
   #tab_all_products
     %h2 All Products
@@ -26,6 +28,9 @@
         = haml "products/table_with_linking".to_sym, locals: {products: @products.supplied_by(supplier)}
       - else
         = haml "products/table".to_sym, locals: {products: @products.supplied_by(supplier)}
+  #tab_no_supplier
+    %h2 Products without supplier
+    = haml "products/table".to_sym, locals: {products: @products.where(supplier_id: nil)}
   #tab_hidden_products
     %h2 Hidden Products
     = haml "products/table".to_sym, locals: {products: @products.all_hidden}
