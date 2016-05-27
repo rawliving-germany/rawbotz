@@ -2,6 +2,7 @@ require "rawbotz/version"
 require "rawbotz/remote_shop"
 require "rawbotz/local_shop"
 require "rawbotz/order_processor"
+require "rawbotz/product_updater"
 
 require 'rawgento_models'
 require 'rawgento_db'
