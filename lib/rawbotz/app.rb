@@ -171,7 +171,7 @@ class RawbotzApp < Sinatra::Base
       understocked = RawgentoDB::Query.understocked
       understocked.each do |product_id, name, min_qty, in_stock|
         local_product = LocalProduct.find_by(product_id: product_id)
-        if local_product.supplier == settings.supplier
+        if local_product.present? && local_product.supplier == settings.supplier
           @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
         end
       end
