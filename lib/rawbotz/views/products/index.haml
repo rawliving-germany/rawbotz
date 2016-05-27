@@ -15,7 +15,7 @@
       %li
         %a(href="#tab_#{idx}")="#{supplier.name} (#{@products.supplied_by(supplier).count})"
     %li
-      %a(href="#tab_no_supplier") [no supplier] (#{@products.where(supplier_id: nil})
+      %a(href="#tab_no_supplier") [no supplier] (#{@products.where(supplier_id: nil).count})
     %li
       %a(href="#tab_hidden_products") Hidden (#{@products.all_hidden.count})
   #tab_all_products
