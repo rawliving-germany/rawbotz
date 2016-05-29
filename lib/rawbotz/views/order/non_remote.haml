@@ -16,7 +16,7 @@
         - @products.find_each do |product|
           %tr
             %td
-              = product.name
+              = product_link product
             %td
               %input.qty(name="item_#{product.id}" size="2")
               - if product.packsize.present?
