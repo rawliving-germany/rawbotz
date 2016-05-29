@@ -299,16 +299,11 @@ class RawbotzApp < Sinatra::Base
                                                      Date.today,
                                                      Date.today - 30,
                                                      RawgentoDB.settings(Rawbotz.conf_file_path))
-      @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
     rescue
       @sales = []
       add_flash :error, 'Cannot connect to MySQL database'
     end
     @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
-    # Interpolate stock and sales, bring to same thing
-    # chart[:labels]
-    # datapoints[[:label, :stock, :sale], ...]
-    #@sales = []
     haml "product/view".to_sym
   end
 
