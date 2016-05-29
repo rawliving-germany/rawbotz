@@ -173,6 +173,7 @@ class RawbotzApp < Sinatra::Base
   get '/order/new' do
     if !Order.current.present?
       @order = Order.create(state: :new)
+      @order.supplier = settings.supplier
 
       # Restrict to supplier
       understocked = RawgentoDB::Query.understocked
@@ -182,6 +183,7 @@ class RawbotzApp < Sinatra::Base
           @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
         end
       end
+      @order.save
       add_flash :success, "New Order created"
     else
       add_flash :message, "Already one Order in progress"
