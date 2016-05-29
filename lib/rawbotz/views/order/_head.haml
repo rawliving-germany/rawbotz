@@ -1,6 +1,10 @@
 %h2 General
 %dl
   %dt
+    Supplier
+  %dd
+    = order.supplier.try(:name)
+  %dt
     Created at
   %dd
     = order.created_at
