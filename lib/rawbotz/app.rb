@@ -58,6 +58,13 @@ class RawbotzApp < Sinatra::Base
       return remote_product_link(product) if product.is_a?(RemoteProduct)
       "no product"
     end
+    def supplier_link supplier
+      if supplier.to_s != ""
+        "<a href=\"/supplier/#{supplier.id}\">#{supplier.name}</a>"
+      else
+        "[no supplier]"
+      end
+    end
     def flash
       @flash = session[:flash]# || {}
     end

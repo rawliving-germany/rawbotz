@@ -15,7 +15,12 @@ module Rawbotz
         if item.remote_product_id.present? && item.num_wished.present?
           log_product_handling item
 
-          ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished
+          begin
+            ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished
+          rescue
+            ordered_qty = nil
+            item.update(state: "error")
+          end
 
           item.update(num_ordered: ordered_qty.to_i)
 
@@ -73,6 +78,9 @@ module Rawbotz
     end
 
     def log_result item
+      if item.state == "error"
+        @logger.warning "Error when ordering #{item.num_wished} #{item.local_product.name}"
+      end
       if item.out_of_stock?
         @logger.info "Product out of stock"
       elsif !item.all_ordered?
@@ -81,6 +89,5 @@ module Rawbotz
         @logger.info "Ordered #{item.num_ordered} (of #{item.num_wished})."
       end
     end
-
   end
 end
