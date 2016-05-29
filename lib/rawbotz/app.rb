@@ -294,15 +294,17 @@ class RawbotzApp < Sinatra::Base
 
   get '/product/:id' do
     @product = LocalProduct.unscoped.find(params[:id])
-    @sales = []
-    if false
-      begin
-      @sales = RawgentoDB::Query.sales_daily(@product.product_id, RawgentoDB.settings(Rawbotz.conf_file_path))
-      rescue
-      @plot_data = Rawbotz::Datapolate.create_data [], @product.stock_items
+    begin
+      @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
+                                                     Date.today,
+                                                     Date.today - 30,
+                                                     RawgentoDB.settings(Rawbotz.conf_file_path))
+      @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
+    rescue
+      @sales = []
       add_flash :error, 'Cannot connect to MySQL database'
-      end
     end
+    @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
     # Interpolate stock and sales, bring to same thing
     # chart[:labels]
     # datapoints[[:label, :stock, :sale], ...]
