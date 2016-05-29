@@ -218,6 +218,11 @@ class RawbotzApp < Sinatra::Base
     end
   end
 
+  get '/order/:id/packlist' do
+    @order = Order.find(params[:id])
+    haml "order/packlist".to_sym
+  end
+
   get '/remote_cart' do
     @cart_content = Rawbotz.mech.get_cart_content
     @cart_products = @cart_content.map do |name, qty|

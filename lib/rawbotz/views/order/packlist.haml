@@ -1,0 +1,14 @@
+%h2 Order #{@order.supplier} from #{@order.created_at}
+
+%table.pure-table.pure-table-striped
+  %thead
+    %tr
+      %th Product
+      %th Shelve
+      %th Quantity
+  %tbody
+    - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
+      %tr
+        %td=p.local_product.name
+        %td=p.local_product.shelve_nr
+        %td=p.num_ordered
