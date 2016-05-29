@@ -57,7 +57,13 @@ def main options
 
   RawgentoModels.establish_connection options[:config]
 
-  result = RawgentoDB::Query.stock(RawgentoDB.settings(options[:config]))
+  begin
+    result = RawgentoDB::Query.stock(RawgentoDB.settings(options[:config]))
+  rescue Mysql2::Error => e
+    logger.error "Problems accessing MySQL database #{e.inspect}"
+    exit 2
+  end
+
   now = DateTime.now
 
   logger.info("Starting stock update")
