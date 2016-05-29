@@ -43,3 +43,6 @@ th {
 .settings {
   width: 50%;
 }
+.empty-stock {
+  background-color: #c77;
+}
