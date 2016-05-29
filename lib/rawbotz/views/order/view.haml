@@ -2,6 +2,8 @@
 
 %h1 View Order
 
+#modal-plot.modal-plot
+
 = haml "order/_head".to_sym, locals: {order: @order}
 
 - if @order.state == "new"

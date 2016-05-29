@@ -5,9 +5,9 @@
       %th Product Name
       %th Current Stock
       %th Min Stock
-      %th Stock/Sales history
       %th Order
       %th Packsize
+      %th Stock/Sales history
   %tbody
     - order_items.each do |order_item|
       %tr
@@ -36,5 +36,8 @@
             -#(last time X)
           - else
             No remote product
-        %td
         %td= order_item.local_product.packsize
+        %td
+          - stock_url = "/product/#{order_item.local_product.id}/stock_sales_plot"
+          %a.stock_show_action{:href => "", :data => {url: stock_url, product: order_item.local_product.name}}
+            Show Stock/Sale data
