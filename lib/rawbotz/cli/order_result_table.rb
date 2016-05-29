@@ -4,7 +4,7 @@ module Rawbotz::CLI
       out = ""
       if !diffs[:perfect].empty?
         perfect_items = diffs[:perfect].map do |p, q|
-          [p.local_product.remote_product.name, q]
+          [p.local_product.remote_product.name[0..35], q]
         end
         out << Terminal::Table.new(title: "Perfect",
           headings: ['Product', 'In Cart'],
@@ -15,7 +15,7 @@ module Rawbotz::CLI
 
       if !diffs[:modified].empty?
         modified_items = diffs[:modified].map do |p,q|
-          [p.local_product.remote_product.name, p.num_wished, q]
+          [p.local_product.remote_product.name[0..35], p.num_wished, q]
         end
         out << Terminal::Table.new(title: "Modified",
           headings: ['Product', 'Wished', 'In Cart'],
@@ -26,7 +26,7 @@ module Rawbotz::CLI
 
       if !diffs[:miss].empty?
         missing_items = diffs[:miss].map do |p,q|
-          [p.local_product.remote_product.name,q]
+          [p.local_product.remote_product.name[0..35], q]
         end
         out << Terminal::Table.new(title: "Missing (?)",
           headings: ['Product', 'In Cart'],
@@ -37,7 +37,7 @@ module Rawbotz::CLI
 
       if !diffs[:under_avail].empty?
         under_avail_items = diffs[:under_avail].map do |p,q|
-          [p.local_product.remote_product.name,item.num_wished, q]
+          [p.local_product.remote_product.name[0..35], p.num_wished, q]
         end
         out << Terminal::Table.new(title: "Not available as such",
           headings: ['Product', 'Wanted', 'In Cart'],
