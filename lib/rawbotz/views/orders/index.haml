@@ -31,10 +31,10 @@
           %td
             %a.pure-button(href="/order/#{order.id}")
               %i.fa.fa-eye
-                View
+              View
             - if order.state == "ordered"
               %a.pure-button(href="/order/#{order.id}/packlist")
                 %i.fa.fa-paper
-                  Packlist
+                Packlist
 
           %td=order.state
