@@ -53,7 +53,7 @@
             %th Qty Sold
         %tbody
           - @plot_data.values.each do |s|
-            %tr{:class => s[:stock] <= 0 ? "empty-stock" : ""}
+            %tr{:class => s[:stock].to_i <= 0 ? "empty-stock" : ""}
               %td= s[:label]
               %td= s[:stock]
               %td= s[:sales]
