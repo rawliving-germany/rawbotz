@@ -2,21 +2,23 @@
 
 %h1 Remote Order
 
-%table.pure-table
+
+ID #{@remote_order_id}
+%br
+
+%table.pure-table.pure-table-striped
   %thead
     %tr
       %th Remote Name
-      %th Remote SKU
       %th Local Name
       %th Qty
       %th Refund
       %th Shelve
   %tbody
-    - @remote_products_qty.each do |p, q|
+    - @remote_products_qty.sort_by{|p,_| p.name}.each do |p, q|
       %tr
         %td
           = remote_product_link p
-        %td
         %td
           -if p.local_product
             %a(href="/product/#{p.local_product.id}")
