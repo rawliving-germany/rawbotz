@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
-require 'rawbotz/icon_helper'
+require 'rawbotz/helpers/icon_helper'
 require 'rawbotz/helpers/flash_helper'
 require 'tilt/haml'
 
@@ -67,7 +67,7 @@ class RawbotzApp < Sinatra::Base
       end
     end
   end
-  helpers Rawbotz::IconHelper
+  helpers Rawbotz::Helpers::IconHelper
   helpers Rawbotz::Helpers::FlashHelper
 
   get '/' do
