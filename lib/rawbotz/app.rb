@@ -39,46 +39,13 @@ class RawbotzApp < Sinatra::Base
     haml :index
   end
 
-  get '/products' do
-    @products = LocalProduct
-    @suppliers = Supplier.all
-    haml "products/index".to_sym
-  end
-
-  get '/products/links' do
-    @local_products = LocalProduct.supplied_by(settings.supplier)
-    @remote_products = RemoteProduct.supplied_by(settings.supplier)
-    haml "products/links".to_sym
-  end
-
-  get '/products/link_wizard' do
-    @unlinked_count = settings.supplier.local_products.unlinked.count
-    @local_product = settings.supplier.local_products.unlinked.first
-    params[:idx] = 0
-    haml "products/link_wizard".to_sym
-  end
-
-  get '/products/link_wizard/:idx' do
-    @unlinked_count = LocalProduct.unlinked.count
-    @local_product = LocalProduct.supplied_by(settings.supplier).unlinked.at(params[:idx].to_i || 0)
-    haml "products/link_wizard".to_sym
-  end
+  register Rawbotz::RawbotzApp::Routing::Products
+  register Rawbotz::RawbotzApp::Routing::ProductLinks
 
   post '/remote_products/search' do
     @products = RemoteProduct.supplied_by(settings.supplier)
       .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
     @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
-  end
-
-  post '/products/search' do
-    @products = LocalProduct
-      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
-    @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
-  end
-
-  get '/orders' do
-    @orders = Order.all.order(created_at: :desc)
-    haml "orders/index".to_sym
   end
 
   get '/orders/non_remote' do
