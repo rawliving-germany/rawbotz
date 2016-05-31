@@ -4,16 +4,19 @@ module Rawbotz::RawbotzApp::Routing::Orders
   include RawgentoModels
 
   def self.registered(app)
+    # app.get '/orders',             &show_orders
     show_orders = lambda do
       @orders = Order.where("supplier_id IS NULL OR supplier_id = %d" % settings.supplier.id).order(created_at: :desc)
       haml "orders/index".to_sym
     end
 
+    # app.get '/order/:id',          &show_order
     show_order = lambda do
       @order = Order.find(params[:id])
       haml 'order/view'.to_sym
     end
 
+    # app.get '/order/:id/packlist', &show_order_packlist
     show_order_packlist = lambda do
       @order = Order.find(params[:id])
       haml "order/packlist".to_sym
