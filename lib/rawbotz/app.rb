@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 require 'rawbotz/icon_helper'
+require 'rawbotz/helpers/flash_helper'
 require 'tilt/haml'
 
 class RawbotzApp < Sinatra::Base
@@ -65,15 +66,9 @@ class RawbotzApp < Sinatra::Base
         "[no supplier]"
       end
     end
-    def flash
-      @flash = session[:flash]# || {}
-    end
-    def add_flash kind, msg
-      session[:flash] ||= {}
-      (session[:flash][kind] ||= []) << msg
-    end
   end
   helpers Rawbotz::IconHelper
+  helpers Rawbotz::Helpers::FlashHelper
 
   get '/' do
     haml :index
