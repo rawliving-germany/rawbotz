@@ -79,7 +79,7 @@ module Rawbotz
 
     def log_result item
       if item.state == "error"
-        @logger.warning "Error when ordering #{item.num_wished} #{item.local_product.name}"
+        @logger.warn "Error when ordering #{item.num_wished} #{item.local_product.name}"
       end
       if item.out_of_stock?
         @logger.info "Product out of stock"
