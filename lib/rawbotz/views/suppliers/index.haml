@@ -1,0 +1,13 @@
+.icon#headicon
+  = settings_icon
+
+= haml "maintenance/menu".to_sym
+
+%h1 Suppliers
+
+%ul.float_ul
+  - @suppliers.find_each do |supplier|
+    %li
+      %a.supplier(href="/supplier/#{supplier.id}")
+        =supplier.name
+%br
