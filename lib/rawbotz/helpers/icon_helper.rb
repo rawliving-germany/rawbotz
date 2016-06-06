@@ -1,6 +1,9 @@
 module Rawbotz
   module Helpers
     module IconHelper
+      def error_icon
+        '<i class="fa fa-flash"></i>'
+      end
       def order_icon
         '<i class="fa fa-shopping-cart"></i>'
       end
@@ -12,6 +15,9 @@ module Rawbotz
       end
       def index_icon
         '<i class="fa fa-th-list"></i>'
+      end
+      def info_icon
+        '<i class="fa fa-info-circle"></i>'
       end
       def link_icon
         '<i class="fa fa-link"></i>'
@@ -25,6 +31,13 @@ module Rawbotz
       def link_icon
         '<i class="fa fa-link"></i>'
       end
+      def success_icon
+        '<i class="fa fa-smile-o"></i>'
+      end
+      def warning_icon
+        '<i class="fa fa-warning"></i>'
+      end
     end
   end
+  # briefcase clone gift shopping-bag truck
 end
