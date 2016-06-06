@@ -5,8 +5,6 @@ require 'date'
 require "rawbotz"
 require 'rawbotz/option_parser'
 
-options = {}
-
 optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS] ORDER_ID"
   opts.separator ""
