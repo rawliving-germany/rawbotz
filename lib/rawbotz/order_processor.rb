@@ -1,4 +1,3 @@
-
 module Rawbotz
   class OrderProcessor
     def initialize(order, logger=Logger.new("/dev/null"))
