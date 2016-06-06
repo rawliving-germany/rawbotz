@@ -39,229 +39,47 @@ class RawbotzApp < Sinatra::Base
     haml :index
   end
 
+  # get  '/orders'
+  # get  '/order/new'
+  # get  '/order/:id'
+  # post '/order/:id/'
+  # get  '/order/:id/packlist'
+  register Rawbotz::RawbotzApp::Routing::Orders
+
+  # get  '/products'
+  # post '/products/search'
+  # get  '/product/:id'
+  # get  '/product/:id/stock_sales_plot'
+  # post '/product/:id/hide'
+  # post '/product/:id/unhide'
+  # get  '/remote_products'
+  # post '/remote_products/search'
+  # get  '/remote_product/id'
   register Rawbotz::RawbotzApp::Routing::Products
+
+  # get  '/products/links'
+  # get  '/products/link_wizard'
+  # get  '/products/link_wizard/:idx'
+  # get  '/product/:id/link'
+  # post '/product/:id/link'
   register Rawbotz::RawbotzApp::Routing::ProductLinks
 
-  post '/remote_products/search' do
-    @products = RemoteProduct.supplied_by(settings.supplier)
-      .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
-    @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
-  end
+  # get '/remote_cart'
+  # get '/remote_orders'
+  # get '/remote_order/:id'
+  register Rawbotz::RawbotzApp::Routing::RemoteShop
 
-  get '/orders/non_remote' do
-    haml "orders/non_remotes".to_sym
-  end
+  # get  '/supplier/:id'
+  # post '/supplier/:id'
+  register Rawbotz::RawbotzApp::Routing::Suppliers
 
-  get '/order/non_remote/:supplier_id' do
-    @supplier = Supplier.find(params[:supplier_id])
-    # This did not work as "Order" without persistence
-    @products = LocalProduct.supplied_by(@supplier)
+  # get  '/stocking/:remote_order_id/:local_order_id'
+  register Rawbotz::RawbotzApp::Routing::Stockings
 
-    #understocked = RawgentoDB::Query.understocked
-    #understocked.each do |product_id, name, min_qty, in_stock|
-    #  local_product = LocalProduct.find_by(product_id: product_id)
-    #    if local_product.supplier == @supplier
-    #      @order.build_order_item(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
-    #    else
-    #      puts "not Dr Georg"
-    #    end
-    #  end
-    #end
-
-    haml "order/non_remote".to_sym
-  end
-
-  post '/order/non_remote/:supplier_id' do
-    supplier = Supplier.find(params.delete("supplier_id"))
-    # Some of these mails might want to be templated
-
-    mail_body = "Dear #{supplier.name}\n\n"
-    params.select{|p| p.start_with?("item_")}.each do |p, val|
-      if val && val.to_i > 0
-        qty = val.to_i
-        product = LocalProduct.find(p[5..-1])
-        mail_body << "#{product.name}: #{qty}"
-        if product.packsize
-          mail_body << " (#{(qty/product.packsize)} Gebinde)"
-        end
-        mail_body << "\n"
-      end
-    end
-
-    mail_body << "Mit freundlichen Grüßen ...\nZu senden an...\n"
-    mail_subject = "Bestellung an #{supplier.name}"
-
-    Rawbotz::mail(mail_subject, mail_body)
-
-    add_flash :success, "Order details send via mail"
-    redirect "/"
-  end
-
-  get '/order/new' do
-    if !Order.current.present?
-      @order = Order.create(state: :new)
-      @order.supplier = settings.supplier
-
-      # Restrict to supplier
-      understocked = RawgentoDB::Query.understocked
-      understocked.each do |product_id, name, min_qty, in_stock|
-        local_product = LocalProduct.find_by(product_id: product_id)
-        if local_product.present? && local_product.supplier == settings.supplier
-          @order.order_items.create(local_product: local_product, current_stock: in_stock, min_stock: min_qty)
-        end
-      end
-      @order.save
-      add_flash :success, "New Order created"
-    else
-      add_flash :message, "Already one Order in progress"
-      @order = Order.current
-    end
-    redirect "/order/#{@order.id}"
-    #haml "order/new".to_sym
-  end
-
-  get '/order/:id' do
-    @order = Order.find(params[:id])
-    haml "order/view".to_sym
-  end
-
-  post '/order/:id' do
-    @order = Order.find(params[:id])
-    params.each do |k,v|
-      if k && k.start_with?("item_") && v != ""
-        OrderItem.find(k[5..-1]).update(num_wished: v.to_i)
-      end
-    end
-    if params['action'] == 'order'
-      @order.update(state: :queued)
-      add_flash :success, 'Order queued'
-      redirect '/orders'
-    elsif params['action'] == 'delete'
-      @order.update(state: :deleted)
-      add_flash :success, 'Order marked deleted'
-      redirect '/orders'
-    else
-      haml "order/view".to_sym
-    end
-  end
-
-  get '/order/:id/packlist' do
-    @order = Order.find(params[:id])
-    haml "order/packlist".to_sym
-  end
-
-  get '/remote_cart' do
-    @cart_content = Rawbotz.mech.get_cart_content
-    @cart_products = @cart_content.map do |name, qty|
-      [RemoteProduct.find_by(name: name), qty]
-    end
-    haml "remote_cart/index".to_sym
-  end
-
-  get '/remote_orders' do
-    @last_orders = Rawbotz.mech.last_orders
-    haml "remote_orders/index".to_sym
-  end
-
-  get '/remote_order/:id' do
-    @remote_order_id = params[:id]
-    @remote_order_items = Rawbotz.mech.products_from_order params[:id]
-    @remote_products_qty = @remote_order_items.map do |remote_product|
-      [RemoteProduct.find_by(name: remote_product[0]) || OpenStruct.new(name: remote_product[0]), remote_product[2]]
-    end
-    haml "remote_order/view".to_sym
-  end
-
-  get '/remote_products' do
-    @products = RawgentoModels::RemoteProduct.all
-    haml "remote_products/index".to_sym
-  end
-
-  get '/remote_product/:id' do
-    @product = RawgentoModels::RemoteProduct.find(params[:id])
-    haml "remote_product/view".to_sym
-  end
-
-  get '/product/:id/link' do
-    @product = RawgentoModels::LocalProduct.find(params[:id])
-    # filter by supplier ...
-    @remote_products = RawgentoModels::RemoteProduct
-    haml 'product/link_to'.to_sym
-  end
-
-  post '/product/:id/hide' do
-    @product = RawgentoModels::LocalProduct.find(params[:id])
-    @product.active = false
-    @product.save
-
-    add_flash :success, "Product '#{@product.name}' is now hidden"
-
-    redirect back
-  end
-
-  post '/product/:id/unhide' do
-    @product = RawgentoModels::LocalProduct.unscoped.find(params[:id])
-    @product.active = true
-    @product.save
-
-    add_flash :success, "Product '#{@product.name}' is now not hidden anymore"
-
-    redirect back
-  end
-
-  post '/product/:id/link' do
-    remote_product = RemoteProduct.find(params[:remote_product_id])
-    @product = RawgentoModels::LocalProduct.find(params[:id])
-    @product.remote_product = remote_product
-    @product.save
-
-    if request.xhr?
-      # return product link
-      remote_product_link remote_product
-    else
-      add_flash :success, "Linked Product '#{@product.name}' to '#{@product.remote_product.name}'"
-
-      if params[:redirect_to] == "link_wizard"
-        redirect '/products/link_wizard'
-      elsif params[:redirect_to] == "links"
-        redirect "/products/links"
-      elsif params[:redirect_to]
-        redirect "/products/links"
-      else
-        redirect "/product/#{params[:id]}"
-      end
-    end
-  end
-
-  get '/product/:id' do
-    @product = LocalProduct.unscoped.find(params[:id])
-    begin
-      @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
-                                                     Date.today,
-                                                     Date.today - 30,
-                                                     RawgentoDB.settings(Rawbotz.conf_file_path))
-    rescue
-      @sales = []
-      add_flash :error, 'Cannot connect to MySQL database'
-    end
-    @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
-    haml "product/view".to_sym
-  end
-
-  get '/product/:id/stock_sales_plot' do
-    @product = LocalProduct.unscoped.find(params[:id])
-    begin
-      @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
-                                                     Date.today,
-                                                     Date.today - 30,
-                                                     RawgentoDB.settings(Rawbotz.conf_file_path))
-    rescue
-      @sales = []
-      add_flash :error, 'Cannot connect to MySQL database'
-    end
-    @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
-    haml "product/_stock_sales_plot".to_sym, layout: :thin_layout, locals: {plot_data: @plot_data}
-  end
+  # get  '/orders/non_remote', &show_suppliers_orders
+  # get  '/order/non_remote/:supplier_id'
+  # post '/order/non_remote/:supplier_id'
+  register Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
   get '/maintenance' do
     haml :maintenance
