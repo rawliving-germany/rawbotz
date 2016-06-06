@@ -70,7 +70,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
     app.get  '/orders',             &show_orders
     app.get  '/order/new',          &create_order
     app.get  '/order/:id',          &show_order
-    app.post '/order/:id/',         &act_on_order
+    app.post '/order/:id',          &act_on_order
     app.get  '/order/:id/packlist', &show_order_packlist
   end
 end
