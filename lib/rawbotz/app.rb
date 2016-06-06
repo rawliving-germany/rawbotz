@@ -76,7 +76,7 @@ class RawbotzApp < Sinatra::Base
   # get  '/stocking/:remote_order_id/:local_order_id'
   register Rawbotz::RawbotzApp::Routing::Stockings
 
-  # get  '/orders/non_remote', &show_suppliers_orders
+  # get  '/orders/non_remote'
   # get  '/order/non_remote/:supplier_id'
   # post '/order/non_remote/:supplier_id'
   register Rawbotz::RawbotzApp::Routing::NonRemoteOrders
