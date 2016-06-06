@@ -20,6 +20,8 @@ $program_name = program_name
 optparse = OptionParser.new do |opts|
   opts.banner = "Usage: #{program_name} [OPTIONS]"
   opts.separator ""
+  opts.separator "Scrapes remote shop and 'imports' products from it."
+  opts.separator ""
 
   opts.separator "Will read remote shop conf from config file."
 
