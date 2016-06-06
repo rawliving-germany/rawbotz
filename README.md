@@ -9,16 +9,18 @@ Rawbotz couples the `rawgento_db`, `rawgento_models` and `magento_remote` gems t
 Note that this git repository includes software components whose Copyright and License differ from the other parts.
 
 These are
-- Font Awesome (http://) in `lib/rawbotz/public/font-awesome-4.5.0`
-- Pure CSS (http://) in `lib/rawbotz/public/pure-min.css`
-- Chart.JS (http://) in `lib/rawbotz/public/Chart.min.js`
-- jquery and jquery-ui (http://) in `lib/rawbotz/public/jquery-2.2.0.min.js` and `lib/rawbotz/public/jui`
+- Font Awesome (http://fontawesome.io/) in `lib/rawbotz/public/font-awesome-4.5.0`
+- Pure CSS (http://purecss.io) in `lib/rawbotz/public/pure-min.css`
+- Chart.JS (http://chartjs.org) in `lib/rawbotz/public/Chart.min.js`
+- jquery and jquery-ui (http://jquery.com, http://jqueryui.com) in `lib/rawbotz/public/jquery-2.2.0.min.js` and `lib/rawbotz/public/jui`
 
 The copyright and license information is contained in the respective file headers. All other files are Copyright 2016 Felix Wolfsteller and licensed under the AGPLv3 (or any later).
 
 ## Installation
 
 While bundling rawbotz up and installing it as a gem should be possible, it is strongly advised to install it via git.
+
+Note that the dependencies should be handled with bundler if you are not running a development setup.
 
 Anyway, the application is so specific to RawLiving Germanys needs that you probably want to get in contact first.
 
@@ -173,6 +175,8 @@ Updates Products from magento MySQL database.  See `--help` for more information
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment. Run `bundle exec rawbotz` to use the gem in this directory, ignoring other installed copies of this gem.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+You can `bundle console` to jump into a pre-setup irb, then call `RawgentoModels::establish_connection "rawbotz.conf"` to setup the database connection and deal with real world data.
 
 ## Contributing
 
