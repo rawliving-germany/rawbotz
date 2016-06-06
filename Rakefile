@@ -6,6 +6,9 @@ require 'rake/testtask'
 task :default => :spec
 
 RawgentoModels.load_tasks
+
+# TODO Setup the environment by calling something like RawgentoModels::establish_connection "rawbotz.conf"` and reading the rest of the config file
+
 # These tasks should be solveable either via a rake task or via single executables
 
 # initial load
