@@ -1,0 +1,25 @@
+.icon#headicon
+  = settings_icon
+
+.pure-u-1
+  .pure-menu.pure-menu-horizontal#submenu
+    %small
+      %center
+        %ul.pure-menu-list
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/maintenance")
+              %i(class="fa fa-question")
+              Info
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/products/links")
+              = link_icon
+              Product Linking
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/products/link_wizard")
+              %i(class="fa fa-magic")
+              Link Wizard
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/suppliers")
+              %i(class="fa fa-globe")
+              Suppliers
+

@@ -19,6 +19,12 @@ module Rawbotz
       def remote_icon
         '<i class="fa fa-globe"></i>'
       end
+      def settings_icon
+        '<i class="fa fa-wrench"></i>'
+      end
+      def link_icon
+        '<i class="fa fa-link"></i>'
+      end
     end
   end
 end
