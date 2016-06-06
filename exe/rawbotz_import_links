@@ -5,7 +5,6 @@ require "rawbotz/option_parser"
 
 require 'csv'
 
-options = {}
 program_name = File.basename __FILE__
 
 optparse = Rawbotz::OptionParser.new do |opts, options|
