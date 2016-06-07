@@ -3,73 +3,58 @@
     %div
       %canvas(id="canvas" height="450" width="800")
 
+- sales_value = ->(h) { h[:sales].to_i }
 :javascript
-  // animate true?
-  var randomScalingFactor = function(){ return Math.round(Math.random()*100)}; // ??
-  Chart.defaults.global.multiTooltipTemplate = "<%= datasetLabel %>: <%= value %>"
-  //var lineChartData = {
-  //  labels : [#{@sales.uniq.map{|s| "\"#{s[0]}\""}.reverse.join(',')}],
-  //  datasets : [
-  //    {
-  //      label: "Product sales",
-  //      fillColor : "rgba(220,220,220,0.2)",
-  //      strokeColor : "rgba(220,220,220,1)",
-  //      pointColor : "rgba(220,220,220,1)",
-  //      pointStrokeColor : "#fff",
-  //      pointHighlightFill : "#fff",
-  //      pointHighlightStroke : "rgba(220,220,220,1)",
-  //      data : [#{@sales.uniq.map{|s| "\"#{s[1]}\""}.reverse.join(',')}]
-  //    },
-  //    {
-  //      label: "Product",
-  //      fillColor : "rgba(220,220,220,0.2)",
-  //      strokeColor : "rgba(220,220,220,1)",
-  //      pointColor : "rgba(120,120,220,1)",
-  //      pointStrokeColor : "#fff",
-  //      pointHighlightFill : "#fff",
-  //      pointHighlightStroke : "rgba(220,220,220,1)",
-  //      data : [#{(@product.stock_items.map(&:qty) * @sales.uniq.length).join(',')}]
-  //    }
-  //  ]
-  //}
+  //Chart.defaults.global.multiTooltipTemplate = "<%= datasetLabel %>: <%= value %>";
+  Chart.defaults.global.hover.mode = 'label';
+  Chart.defaults.global.tooltips.mode = 'label';
 
   var salesData = {
-    // extract_keyname = ->(h) { h[:keyname] } ; map(&extract_keyname); lambda fun
     labels : [#{plot_data.values.map{|v| "'#{v[:label].to_s}'"}.join(',')}],
     datasets : [
       {
         label: "Product sales",
-        fillColor : "rgba(220,220,220,0.2)",
-        strokeColor : "rgba(220,220,220,1)",
-        pointColor : "rgba(220,220,220,1)",
-        pointStrokeColor : "#fff",
-        pointHighlightFill : "#fff",
-        pointHighlightStroke : "rgba(220,220,220,1)",
-        data : [#{plot_data.values.map{|v|v[:sales]}.join(',')}]
+        fill: false,
+        lineTension: 0.2,
+        borderColor: "rgba(75,192,142,1)",
+        borderCapStyle: 'round',
+        pointBorderColor: "rgba(75,142,112,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 8,
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 2,
+        pointHitRadius: 10,
+        data : [#{plot_data.values.map(&sales_value).join(',')}]
       },
       {
         label: "Product stock",
-        fillColor : "rgba(220,220,220,0.2)",
-        strokeColor : "rgba(220,220,220,1)",
-        pointColor : "rgba(120,120,220,1)",
-        pointStrokeColor : "#fff",
-        pointHighlightFill : "#fff",
-        pointHighlightStroke : "rgba(220,220,220,1)",
-        data : [#{plot_data.values.map{|v| v[:stock]}.join(',')}]
+        fill: true,
+        lineTension: 0.2,
+        backgroundColor: "rgba(175,155,155,0.4)",
+        borderColor: "rgba(105,112,172,1)",
+        borderCapStyle: 'round',
+        pointBorderColor: "rgba(155,152,182,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 8,
+        pointHoverBackgroundColor: "rgba(99,102,152,1)",
+        pointHoverBorderColor: "rgba(210,210,210,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 2,
+        pointHitRadius: 10,
+        data : [#{plot_data.values.map{|v| v[:stock].nil? ? 'null' : v[:stock].to_i}.join(',')}]
+        /*data : [#{plot_data.values.map{|v| v[:stock].to_i}.join(',')}]*/
       }
     ]
   }
 
   var ctx = document.getElementById("canvas").getContext("2d");
-  window.myLine = new Chart(ctx).Line(salesData, {
-  //lineChartData, {
-    responsive: true
+  window.myLine = new Chart(ctx, {
+    type: 'line',
+    data: salesData,
+    options: {},
+    responsive: true,
   });
-  //window.onload = function(){
-  //  var ctx = document.getElementById("canvas").getContext("2d");
-  //  window.myLine = new Chart(ctx).Line(salesData, {
-  //  //lineChartData, {
-  //    responsive: true
-  //  });
-  //}
-
