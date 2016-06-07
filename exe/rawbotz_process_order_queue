@@ -13,7 +13,7 @@ optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS] ORDER_ID"
   opts.separator ""
 
-  opts.on("-m", "--[no]-mail", "Send mail with result") do |m|
+  opts.on("-m", "--[no-]mail", "Send mail with result") do |m|
     options[:mail] = m
   end
 end
