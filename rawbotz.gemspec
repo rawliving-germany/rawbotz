@@ -10,9 +10,9 @@ Gem::Specification.new do |spec|
   spec.email         = ["felix.wolfsteller@gmail.com"]
 
   spec.summary       = %q{web-interface and other tools to manage a magento shop}
-  spec.description   = %q{provides a (sinatra) web interface to order from another shop, stock history ...}
-  spec.homepage      = %q{to come}
-  spec.license       = ['AGPLv3+']
+  spec.description   = %q{provides a (sinatra) web interface to order from another shop, view stock history ...}
+  spec.homepage      = %q{https://rawliving-germany.github.io/rawbotz/}
+  spec.licenses      = ['AGPLv3+']
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
