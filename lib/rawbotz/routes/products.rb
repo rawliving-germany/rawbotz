@@ -31,7 +31,7 @@ module Rawbotz::RawbotzApp::Routing::Products
         @sales = []
         add_flash :error, 'Cannot connect to MySQL database'
       end
-      @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
+      @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items.where(created_at: (Date.today - 30)..Date.today)
       haml "product/view".to_sym
     end
 
