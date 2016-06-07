@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'pony', '~> 1.11'
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency "rawgento_models", '~> 0.2.2'
-  spec.add_dependency "rawgento_db", "~> 0.1.0"
+  spec.add_dependency "rawgento_db", "~> 0.1.1"
   spec.add_dependency "magento_remote"
   spec.add_dependency "terminal-table", '~> 1.5'
 
