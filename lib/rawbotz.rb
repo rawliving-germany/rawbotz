@@ -4,11 +4,12 @@ require "rawbotz/local_shop"
 require "rawbotz/order_processor"
 require "rawbotz/datapolate"
 require "rawbotz/product_updater"
-require "rawbotz/routes"
 require "rawbotz/mail_template"
 
 require 'rawgento_models'
 require 'rawgento_db'
+
+require "rawbotz/routes"
 
 require 'ostruct'
 require 'yaml'

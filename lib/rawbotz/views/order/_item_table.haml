@@ -2,13 +2,13 @@
 %table.pure-table.pure-table-bordered
   %thead
     %tr
-      %th Product ID
-      %th Product Name
-      %th Stock (at time of Order)
-      %th Min Stock
-      %th Order
-      %th Packsize
-      %th Stock/Sales history
+      %th(style="width: 5%;") Product ID
+      %th(style="width: 50%;") Product Name
+      %th(style="width: 10%;") Stock (at order- time) / min stock
+      %th(style="width: 20%;") Order
+      %th(style="width: 5%;")
+        %i.fa.fa-cube
+      %th(style="width: 10%;") Stock/ Sales history
   %tbody
     - order_items.each do |order_item|
       %tr
@@ -19,26 +19,39 @@
             No local product!
         %td
           = local_product_link order_item.local_product
-        %td= order_item.current_stock
-        %td= order_item.min_stock
+        %td
+          = order_item.current_stock
+          \/
+          = order_item.min_stock
+          - last_order_item = order_item.order_item_same_product(order_item.updated_at).first
+          - if last_order_item.present? && last_order_item.num_wished
+            %br
+            %button.pure-button.reorder(data-order_item_id="#{order_item.id}" data-num_wished="#{last_order_item.num_wished}")
+              = last_order_item.order.updated_at.strftime("%Y-%m-%d")
+              %br
+              = last_order_item.num_wished
+              \/
+              = last_order_item.num_ordered
         %td
           - if order_item.remote_product_id.present?
-            %input.qty(name="item_#{order_item.id}" size="1" value="#{order_item.num_wished}")
+            %input.qty(name="item_#{order_item.id}" size="1" value="#{order_item.num_wished}" id="item_#{order_item.id}")
+            - packsize = order_item.local_product.packsize
             %button.pure-button.order-none
               %i.fa.fa-remove
-            - packsize = order_item.local_product.packsize
             - if packsize
-              %button.pure-button.plus-pack(data-packsize="#{packsize}")
-                %i.fa.fa-plus-square
-                %i.fa.fa-cube
-              %button.pure-button.minus-pack(data-packsize="#{packsize}")
-                %i.fa.fa-minus-square
-                %i.fa.fa-cube
-            -#(last time X)
+              .packsize-buttons
+                .packsize-button
+                  %button.pure-button.plus-pack(data-packsize="#{packsize}")
+                    %i.fa.fa-plus-square
+                    %i.fa.fa-cube
+                .packsize-button
+                  %button.pure-button.minus-pack(data-packsize="#{packsize}")
+                    %i.fa.fa-minus-square
+                    %i.fa.fa-cube
           - else
             No remote product
         %td= order_item.local_product.packsize
         %td
           - stock_url = "/product/#{order_item.local_product.id}/stock_sales_plot"
           %a.stock_show_action{:href => "", :data => {url: stock_url, product: order_item.local_product.name}}
-            Show Stock/Sale data
+            Stock/Sales
