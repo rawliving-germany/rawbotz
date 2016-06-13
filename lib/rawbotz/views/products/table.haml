@@ -7,8 +7,8 @@
         Product ID
       %th
         Supplier
-      -#%th
-      -#  Last Stock
+      %th
+        Stock/ Sales
   %tbody
     - products.each do |product|
       %tr
@@ -16,5 +16,8 @@
           = product_link product
         %td= product.product_id
         %td= product.supplier.try(:name)
-        -#%td
-        -#  %a(href="") Show modal
+        %td
+          = haml "widgets/_stock_sales".to_sym, locals: {product: product}
+          - stock_url = "/product/#{product.id}/stock_sales_plot"
+          %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
+            Stock/Sales
