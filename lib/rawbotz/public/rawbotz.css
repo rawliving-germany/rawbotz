@@ -77,3 +77,13 @@ th {
 input.qty {
   width: 3em;
 }
+.center {
+  text-align: center;
+}
+.huge-icon {
+  font-size: 500%;
+  color: #444;
+}
+.huge-icon:hover {
+  color: #246;
+}
