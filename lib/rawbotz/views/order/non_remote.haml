@@ -20,16 +20,7 @@
             %td
               = product_link product
             %td
-              %input.qty(name="item_#{product.id}" size="2")
-              - if product.packsize.present?
-                %button.pure-button.plus-pack(data-packsize="#{product.packsize}")
-                  %i.fa.fa-plus-square
-                  %i.fa.fa-cube
-                %button.pure-button.minus-pack(data-packsize="#{product.packsize}")
-                  %i.fa.fa-minus-square
-                  %i.fa.fa-cube
-                %button.pure-button.order-none
-                  %i.fa.fa-remove
+              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product}
             %td
               - if product.packsize.present?
                 = product.packsize

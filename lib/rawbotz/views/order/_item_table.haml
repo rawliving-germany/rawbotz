@@ -34,20 +34,7 @@
               = last_order_item.num_ordered
         %td
           - if order_item.remote_product_id.present?
-            %input.qty(name="item_#{order_item.id}" size="1" value="#{order_item.num_wished}" id="item_#{order_item.id}")
-            - packsize = order_item.local_product.packsize
-            %button.pure-button.order-none
-              %i.fa.fa-remove
-            - if packsize
-              .packsize-buttons
-                .packsize-button
-                  %button.pure-button.plus-pack(data-packsize="#{packsize}")
-                    %i.fa.fa-plus-square
-                    %i.fa.fa-cube
-                .packsize-button
-                  %button.pure-button.minus-pack(data-packsize="#{packsize}")
-                    %i.fa.fa-minus-square
-                    %i.fa.fa-cube
+            = haml "widgets/_qty_wished_input".to_sym, locals: {product: order_item.local_product}
           - else
             No remote product
         %td= order_item.local_product.packsize

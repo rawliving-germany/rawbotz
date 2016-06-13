@@ -1,0 +1,14 @@
+.wished_qty_input
+  - input_id = "item_#{product.id}"
+  %input.qty(id=input_id name=input_id size="2")
+  - packsize = product.packsize
+  - if packsize.present?
+    .packsize-buttons
+      %button.pure-button.plus-pack(data-packsize=packsize data-reference_input_id=input_id)
+        %i.fa.fa-plus-square
+        %i.fa.fa-cube
+      %button.pure-button.minus-pack(data-packsize=packsize data-reference_input_id=input_id)
+        %i.fa.fa-minus-square
+        %i.fa.fa-cube
+  %button.pure-button.order-none
+    %i.fa.fa-remove
