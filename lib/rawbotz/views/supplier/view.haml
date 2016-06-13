@@ -5,59 +5,88 @@
 
 %h2 Supplier #{@supplier.name}
 
-%form.pure-form.pure-form-aligned(action="" method="post")
-  %input(type="hidden" name="_method" value="put")
-  %fieldset
-    .pure-control-group
-      %label(for="email") E-Mail address
-      %input#email(name="email" type="email" value="#{@supplier.email}")
+:javascript
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
 
-    .pure-control-group
-      %label(for="order_template") Order Template
-      %textarea#order_template(name="order_template" value="#{@supplier.order_template}" rows="10" cols="80")~ @supplier.order_template
+#tabs
+  %ul
+    %li
+      %a(href="#tab_products")
+        = products_icon
+        Products
+    %li
+      %a(href="#tab_orders")
+        = order_icon
+        Orders
+    %li
+      %a(href="#tab_order_settings")
+        = settings_icon
+        Order Settings
+  #tab_products
+    %h2 Products of #{@supplier.name}
+    = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}
+  #tab_orders
+    %h2 Orders of #{@supplier.name}
+    - @supplier.orders.find_each do |order|
+      = order.id
+  #tab_order_settings
+    %h2 Settings for #{@supplier.name}
 
-    .pure-control-group
-      %button.pure-button.pure-button-primary
-        %i.fa.fa-save
-        Save
-    %h3 Help
-    .pure-control-group
-      %em
-        How to fill out templates:
-    .pure-control-group
-      See the example template in the following textarea.  The line starting with a star (*) will be repeated.  A list of supported symbols can be found below.
-      %br
-      %textarea#example_order_template(name="example_order_template" readonly rows="10" cols="80")
-        :preserve
-          SUBJECT=Order NAME
-
-          Dear NAME,
-
-          We will order
-
-          * PRODUCTCODE QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME
-
-          Thank you,
-
-          us.
-      %br
-      Following symbols are supported:
-      %br
-      %dl
-        %dt SUBJECT=
-        %dd will be subject of the mail (and NOT included in mail itself)
-        %dt NAME
-        %dd will be replaced by this suppliers name
-        %dt *
-        %dd the line starting with a star will be iterated over with every product
-        %dt PRODUCTCODE
-        %dd the product code as stored in magento
-        %dt QTY
-        %dd quantity ordered
-        %dt NUM_PACKS
-        %dd quantity ordered (in packs of PACKSIZE)
-        %dt PACKSIZE
-        %dd packsize as stored in magento
-        %dt PRODUCTNAME
-        %dd the products name
-      %br
+    %form.pure-form.pure-form-aligned(action="" method="post")
+      %input(type="hidden" name="_method" value="put")
+      %fieldset
+        .pure-control-group
+          %label(for="email") E-Mail address
+          %input#email(name="email" type="email" value="#{@supplier.email}")
+    
+        .pure-control-group
+          %label(for="order_template") Order Template
+          %textarea#order_template(name="order_template" value="#{@supplier.order_template}" rows="10" cols="80")~ @supplier.order_template
+    
+        .pure-control-group
+          %button.pure-button.pure-button-primary
+            %i.fa.fa-save
+            Save
+        %h3 Help
+        .pure-control-group
+          %em
+            How to fill out templates:
+        .pure-control-group
+          See the example template in the following textarea.  The line starting with a star (*) will be repeated.  A list of supported symbols can be found below.
+          %br
+          %textarea#example_order_template(name="example_order_template" readonly rows="10" cols="80")
+            :preserve
+              SUBJECT=Order NAME
+    
+              Dear NAME,
+    
+              We will order
+    
+              * PRODUCTCODE QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME
+    
+              Thank you,
+    
+              us.
+          %br
+          Following symbols are supported:
+          %br
+          %dl
+            %dt SUBJECT=
+            %dd will be subject of the mail (and NOT included in mail itself)
+            %dt NAME
+            %dd will be replaced by this suppliers name
+            %dt *
+            %dd the line starting with a star will be iterated over with every product
+            %dt PRODUCTCODE
+            %dd the product code as stored in magento
+            %dt QTY
+            %dd quantity ordered
+            %dt NUM_PACKS
+            %dd quantity ordered (in packs of PACKSIZE)
+            %dt PACKSIZE
+            %dd packsize as stored in magento
+            %dt PRODUCTNAME
+            %dd the products name
+          %br
