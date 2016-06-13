@@ -2,6 +2,8 @@
 
 %h1 Non-Remote Order for supplier #{@supplier.name}
 
+#modal-plot.modal-plot
+
 %center
   %form.pure-form(action="" method="post")
     %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
@@ -11,7 +13,7 @@
           %th Name
           %th Qty
           %th Packsize
-          -#%th Stock and Sales
+          %th Stock/ Sales
       %tbody
         - @products.find_each do |product|
           %tr
@@ -33,6 +35,10 @@
                 = product.packsize
               - else
                 %i.fa.fa-ban
+            %td
+              - stock_url = "/product/#{product.id}/stock_sales_plot"
+              %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
+                Stock/Sales
 
 
     %br
