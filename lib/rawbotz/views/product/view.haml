@@ -20,7 +20,7 @@
         = backend_url
     .pure-control-group
       %label(for="supplier") Supplier
-      = @product.supplier.try(:name)
+      = supplier_link @product.supplier
     .pure-control-group
       %label(for="supplier") Remote Product
       - if @product.remote_product.nil?

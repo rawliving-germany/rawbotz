@@ -14,8 +14,10 @@
       %tr
         %td
           = product_link product
-        %td= product.product_id
-        %td= product.supplier.try(:name)
+        %td
+          = product.product_id
+        %td
+          = supplier_link product.supplier
         %td
           = haml "widgets/_stock_sales".to_sym, locals: {product: product}
           - stock_url = "/product/#{product.id}/stock_sales_plot"
