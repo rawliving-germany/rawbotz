@@ -3,6 +3,7 @@ require "rawbotz/remote_shop"
 require "rawbotz/local_shop"
 require "rawbotz/order_processor"
 require "rawbotz/datapolate"
+require "rawbotz/chart_month_dataset"
 require "rawbotz/product_updater"
 require "rawbotz/mail_template"
 
