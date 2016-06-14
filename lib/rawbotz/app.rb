@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'open-uri'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
 require 'rawbotz/helpers/icon_helper'

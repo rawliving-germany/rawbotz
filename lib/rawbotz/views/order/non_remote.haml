@@ -4,8 +4,13 @@
 
 #modal-plot.modal-plot
 
+- if @mail_preview.to_s != ""
+  %h2 Mail preview
+  %pre~ @mail_preview
+  %a{:href => "mailto:#{@supplier.email}?Subject=Order&body=%s" % URI::escape(@mail_preview).gsub(/&/,'%26')} Open mail
+
 %center
-  %form.pure-form(action="" method="post")
+  %form#non_remote_order.pure-form(action="" method="post")
     %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
     %table.pure-table
       %thead
@@ -36,4 +41,32 @@
     %center
       %button.pure-button.pure-button-primary
         %i.fa.fa-envelope
-        Send me the mail!
+          Send me the mail!
+      -#%button#ajax_mailto.pure-button.pure-button-secondary
+      -#  %i.fa.fa-envelope
+      -#    Open mail
+      -#:javascript
+      -#  $("#ajax_mailto").click(function(e){
+      -#    e.preventDefault();
+      -#    var parameters = $('#non_remote_order').serialize();
+      -#    //alert(parameters);
+      -#    $.ajax({
+      -#      url: "/order/non_remote/#{@supplier.id}/mailto",
+      -#      data: parameters,
+      -#      type: 'POST',
+      -#      success: function(data){
+      -#        if(data.indexOf('mailto') > -1){
+      -#          window.location = data;
+      -#        }
+      -#      }
+      -#    });
+      -#  });
+
+-#Edit supplier ...
+
+%br
+%h2 Mail template
+%pre~ @supplier.order_template
+%a.pure-button(href="/supplier/#{@supplier.id}")
+  Edit template
+%br
