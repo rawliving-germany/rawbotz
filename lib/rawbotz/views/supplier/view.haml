@@ -58,9 +58,9 @@
           %br
           %textarea#example_order_template(name="example_order_template" readonly rows="10" cols="80")
             :preserve
-              SUBJECT=Order NAME
+              SUBJECT=Order SUPPLIERNAME
     
-              Dear NAME,
+              Dear SUPPLIERNAME,
     
               We will order
     
@@ -75,7 +75,7 @@
           %dl
             %dt SUBJECT=
             %dd will be subject of the mail (and NOT included in mail itself)
-            %dt NAME
+            %dt SUPPLIERNAME
             %dd will be replaced by this suppliers name
             %dt *
             %dd the line starting with a star will be iterated over with every product
