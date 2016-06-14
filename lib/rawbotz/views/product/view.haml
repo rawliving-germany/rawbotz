@@ -45,20 +45,33 @@
     .pure-u-1-1
       %h2 Stock and Sales Values (30 days)
     .pure-u-2-5
-      %table.pure-table
+      %table.pure-table.pure-table-striped
         %thead
           %tr
-            %th Date
-            %th Qty in Stock
+            %th Month
             %th Qty Sold
+            %th Quarter
         %tbody
-          - @plot_data.values.each do |s|
-            %tr{:class => s[:stock].to_i <= 0 ? "empty-stock" : ""}
-              %td= s[:label]
-              %td= s[:stock]
-              %td= s[:sales]
-    
+          - @sales_monthly.each_slice(3) do |sales|
+            - sales.each do |s|
+              %tr
+                %td
+                  = Date::MONTHNAMES[s[0].month]
+                  = s[0].year
+                %td=s[1]
+                %td
+            %tr(style="background-color: rgb(132,122,102);")
+              %td(colspan="2")
+                = Date::MONTHNAMES[sales[0][0].month]
+                = sales[0][0].year
+                \-
+                = Date::MONTHNAMES[sales[-1][0].month]
+                = sales[-1][0].year
+              %td
+                -#= sales.inspect
+                = sales.inject(0) {|acc, s| acc + s[1].to_i }
+
     .pure-u-3-5
-      = haml :"product/_stock_sales_plot", locals: {plot_data: @plot_data}
+      = haml :"product/_stock_sales_plot", locals: {plot_data: @plot_data, markers: @sales_monthly}
 -#%h2 Orders
 -#= product.order_items.order ... link

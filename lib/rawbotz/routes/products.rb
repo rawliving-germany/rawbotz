@@ -27,8 +27,13 @@ module Rawbotz::RawbotzApp::Routing::Products
                                                        Date.today,
                                                        Date.today - 30,
                                                        settings)
+        @sales_monthly = RawgentoDB::Query.sales_monthly_between(@product.product_id,
+                                                         Date.today,
+                                                         Date.today - (12 * 30),
+                                                         settings).uniq
       rescue
         @sales = []
+        @sales_monthly = []
         add_flash :error, 'Cannot connect to MySQL database'
       end
       @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items.where(created_at: (Date.today - 30)..Date.today)
