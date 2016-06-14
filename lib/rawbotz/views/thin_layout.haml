@@ -1,32 +1,17 @@
-!!! 5
-%html
-  %head
-    %title Rawbotz
-    %meta(name="viewport" content="width=device-width, initial-scale=1")
-    %meta(charset="utf-8")
-    %link(rel="stylesheet" txpe="text/css" href="/pure-min.css")
-    %link(rel="stylesheet" txpe="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css")
-    %link(rel="stylesheet" txpe="text/css" href="/rawbotz.css")
-    %script{:type => 'text/javascript', :src => "/Chart.min.js"}
-    %script{:type => 'text/javascript', :src => "/jquery-2.2.0.min.js"}
-    %script{:type => 'text/javascript', :src => "/jui/jquery-ui.min.js"}
-    %link(rel="stylesheet" type='text/css' href="/jui/jquery-ui.min.css")
-    %script{:type => 'text/javascript', :src => "/rawbotz.js"}
-  %body
-    .pure-g
-      .pure-u-1#main
-        - if flash
-          - if msg = flash.delete(:error)
-            #flash.ui-state-error
-              = msg.join(" | ")
-          - if msg = flash.delete(:success)
-            #flash.ui-state-highlight
-              = msg.join(" | ")
-          - if msg = flash.delete(:failure)
-            #flash.ui-state-highlight
-              = msg.join(" | ")
-          - if msg = flash.delete(:info)
-            #flash.ui-state-highlight
-              = msg.join(" | ")
+.pure-g
+  .pure-u-1#main
+    - if flash
+      - if msg = flash.delete(:error)
+        #flash.ui-state-error
+          = msg.join(" | ")
+      - if msg = flash.delete(:success)
+        #flash.ui-state-highlight
+          = msg.join(" | ")
+      - if msg = flash.delete(:failure)
+        #flash.ui-state-highlight
+          = msg.join(" | ")
+      - if msg = flash.delete(:info)
+        #flash.ui-state-highlight
+          = msg.join(" | ")
 
-        =yield
+    =yield
