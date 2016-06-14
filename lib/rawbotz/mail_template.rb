@@ -22,7 +22,7 @@ module Rawbotz
         order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:name].to_s)
         order_item_line
       end
-      lines[lines.find_index(product_line)] = order_lines
+      lines[lines.find_index(product_line)] = order_lines if product_line
       lines.flatten.join("\n")
     end
   end
