@@ -25,7 +25,7 @@
             %td
               = product_link product
             %td
-              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product}
+              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id}
             %td
               - if product.packsize.present?
                 = product.packsize

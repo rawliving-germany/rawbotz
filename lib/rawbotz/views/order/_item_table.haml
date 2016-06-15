@@ -34,7 +34,7 @@
               = last_order_item.num_ordered
         %td
           - if order_item.remote_product_id.present?
-            = haml "widgets/_qty_wished_input".to_sym, locals: {product: order_item.local_product}
+            = haml "widgets/_qty_wished_input".to_sym, locals: {product: order_item.local_product, input_id_num: order_item.id, num_wished: order_item.num_wished}
           - else
             No remote product
         %td= order_item.local_product.packsize
