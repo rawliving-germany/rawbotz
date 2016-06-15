@@ -47,9 +47,12 @@ module Rawbotz::CLI
       end
 
       if !diffs[:extra].empty?
+        extra_items = diffs[:extra].map do |n,q|
+          [n[0..35], q]
+        end
         out << Terminal::Table.new(title: "Extra (not in rawbotz)",
           headings: ['Product', 'In Cart'],
-          rows:     diffs[:extra],
+          rows:     extra_items,
           style:    {width:60}).to_s
       end
     end
