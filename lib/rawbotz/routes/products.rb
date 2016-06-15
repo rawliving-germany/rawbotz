@@ -89,7 +89,7 @@ module Rawbotz::RawbotzApp::Routing::Products
       @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
     end
 
-    # app.get  '/remote_product/id',  &show_remote_product
+    # app.get  '/remote_product/:id',  &show_remote_product
     show_remote_product = lambda do
       @product = RawgentoModels::RemoteProduct.find(params[:id])
       haml "remote_product/view".to_sym
@@ -104,6 +104,6 @@ module Rawbotz::RawbotzApp::Routing::Products
 
     app.get  '/remote_products',        &show_remote_products
     app.post '/remote_products/search', &search_remote_products
-    app.get  '/remote_product/id',      &show_remote_product
+    app.get  '/remote_product/:id',      &show_remote_product
   end
 end

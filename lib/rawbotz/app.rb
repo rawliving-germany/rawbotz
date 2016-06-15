@@ -55,7 +55,7 @@ class RawbotzApp < Sinatra::Base
   # post '/product/:id/unhide'
   # get  '/remote_products'
   # post '/remote_products/search'
-  # get  '/remote_product/id'
+  # get  '/remote_product/:id'
   register Rawbotz::RawbotzApp::Routing::Products
 
   # get  '/products/links'
