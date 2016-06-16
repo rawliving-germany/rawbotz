@@ -18,6 +18,7 @@
           %th Name
           %th Qty
           %th Packsize
+          %th Rough Avg. sales/ m
           %th Stock/ Sales
       %tbody
         - @products.find_each do |product|
@@ -31,6 +32,9 @@
                 = product.packsize
               - else
                 %i.fa.fa-ban
+            %td
+              - if @monthly_sales
+                = @monthly_sales[product.product_id]
             %td
               - stock_url = "/product/#{product.id}/stock_sales_plot"
               %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}

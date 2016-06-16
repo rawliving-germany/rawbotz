@@ -17,6 +17,18 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         redirect "/supplier/#{@supplier.id}"
       else
         @products = LocalProduct.supplied_by(@supplier)
+
+        begin
+          db = RawgentoDB::Query
+          @monthly_sales = @products.map{|p| [p.product_id,
+                                             db.sales_monthly_between(p.product_id,
+                                             Date.today,
+                                             Date.today - 31 * 4)]}.to_h
+          @monthly_sales.each{|k,v| @monthly_sales[k] = v.inject(0){|a,s| a + s[1].to_i}}
+        rescue
+          @monthly_sales = {}
+          add_flash :error, 'Cannot connect to MySQL database'
+        end
         haml "order/non_remote".to_sym
       end
     end

@@ -31,6 +31,12 @@
     %h2 Orders of #{@supplier.name}
     - @supplier.orders.find_each do |order|
       = order.id
+    - if @supplier != settings.supplier
+      - if @supplier.order_template.present?
+        %a(href="/order/non_remote/#{@supplier.id}")
+          Create mail order
+      - else
+        Please specify mail order template (in Settings tab) before continuing.
   #tab_order_settings
     %h2 Settings for #{@supplier.name}
 
