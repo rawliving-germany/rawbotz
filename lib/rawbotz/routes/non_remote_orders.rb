@@ -24,10 +24,13 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
                                              db.sales_monthly_between(p.product_id,
                                              Date.today,
                                              Date.today - 31 * 4)]}.to_h
-          @monthly_sales.each{|k,v| @monthly_sales[k] = v.inject(0){|a,s| a + s[1].to_i}}
-        rescue
+          @monthly_sales.each{|k,v| @monthly_sales[k] = v.inject(0){|a,s| a + s[1].to_i}/v.length rescue 0}
+          @stock = {}
+          db.stock.each {|s| @stock[s.product_id] = s.qty}
+        rescue Exception => e
           @monthly_sales = {}
-          add_flash :error, 'Cannot connect to MySQL database'
+          @stock = {}
+          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
         haml "order/non_remote".to_sym
       end
