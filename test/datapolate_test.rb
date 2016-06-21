@@ -38,6 +38,8 @@ class DatapolateTest < MiniTest::Test
                   Date.civil(2014, 10, 13),
                   Date.civil(2014, 10, 14)],
                  days
+    days = Rawbotz::Datapolate.explode_days nil, nil
+    assert_equal([], days)
   end
 
   def test_datapolation

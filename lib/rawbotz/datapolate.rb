@@ -16,12 +16,14 @@ module Rawbotz
     end
 
     def self.explode_days min_date, max_date
+      return [] if min_date.nil? || max_date.nil?
       (min_date.to_date..max_date.to_date).to_a
     end
 
     def self.create_data sales, stock
       # from [date, sales] and [date, stock] create realistic list
       from_date, to_date = date_minmax sales, stock
+      return {} if from_date.nil? || to_date.nil?
       days = explode_days from_date, to_date
 
       stock_data = Hash.new(nil)
