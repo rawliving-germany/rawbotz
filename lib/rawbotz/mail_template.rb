@@ -11,7 +11,7 @@ module Rawbotz
       order_lines = order[:order_items].map do |oi|
         next if product_line.nil?
         order_item_line = product_line[2..-1]
-        order_item_line.gsub!(/PRODUCTCODE/, '')
+        order_item_line.gsub!(/SUPPLIERSKU/, oi[:local_product][:supplier_sku].to_s)
         order_item_line.gsub!(/QTY/, oi[:num_wished].to_s)
         if oi[:local_product][:packsize].to_s != ""
           order_item_line.gsub!(/NUM_PACKS/, (oi[:num_wished] / oi[:local_product][:packsize].to_f).to_s)
@@ -19,7 +19,7 @@ module Rawbotz
           order_item_line.gsub!(/NUM_PACKS/, '')
         end
         order_item_line.gsub!(/PACKSIZE/, oi[:local_product][:packsize].to_s)
-        order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:name].to_s)
+        order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:supplier_prod_name] || oi[:local_product][:name].to_s)
         order_item_line
       end
       lines[lines.find_index(product_line)] = order_lines if product_line
