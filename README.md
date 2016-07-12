@@ -29,6 +29,8 @@ Anyway, the application is so specific to RawLiving Germanys needs that you prob
 - supplier attribute
 - shelve attribute
 - packsize attribute
+- supplier_sku attribute
+- supplier_prod_name attribute
 - Ubuntu 14.04 installation, using rvm in an unprivileged users home.
 
 ## Usage
@@ -70,6 +72,8 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       supplier_name: 666
       shelve_nr: 42
       packsize: 1337
+      supplier_sku: 1222
+      supplier_prod_name: 1921
     
     # Remote Magento Web Interface (for our mech)
     remote_shop:
