@@ -41,6 +41,20 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @supplier = Supplier.find(params[:supplier_id])
       @products = @supplier.local_products
 
+      begin
+        db = RawgentoDB::Query
+        @monthly_sales = @products.map{|p| [p.product_id,
+                                           db.sales_monthly_between(p.product_id,
+                                           Date.today,
+                                           Date.today - 31 * 4)]}.to_h
+        # this is not avg
+        @monthly_sales.each{|k,v| @monthly_sales[k] = v.inject(0){|a,s| a + s[1].to_i}/v.length rescue 0}
+        @stock = {}
+        db.stock.each {|s| @stock[s.product_id] = s.qty}
+      rescue Exception => e
+        @stock = {}
+      end
+
       order = {supplier: @supplier, order_items: []}
       params.select{|p| p.start_with?("item_")}.each do |p, val|
         if val && val.to_i > 0
