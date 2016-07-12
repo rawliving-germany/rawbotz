@@ -3,7 +3,8 @@ module Rawbotz
     attr_accessor :local_products
     attr_accessor :logger
     attr_accessor :name_attribute_id, :supplier_attribute_id,
-      :shelve_attribute_id, :packsize_attribute_id
+      :shelve_attribute_id, :packsize_attribute_id,
+      :supplier_sku_attribute_id, :supplier_prod_name_attribute_id
 
     def initialize logger
       @local_products = {}
@@ -13,10 +14,14 @@ module Rawbotz
       @supplier_attribute_id = Rawbotz.attribute_ids["supplier_name"]
       @shelve_attribute_id   = Rawbotz.attribute_ids["shelve_nr"]
       @packsize_attribute_id = Rawbotz.attribute_ids["packsize"]
+      @supplier_sku_attribute_id = Rawbotz.attribute_ids["supplier_sku"]
+      @supplier_prod_name_attribute_id = Rawbotz.attribute_ids["supplier_prod_name"]
       @logger.debug "Attribute-ids: Name: #{@name_attribute_id}, "\
         "Supplier: #{@supplier_attribute_id}, "\
         "Shelve-Nr: #{@shelve_attribute_id}, "\
-        "Packsize: #{@packsize_attribute_id}"
+        "Packsize: #{@packsize_attribute_id}"\
+        "Supplier-SKU: #{@supplier_sku_attribute_id}"\
+        "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"
     end
 
     def sync
@@ -31,6 +36,10 @@ module Rawbotz
       update_attribute(@shelve_attribute_id, :shelve_nr)
       # Packsize
       update_attribute(@packsize_attribute_id, :packsize, :integer)
+      # Supplier SKU
+      update_attribute(@supplier_sku_attribute_id, :supplier_sku)
+      # Supplier Product name
+      update_attribute(@supplier_prod_name_attribute_id, :supplier_prod_name)
 
       log_changes
 
