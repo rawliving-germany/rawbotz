@@ -8,6 +8,7 @@
   %h2 Mail preview
   %pre~ @mail_preview
   %a{:href => "mailto:#{@supplier.email}?Subject=Order&body=%s" % URI::escape(@mail_preview).gsub(/&/,'%26')} Open mail
+  %br
 
 %center
   %form#non_remote_order.pure-form(action="" method="post")
@@ -26,6 +27,11 @@
           %tr
             %td
               = product_link product
+              - if product.supplier_prod_name
+                %br
+                %small
+                  = product.supplier_sku
+                  = product.supplier_prod_name
             %td
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id}
             %td
@@ -48,7 +54,7 @@
     %center
       %button.pure-button.pure-button-primary
         %i.fa.fa-envelope
-          Send me the mail!
+          Show me the mail!
       -#%button#ajax_mailto.pure-button.pure-button-secondary
       -#  %i.fa.fa-envelope
       -#    Open mail
