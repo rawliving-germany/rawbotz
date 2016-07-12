@@ -70,7 +70,7 @@
     
               We will order
     
-              * PRODUCTCODE QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME
+              * SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME
     
               Thank you,
     
@@ -85,8 +85,6 @@
             %dd will be replaced by this suppliers name
             %dt *
             %dd the line starting with a star will be iterated over with every product
-            %dt PRODUCTCODE
-            %dd the product code as stored in magento
             %dt QTY
             %dd quantity ordered
             %dt NUM_PACKS
@@ -94,5 +92,7 @@
             %dt PACKSIZE
             %dd packsize as stored in magento
             %dt PRODUCTNAME
-            %dd the products name
+            %dd the products name, (prefers supplier_prod_name property of product)
+            %dt SUPPLIERSKU
+            %dd 'remote' SKU of the product
           %br
