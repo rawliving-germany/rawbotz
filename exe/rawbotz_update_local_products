@@ -26,7 +26,8 @@ begin
   products = RawgentoDB::Query.products
 rescue
   logger.error "Could not connect to MySQL database or other error"
-  #logger.error "$!.inspect" $@ -> backtrace
+  logger.error $!.inspect
+  # $@ -> backtrace would be available, too
   exit 1
 end
 
