@@ -19,7 +19,11 @@ module Rawbotz
           order_item_line.gsub!(/NUM_PACKS/, '')
         end
         order_item_line.gsub!(/PACKSIZE/, oi[:local_product][:packsize].to_s)
-        order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:supplier_prod_name] || oi[:local_product][:name].to_s)
+        if oi[:local_product][:supplier_prod_name].to_s != ""
+          order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:supplier_prod_name])
+        else
+          order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:name].to_s)
+        end
         order_item_line
       end
       lines[lines.find_index(product_line)] = order_lines if product_line
