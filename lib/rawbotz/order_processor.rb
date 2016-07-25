@@ -3,6 +3,8 @@ module Rawbotz
     def initialize(order, logger=Logger.new("/dev/null"))
       @order = order
       @logger = logger
+      @form_token = YAML::load_file(
+        Rawbotz::conf_file_path)["remote_shop"]["form_token"]
     end
 
     # Yield items, if block given
@@ -15,7 +17,7 @@ module Rawbotz
           log_product_handling item
 
           begin
-            ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished
+            ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished, @form_token
           rescue
             ordered_qty = nil
             item.update(state: "error")
