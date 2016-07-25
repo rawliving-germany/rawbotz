@@ -80,6 +80,7 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       base_uri: https://magentoshop.remote
       user: mylogin@email.address
       pass: whatnottobenamed
+      form_token: 982103978ab8776F98872Lw
     
     supplier_name: MagentoShop Remote
     
