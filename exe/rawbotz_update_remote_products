@@ -5,6 +5,7 @@ require "rawbotz"
 require 'magento_remote'
 
 require 'optparse'
+STDOUT.sync = true
 
 options = { sleep_time: 1,
             start_pid: 0,

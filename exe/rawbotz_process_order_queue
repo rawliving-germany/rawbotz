@@ -22,6 +22,8 @@ options = optparse.options
 
 include RawgentoModels
 
+STDOUT.sync = true # helps in shell redirection logging situations
+
 def main options
   logger = Logger.new(STDOUT)
   logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
