@@ -63,7 +63,9 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
           order[:order_items] << {num_wished: qty, local_product: product}
         end
       end
-      @mail_preview = Rawbotz::MailTemplate.consume @supplier.order_template, order
+      @mail_preview_subject = Rawbotz::MailTemplate.extract_subject @supplier.order_template, order
+      @mail_preview_text = Rawbotz::MailTemplate.consume @supplier.order_template, order
+      @mailto_url = Rawbotz::MailTemplate.create_mailto_url @supplier, order
       haml "order/non_remote".to_sym
     end
 

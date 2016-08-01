@@ -4,10 +4,12 @@
 
 #modal-plot.modal-plot
 
-- if @mail_preview.to_s != ""
+- if @mail_preview_text.to_s != ""
   %h2 Mail preview
-  %pre~ @mail_preview
-  %a{:href => "mailto:#{@supplier.email}?Subject=Order&body=%s" % URI::escape(@mail_preview).gsub(/&/,'%26')} Open mail
+  %pre~ "SUBJECT: #{@mail_preview_subject}"
+  %pre~ "TO: #{@supplier.email}"
+  %pre~ @mail_preview_text
+  %a{:href => @mailto_url, :target => 'rawbotz_mail_order'} Open mail
   %br
 
 %center
