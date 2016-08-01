@@ -91,3 +91,8 @@ th {
 .wished_qty_input .order-none {
   display: table-cell;
 }
+.pure-control-group .hint {
+  font-size: 80%;
+  color: grey;
+  display: inline-block;
+}

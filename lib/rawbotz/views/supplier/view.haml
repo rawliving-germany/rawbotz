@@ -50,6 +50,30 @@
         .pure-control-group
           %label(for="order_template") Order Template
           %textarea#order_template(name="order_template" value="#{@supplier.order_template}" rows="10" cols="80")~ @supplier.order_template
+        .pure-control-group
+          %label.pseudo
+          .hint
+            See example below.
+
+        .pure-control-group
+          %label(for="order_info") Order Info
+          %textarea#order_info(name="order_info" value="#{@supplier.order_info}" rows="10" cols="80")~ @supplier.order_info
+
+        .pure-control-group
+          %label(for="delivery_time_days") Delivery Time
+          %input#delivery_time_days(name="delivery_time_days" value="#{@supplier.delivery_time_days}")
+        .pure-control-group
+          %label.pseudo
+          .hint
+            In days.
+
+        .pure-control-group
+          %label(for="minimum_order_value") Minimum Order Value
+          %input#minimum_order_value(name="minimum_order_value" value="#{@supplier.minimum_order_value}")
+        .pure-control-group
+          %label.pseudo
+          .hint
+            In €, british notation (100.87 not 100,87).
     
         .pure-control-group
           %button.pure-button.pure-button-primary
