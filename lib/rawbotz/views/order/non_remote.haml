@@ -4,6 +4,28 @@
 
 #modal-plot.modal-plot
 
+- if @supplier.order_info
+  #flash.ui-state-highlight
+    = info_icon
+    %b Delivery info:
+    = @supplier.order_info
+
+- if @supplier.delivery_time_days
+  #flash.ui-state-highlight
+    = info_icon
+    %b Delivery Time (in days):
+    = @supplier.delivery_time_days
+
+- if @supplier.minimum_order_value
+  #flash.ui-state-highlight
+    = info_icon
+    %b Minimum Order Value
+    = @supplier.minimum_order_value
+    €
+
+- if @supplier.order_info || @supplier.delivery_time_days || @supplier.minimum_order_value
+  %br
+
 - if @mail_preview_text.to_s != ""
   %h2 Mail preview
   %pre~ "SUBJECT: #{@mail_preview_subject}"
