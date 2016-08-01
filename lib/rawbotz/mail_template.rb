@@ -29,5 +29,25 @@ module Rawbotz
       lines[lines.find_index(product_line)] = order_lines if product_line
       lines.flatten.join("\n")
     end
+
+    def self.extract_subject template, order
+      result = ""
+      result = template.gsub(/SUPPLIERNAME/, order[:supplier][:name])
+
+      lines = result.split("\n")
+      subject, lines = lines.partition{|l| l.start_with?("SUBJECT=")}
+      if !subject.empty?
+        subject[0][8..-1]
+      else
+        "Order"
+      end
+    end
+
+
+    def self.create_mailto_url supplier, order
+      mail_preview = self.consume supplier[:order_template], order
+      subject = self.extract_subject supplier[:order_template], order
+      "mailto:#{supplier[:email]}?Subject=#{subject}&body=%s" % URI::escape(mail_preview).gsub(/&/,'%26')
+    end
   end
 end
