@@ -19,6 +19,12 @@
             No local product!
         %td
           = local_product_link order_item.local_product
+          - if order_item.local_product.order_info.present?
+            %br
+            #flash.ui-state-highlight
+              = info_icon
+              = order_item.local_product.order_info
+
         %td
           = order_item.current_stock
           \/
