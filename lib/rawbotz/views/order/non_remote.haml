@@ -57,10 +57,10 @@
                 %small
                   = product.supplier_sku
                   = product.supplier_prod_name
-              - if product.order_info
+              - if product.order_info.present?
                 #flash.ui-state-highlight
                   = error_icon
-                    = product.order_info
+                  = product.order_info
             %td
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id}
             %td
