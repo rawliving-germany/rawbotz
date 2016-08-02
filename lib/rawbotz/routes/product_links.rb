@@ -22,7 +22,7 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
 
     # app.get  '/products/link_wizard/:idx', &show_link_wizard_id
     show_link_wizard_id = lambda do
-      @unlinked_count = LocalProduct.unlinked.count
+      @unlinked_count = LocalProduct.supplied_by(settings.supplier).unlinked.count
       @local_product = LocalProduct.supplied_by(settings.supplier).unlinked.at(params[:idx].to_i || 0)
       haml "products/link_wizard".to_sym
     end
