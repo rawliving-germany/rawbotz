@@ -45,6 +45,7 @@
           %th Packsize
           %th Rough Avg. sales/ m
           %th Stock
+          %th Purchase Price
           %th Chart
       %tbody
         - @products.find_each do |product|
@@ -56,6 +57,10 @@
                 %small
                   = product.supplier_sku
                   = product.supplier_prod_name
+              - if product.order_info
+                #flash.ui-state-highlight
+                  = error_icon
+                    = product.order_info
             %td
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id}
             %td
@@ -68,6 +73,10 @@
                 = @monthly_sales[product.product_id]
             %td
               = @stock[product.product_id]
+            %td
+              - if product.purchase_price
+                = product.purchase_price
+                €
             %td
               - stock_url = "/product/#{product.id}/stock_sales_plot"
               %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
