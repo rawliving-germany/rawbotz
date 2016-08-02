@@ -33,14 +33,22 @@
     .pure-control-group
       %label(for="shelve") Shelve
       = @product.shelve_nr
-    - if @product.supplier_sku != ""
+    - if @product.supplier_sku.present?
       .pure-control-group
         %label(for="supplier_sku") Supplier SKU
         = @product.supplier_sku
-    - if @product.supplier_prod_name != ""
+    - if @product.supplier_prod_name.present?
       .pure-control-group
         %label(for="supplier_prod_name") Supplier Product Name
         = @product.supplier_prod_name
+    - if @product.order_info.present?
+      .pure-control-group
+        %label(for="order_info") Order Info
+        = @product.order_info
+    - if @product.purchase_price.present?
+      .pure-control-group
+        %label(for="purchase_price") Purchase Price
+        = @product.purchase_price
 
 %h2 Actions
 - if !@product.remote_product.present?
