@@ -7,7 +7,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.get  '/products',           &show_products
     show_products = lambda do
       @products = LocalProduct
-      @suppliers = Supplier.all
+      @suppliers = Supplier.order(:name).all
       haml "products/index".to_sym
     end
 

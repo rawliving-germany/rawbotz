@@ -6,7 +6,7 @@ module Rawbotz::RawbotzApp::Routing::Suppliers
   def self.registered(app)
     # app.get  '/suppliers', &show_suppliers
     show_suppliers = lambda do
-      @suppliers = Supplier.all
+      @suppliers = Supplier.order(:name).all
       haml "suppliers/index".to_sym
     end
 

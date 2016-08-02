@@ -6,6 +6,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
   def self.registered(app)
     # app.get  '/orders/non_remote', &show_suppliers_orders
     show_suppliers_orders = lambda do
+      @suppliers = Supplier.order(:name)
       haml "orders/non_remotes".to_sym
     end
 
