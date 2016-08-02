@@ -31,6 +31,8 @@ Anyway, the application is so specific to RawLiving Germanys needs that you prob
 - packsize attribute
 - supplier_sku attribute
 - supplier_prod_name attribute
+- order_info attribute
+- purchase_price attribute
 - Ubuntu 14.04 installation, using rvm in an unprivileged users home.
 
 ## Usage
