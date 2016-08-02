@@ -14,7 +14,7 @@ module Rawbotz
         order_item_line.gsub!(/SUPPLIERSKU/, oi[:local_product][:supplier_sku].to_s)
         order_item_line.gsub!(/QTY/, oi[:num_wished].to_s)
         if oi[:local_product][:packsize].to_s != ""
-          order_item_line.gsub!(/NUM_PACKS/, (oi[:num_wished] / oi[:local_product][:packsize].to_f).to_s)
+          order_item_line.gsub!(/NUM_PACKS/, "%g" % (oi[:num_wished] / oi[:local_product][:packsize].to_f))
         else
           order_item_line.gsub!(/NUM_PACKS/, '')
         end

@@ -21,7 +21,7 @@ class MailTemplateTest < MiniTest::Test
       "\n"\
       " \n"\
       " 1 (0.25 of 4) First Product\n"\
-      "sku1 5 (1.0 of 5) Suppliers first\n"\
+      "sku1 5 (1 of 5) Suppliers first\n"\
       " 7 ( of ) Third Product\n"\
       "see you"
     result = Rawbotz::MailTemplate.consume(template, order)
@@ -66,7 +66,7 @@ class MailTemplateTest < MiniTest::Test
       {num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}}
     ]}
 
-    expected = "mailto:mailme@plea.se?Subject=I mail you Suppliername&body=Dear%20Suppliername%0A%0A%20%0A%201%20(0.25%20of%204)%20First%20Product%0Asku1%205%20(1.0%20of%205)%20Suppliers%20first%0A%207%20(%20of%20)%20Third%20Product%0Asee%20you"
+    expected = "mailto:mailme@plea.se?Subject=I mail you Suppliername&body=Dear%20Suppliername%0A%0A%20%0A%201%20(0.25%20of%204)%20First%20Product%0Asku1%205%20(1%20of%205)%20Suppliers%20first%0A%207%20(%20of%20)%20Third%20Product%0Asee%20you"
     supplier = { email: "mailme@plea.se", order_template: template }
     result = Rawbotz::MailTemplate.create_mailto_url(supplier, order)
     assert_equal expected, result
