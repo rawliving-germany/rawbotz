@@ -2,6 +2,15 @@
 
 %h1 Orders
 
+:javascript
+  $(document).ready(function() {
+    $( "#tabs" ).tabs();
+  });
+
+
+-#- if Order.in_state('processing').present?
+-#  Currently Processing an order: [progress]
+
 - if Order.current.present?
   %a(href="/order/#{Order.current.id}")
     Current Order
@@ -9,32 +18,22 @@
   %a(href="/order/new") New Order
 
 %br
-- if @orders.count > 0
-  %br
 
-  %table.pure-table
-    %thead
-      %tr
-        %th Date
-        %th Number of Items
-        %th Action
-        %th State
-    %tbody
-      - @orders.each do |order|
-        %tr
-          %td=order.created_at
-          %td
-            = order.order_items.count
-            (
-            = order.order_items.processible.count
-            )
-          %td
-            %a.pure-button(href="/order/#{order.id}")
-              %i.fa.fa-eye
-              View
-            - if order.state == "ordered"
-              %a.pure-button(href="/order/#{order.id}/packlist")
-                %i.fa.fa-paper
-                Packlist
-
-          %td=order.state
+#tabs
+  %ul
+    %li
+      %a(href="#tab_all_orders") All
+    - if @orders.in_state('ordered').present?
+      %li
+        %a(href="#tab_ordered_orders") Ordered
+    - if @orders.in_state('deleted').present?
+      %li
+        %a(href="#tab_deleted_orders") Deleted
+  #tab_all_orders
+    = haml "orders/_order_table".to_sym, locals: {orders: @orders}
+  - if @orders.in_state('ordered').present?
+    #tab_ordered_orders
+      = haml "orders/_order_table".to_sym, locals: {orders: @orders.in_state('ordered')}
+  - if @orders.in_state('deleted').present?
+    #tab_deleted_orders
+      = haml "orders/_order_table".to_sym, locals: {orders: @orders.in_state('deleted')}
