@@ -65,7 +65,8 @@
           Stock at time
     %tbody
       - @order.order_items.find_each do |item|
-        %tr
+        %tr{:class => order_item_class(item)}
+          -# color when not avail, or less available than wished!
           %td
             = local_product_link item.local_product
           %td

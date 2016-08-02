@@ -5,6 +5,7 @@ require 'haml'
 require 'rawbotz/helpers/icon_helper'
 require 'rawbotz/helpers/flash_helper'
 require 'rawbotz/helpers/resource_link_helper'
+require 'rawbotz/helpers/order_item_color_helper'
 require 'tilt/haml'
 
 class RawbotzApp < Sinatra::Base
@@ -35,6 +36,7 @@ class RawbotzApp < Sinatra::Base
   helpers Rawbotz::Helpers::IconHelper
   helpers Rawbotz::Helpers::FlashHelper
   helpers Rawbotz::Helpers::ResourceLinkHelper
+  helpers Rawbotz::Helpers::OrderItemColorHelper
 
   get '/' do
     haml :index

@@ -96,3 +96,13 @@ th {
   color: grey;
   display: inline-block;
 }
+
+.perfect_order {
+  background-color: #99ff99;
+}
+.out_of_stock {
+  background-color: #ffb3b3;
+}
+.partly_available {
+  background-color: #ffdd99;
+}
