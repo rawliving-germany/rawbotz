@@ -42,8 +42,12 @@ logger.info("Found #{RawgentoModels::LocalProduct.unscoped.count - product_count
 
 if options[:mail]
   logger.debug("Sending mail")
-  Rawbotz::mail("rawbotz local product update",
-                "Found #{RawgentoModels::LocalProduct.unscoped.count - product_count} new local products")
+  if updater.change_text.present?
+    Rawbotz::mail("rawbotz local product update",
+                  "Found #{RawgentoModels::LocalProduct.unscoped.count - product_count} new local products\n\nOther changes:\n#{updater.change_text}")
+  else
+    Rawbotz::mail("rawbotz local product update: no changes", "Nothing changed in magento")
+  end
 end
 
 exit 0
