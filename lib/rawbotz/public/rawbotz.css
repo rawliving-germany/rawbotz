@@ -106,3 +106,6 @@ th {
 .partly_available {
   background-color: #ffdd99;
 }
+#flash {
+  padding-left: 0.5em;
+}
