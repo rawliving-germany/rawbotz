@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+require "rawbotz/option_parser"
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
+  opts.separator ""
+end
+
+optparse.parse!
+options = optparse.options
+
+logger = Logger.new(STDOUT)
+logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
+
+logger.info("Setting all orders in processing state in 'aborted' state")
+
+orders = RawgentoModels::Order.where(state: 'processing')
+logger.info("Found #{orders.count} orders")
+
+orders.update_all(state: 'aborted')
+
+logger.info("done")
+
+exit 0
