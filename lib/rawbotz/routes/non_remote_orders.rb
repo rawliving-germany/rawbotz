@@ -22,7 +22,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @stock    = {}
         begin
           @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
-          db.stock.each {|s| @stock[s.product_id] = s.qty}
+          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
           @monthly_sales = {}
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
@@ -55,7 +55,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
         begin
           @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
-          db.stock.each {|s| @stock[s.product_id] = s.qty}
+          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
           @monthly_sales = {}
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
@@ -73,7 +73,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
       begin
         @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
-        db.stock.each {|s| @stock[s.product_id] = s.qty}
+        RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
       rescue Exception => e
         @monthly_sales = {}
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
