@@ -1,6 +1,9 @@
 module Rawbotz
   module Helpers
     module IconHelper
+      def add_icon
+        '<i class="fa fa-plus"></i>'
+      end
       def error_icon
         '<i class="fa fa-flash"></i>'
       end
@@ -24,6 +27,9 @@ module Rawbotz
       end
       def remote_icon
         '<i class="fa fa-globe"></i>'
+      end
+      def save_icon
+        '<i class="fa fa-envelope"></i>'
       end
       def settings_icon
         '<i class="fa fa-wrench"></i>'
