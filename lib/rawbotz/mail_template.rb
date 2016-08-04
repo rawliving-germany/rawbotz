@@ -11,20 +11,22 @@ module Rawbotz
       order_lines = order.order_items.map do |oi|
         next if product_line.nil?
         order_item_line = product_line[2..-1]
-        order_item_line.gsub!(/SUPPLIERSKU/, oi[:local_product][:supplier_sku].to_s)
+        order_item_line.gsub!(/SUPPLIERSKU/, oi.local_product[:supplier_sku].to_s)
         order_item_line.gsub!(/QTY/, oi[:num_wished].to_s)
-        if oi[:local_product][:packsize].to_s != ""
-          order_item_line.gsub!(/NUM_PACKS/, "%g" % (oi[:num_wished] / oi[:local_product][:packsize].to_f))
+        if oi.local_product[:packsize].to_s != ""
+          order_item_line.gsub!(/NUM_PACKS/, "%g" % (oi[:num_wished] / oi.local_product[:packsize].to_f))
         else
           order_item_line.gsub!(/NUM_PACKS/, '')
         end
-        order_item_line.gsub!(/PACKSIZE/, oi[:local_product][:packsize].to_s)
-        if oi[:local_product][:supplier_prod_name].to_s != ""
-          order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:supplier_prod_name])
+        order_item_line.gsub!(/PACKSIZE/, oi.local_product[:packsize].to_s)
+        if oi.local_product[:supplier_prod_name].to_s != ""
+          order_item_line.gsub!(/PRODUCTNAME/, oi.local_product[:supplier_prod_name])
         else
-          order_item_line.gsub!(/PRODUCTNAME/, oi[:local_product][:name].to_s)
+          order_item_line.gsub!(/PRODUCTNAME/, oi.local_product[:name].to_s)
         end
         order_item_line
+        #SUPPLIERSKU
+        #SUPPLIERPRODUCTNAME
       end
       lines[lines.find_index(product_line)] = order_lines if product_line
       lines.flatten.join("\n")

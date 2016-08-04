@@ -6,6 +6,10 @@ require 'rawbotz/mail_template'
 require 'ostruct'
 
 class MailTemplateTest < MiniTest::Test
+  OI_BARE = OpenStruct.new({num_wished: 1, local_product: {name: "First Product", packsize: 4}})
+  OI_FULL = OpenStruct.new({num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}})
+  OI_HALF = OpenStruct.new({num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}})
+
   def test_substitution
     template = "Dear SUPPLIERNAME\n"\
       "SUBJECT=I mail you SUPPLIERNAME\n"\
@@ -14,10 +18,7 @@ class MailTemplateTest < MiniTest::Test
       "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
       "see you"
     order = {supplier: {name: "Suppliername"}, order_items: [
-      {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
-      {num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}},
-      {num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}}
-    ]}
+      OI_BARE, OI_FULL, OI_HALF]}
     order = OpenStruct.new order
 
     expected = "Dear Suppliername\n"\
@@ -39,7 +40,7 @@ class MailTemplateTest < MiniTest::Test
       "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
       "see you"
     order = {supplier: {name: "Suppliername"}, order_items: [
-      {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
+      OI_BARE
     ]}
     order = OpenStruct.new order
     result = Rawbotz::MailTemplate.extract_subject(template, order)
@@ -51,7 +52,7 @@ class MailTemplateTest < MiniTest::Test
       "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
       "see you"
     order = {supplier: {name: "Suppliername"}, order_items: [
-      {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
+      OI_BARE
     ]}
     order = OpenStruct.new order
     result = Rawbotz::MailTemplate.extract_subject(template, order)
@@ -66,9 +67,7 @@ class MailTemplateTest < MiniTest::Test
       "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
       "see you"
     order = {supplier: {name: "Suppliername"}, order_items: [
-      {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
-      {num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}},
-      {num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}}
+      OI_BARE, OI_FULL, OI_HALF
     ]}
     order = OpenStruct.new order
 
