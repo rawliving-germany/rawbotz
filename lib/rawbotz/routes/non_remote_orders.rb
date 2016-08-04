@@ -44,22 +44,27 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
     # app.get  '/order/non_remote/:order_id', &show_supplier_order
     show_supplier_order = lambda do
-      @supplier = Supplier.find(params[:supplier_id])
+      @order    = Order.find(params[:order_id])
+      @supplier = @order.supplier
       if @supplier.order_template.to_s == ""
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
       else
-        @products = LocalProduct.supplied_by(@supplier)
-        @order    = Order.find(params[:order_id])
         @stock    = {}
-
         begin
+          @products = @order.order_items.map{|oi| oi.local_product}
           @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
           RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
           @monthly_sales = {}
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
+        @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
+          @supplier.order_template, @order)
+        @mail_preview_text    = Rawbotz::MailTemplate.consume(
+          @supplier.order_template, @order)
+        @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
+          @supplier, @order)
         haml "order/non_remote".to_sym
       end
     end
@@ -70,6 +75,12 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @products = @supplier.local_products
       @order    = Order.find(params[:order_id])
       @stock    = {}
+
+      # Certain orders should not be changed
+      if @order.state != 'new'
+        add_flash :error, "Orders in state #{@order.state} cannot be changed!"
+        redirect "order/non_remote/#{@order.id}"
+      end
 
       begin
         @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
@@ -87,6 +98,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
           oi.update(num_wished: qty)
         end
       end
+      @order.public_comment   = params[:public_comment]
+      @order.internal_comment = params[:internal_comment]
 
       @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
         @supplier.order_template, @order)
@@ -94,6 +107,21 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @supplier.order_template, @order)
       @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
         @supplier, @order)
+
+      @order.order_result = @mail_preview_text
+      @order.save
+      if params['action'] == 'fix'
+        @order.update(state: :mailed)
+        add_flash :success, "Order marked as mailed"
+        redirect '/orders'
+      elsif params['action'] == "delete"
+        @order.update(state: :deleted)
+        add_flash :success, 'Order marked deleted'
+        redirect '/orders'
+      else
+        add_flash :success, "Order saved"
+      end
+
       haml "order/non_remote".to_sym
     end
 
