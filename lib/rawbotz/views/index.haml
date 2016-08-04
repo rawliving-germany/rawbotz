@@ -8,7 +8,7 @@
     %h3 Last 3 Orders
     %table.pure-table-horizontal.pure-table
       -# Order.where(state: [Order::STATES.new, Order::STATES.processing, Order::STATES.queued, Order::STATES.ordered]).order("updated_at DESC").first(3).each do |order|
-      - Order.where(state: ["new", "processing", "ordered"]).order("updated_at DESC").first(3).each do |order|
+      - Order.where(state: ["new", "processing", "ordered", "mailed"]).order("updated_at DESC").first(3).each do |order|
         %tr
           %td
             %a(href="/order/#{order.id}")
