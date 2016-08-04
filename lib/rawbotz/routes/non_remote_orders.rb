@@ -111,6 +111,10 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @order.order_result = @mail_preview_text
       @order.save
       if params['action'] == 'fix'
+        @order.order_items.find_each do |oi|
+          oi.num_ordered = oi.num_wished
+          oi.save
+        end
         @order.update(state: :mailed)
         add_flash :success, "Order marked as mailed"
         redirect '/orders'
