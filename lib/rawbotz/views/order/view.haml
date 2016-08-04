@@ -17,7 +17,8 @@
 
     #tabs
       - supplier_name = settings.supplier
-      - understocked_items = @order.order_items.select{|i| i.local_product.supplier==supplier_name && i.num_wished.nil?}
+      -# Use scopes?
+      - understocked_items = @order.order_items.select{|i| i.local_product.present? && i.num_wished.nil?}
       - unordered_items = []
       - ordered_items = @order.order_items.select{|i| i.num_wished.present? && i.num_wished != 0}
       - ignored_items = @order.order_items.select{|i| i.local_product.supplier==supplier_name && i.num_wished == 0}
@@ -46,6 +47,7 @@
     %center
       -#(Find remote order? Delete?)
       %button.pure-button.pure-button-secondary(name="action" value="save")
+        = save_icon
         Save
       %button.pure-button.pure-button-primary(name="action" value="order")
         Order!
@@ -77,4 +79,3 @@
             =item.current_stock
 -#  %h2 Action
 -#  (Find remote order? Delete?)
-
