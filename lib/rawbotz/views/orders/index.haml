@@ -8,8 +8,11 @@
   });
 
 
--#- if Order.in_state('processing').present?
--#  Currently Processing an order: [progress]
+- if Order.in_state('processing').present?
+  - current_processing = Order.in_state("processing").all[0]
+  = current_processing.order_items.where("num_ordered > ?", 0).count
+  of
+  = current_processing.order_items.where("num_wished > ?", 0).count
 
 - if Order.current.present?
   %a(href="/order/#{Order.current.id}")
