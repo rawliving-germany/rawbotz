@@ -9,6 +9,8 @@ class MailTemplateTest < MiniTest::Test
   OI_BARE = OpenStruct.new({num_wished: 1, local_product: {name: "First Product", packsize: 4}})
   OI_FULL = OpenStruct.new({num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}})
   OI_HALF = OpenStruct.new({num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}})
+  OI_ZEROWISHED = OpenStruct.new({num_wished: 0, local_product: {name: "Boring Product", supplier_sku: 'bo1', supplier_prod_name: 'Fourth Product'}})
+  OI_UNWISHED = OpenStruct.new({local_product: {name: "Fifth Product", supplier_sku: '', supplier_prod_name: '', packsize: 5}})
 
   def test_substitution
     template = "Dear SUPPLIERNAME\n"\
@@ -27,6 +29,23 @@ class MailTemplateTest < MiniTest::Test
       " 1 (0.25 of 4) First Product\n"\
       "sku1 5 (1 of 5) Suppliers first\n"\
       " 7 ( of ) Third Product\n"\
+      "see you"
+    result = Rawbotz::MailTemplate.consume(template, order)
+    assert_equal expected, result
+  end
+
+  def test_order_item_exclusion
+    template = "Dear SUPPLIERNAME\n"\
+      "SUBJECT=I mail you SUPPLIERNAME\n"\
+      "\n"\
+      " \n"\
+      "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
+      "see you"
+    order = OpenStruct.new supplier: {name: "Suppliername"}, order_items: [OI_ZEROWISHED, OI_UNWISHED]
+
+    expected = "Dear Suppliername\n"\
+      "\n"\
+      " \n"\
       "see you"
     result = Rawbotz::MailTemplate.consume(template, order)
     assert_equal expected, result

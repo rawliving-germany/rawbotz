@@ -8,7 +8,7 @@ module Rawbotz
       lines = result.split("\n")
       subject, lines = lines.partition{|l| l.start_with?("SUBJECT=")}
       product_line = lines.detect{|l| l.start_with?("* ")}
-      order_lines = order.order_items.map do |oi|
+      order_lines = order.order_items.select{|o|o.num_wished.to_i != 0}.map do |oi|
         next if product_line.nil?
         order_item_line = product_line[2..-1]
         order_item_line.gsub!(/SUPPLIERSKU/, oi.local_product[:supplier_sku].to_s)
