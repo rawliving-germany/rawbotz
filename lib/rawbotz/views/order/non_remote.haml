@@ -5,7 +5,7 @@
 #modal-plot.modal-plot
 
 #supplier_info
-  - if @supplier.order_info
+  - if @supplier.order_info.present?
     #flash.ui-state-highlight
       = info_icon
       %b Delivery info:
@@ -24,7 +24,7 @@
       = @supplier.minimum_order_value
       €
   
-  - if @supplier.order_info || @supplier.delivery_time_days || @supplier.minimum_order_value
+  - if @supplier.order_info.present? || @supplier.delivery_time_days || @supplier.minimum_order_value
     %br
 
 %center
