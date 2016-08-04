@@ -68,6 +68,8 @@ def main options
   diff_table = Rawbotz::CLI::OrderResultTable.tables diffs
   puts diff_table
 
+  order.update(order_result: diff_table)
+
   if options[:mail]
     logger.debug("Sending mail")
     mail = Rawbotz::mail("rawbotz order finished",
