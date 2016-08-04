@@ -97,4 +97,22 @@ class MailTemplateTest < MiniTest::Test
     result = Rawbotz::MailTemplate.create_mailto_url(supplier, order)
     assert_equal expected, result
   end
+
+  def test_mailto_multiple_url_creation
+    template = "Dear SUPPLIERNAME\n"\
+      "SUBJECT=I mail you SUPPLIERNAME\n"\
+      "\n"\
+      " \n"\
+      "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
+      "see you"
+    order = {supplier: {name: "Suppliername"}, order_items: [
+      OI_BARE
+    ]}
+    order = OpenStruct.new order
+
+    expected = "mailto:mailme@plea.se?cc=read@th.at&cc=one@co.py&Subject=I mail you Suppliername&body=Dear%20Suppliername%0A%0A%20%0A%201%20(0.25%20of%204)%20First%20Product%0Asee%20you"
+    supplier = { email: "mailme@plea.se read@th.at one@co.py", order_template: template }
+    result = Rawbotz::MailTemplate.create_mailto_url(supplier, order)
+    assert_equal expected, result
+  end
 end

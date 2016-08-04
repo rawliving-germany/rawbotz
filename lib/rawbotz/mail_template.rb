@@ -49,7 +49,12 @@ module Rawbotz
     def self.create_mailto_url supplier, order
       mail_preview = self.consume supplier[:order_template], order
       subject = self.extract_subject supplier[:order_template], order
-      "mailto:#{supplier[:email]}?Subject=#{subject}&body=%s" % URI::escape(mail_preview).gsub(/&/,'%26')
+      to_mail = supplier[:email].split[0]
+      cc_mail = supplier[:email].split[1..-1].map{|m| "cc=#{m}"}.join("&")
+      if cc_mail.to_s != ""
+        cc_mail += "&"
+      end
+      "mailto:#{to_mail}?#{cc_mail}Subject=#{subject}&body=%s" % URI::escape(mail_preview).gsub(/&/,'%26')
     end
   end
 end
