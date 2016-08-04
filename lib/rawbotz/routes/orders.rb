@@ -6,15 +6,15 @@ module Rawbotz::RawbotzApp::Routing::Orders
   def self.registered(app)
     # app.get '/orders',             &show_orders
     show_orders = lambda do
-      @orders = Order.where("supplier_id IS NULL OR supplier_id = %d" % settings.supplier.id).order(created_at: :desc)
+      @orders = Order.order(created_at: :desc)
       haml "orders/index".to_sym
     end
 
     # app.get '/order/new',          &create_order
     create_order = lambda do
-      if Order.current.present?
+      if settings.supplier.orders.where(state: 'new').present?
         add_flash :message, "Already one Order in progress"
-        @order = Order.current
+        @order = settings.supplier.orders.where(state: 'new').first
       else
         @order = Order.create(state: :new)
         @order.supplier = settings.supplier
@@ -67,6 +67,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
       haml "order/packlist".to_sym
     end
 
+    # routes
     app.get  '/orders',             &show_orders
     app.get  '/order/new',          &create_order
     app.get  '/order/:id',          &show_order
