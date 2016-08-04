@@ -6,6 +6,7 @@ module Rawbotz
       :shelve_attribute_id, :packsize_attribute_id,
       :supplier_sku_attribute_id, :supplier_prod_name_attribute_id,
       :order_info_attribute_id, :purchase_price_attribute_id
+    attr_accessor :change_text
 
     def initialize logger
       @local_products = {}
@@ -52,6 +53,8 @@ module Rawbotz
 
       log_changes
 
+      @change_text = changes
+
       save_changes
     end
 
@@ -72,6 +75,13 @@ module Rawbotz
           @logger.info("Changes for #{p.product_id} (#{p.name}): #{p.changes}")
         end
       end
+    end
+
+    def changes
+      local_changed_products = @local_products.values.select {|p| p.changed? }
+      changes_string = local_changed_products.map do |p|
+        "Changes for #{p.product_id} (#{p.name}): #{p.changes}"
+      end.join("\n")
     end
 
     def ensure_existence
