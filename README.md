@@ -160,18 +160,33 @@ Create following `rawbotz.conf` section:
         - colleagues@mail.address
 .
 
-### Deployment or web-app startup
+## Deployment or web-app startup
 
 You can run `(bundle exec) exe/rawbotz`, `rackup` or put rawbotz behind a phusion passenger.
 There is a `-c` option to pass in a config file.
 
-As usual, for `rackup` you can specify port (`-p`) and host (`-o`) parameters.  The path to config file has to be exposed as RAWBOTZ_CONFIG env var.
+As usual, for `rackup` you can specify port (`-p`) and host (`-o`) parameters.  The path to config file has to be exposed as `RAWBOTZ_CONFIG` env var (e.g. `export RAWBOTZ_CONFIG=/path/to/rawbotz.conf`).
 
 ### Stock History Update via cron
 
+Assuming an Ubuntu Server Setup, run `crontab -e` and add following line to fetch stock values every day at 06:00 am.
+
+0 6 * * * /path/to/rawbotz_stock_update.sh >> /path/to/rawbotz_stock_update.log
+
+### Local (Magento MySQL DB) Product Update via cron
+
 Assuming an Ubuntu Server Setup, run `crontab -e` and add following line to fetch stock values every day at 03:00 am.
 
-### Other tools included
+0 3 * * * /path/to/rawbotz_local_product_update.sh >> /path/to/rawbotz_local_product_update.log
+
+### Picking up Orders
+
+The poor mans job scheduler can be implemented by checking every minute for an order that is in the `queued` state (with cron):
+
+* * * * * /path/to/rawbotz_process_order_queue.sh
+
+
+## Other tools included
 
 #### rawbotz_update_local_products
 
@@ -184,6 +199,10 @@ After checking out the repo, run `bin/setup` to install dependencies. You can al
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 You can `bundle console` to jump into a pre-setup irb, then call `RawgentoModels::establish_connection "rawbotz.conf"` to setup the database connection and deal with real world data.
+
+### Life cycle of order
+
+Orders get created as `new` and then go into `queued` or `mailed` state. From every state they can exit into `deleted`.  State changes are done by hand.
 
 ## Contributing
 
