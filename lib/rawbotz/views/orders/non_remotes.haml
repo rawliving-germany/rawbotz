@@ -2,7 +2,18 @@
 
 %h1 Non-Remote Order
 
-- @suppliers.each do |supplier|
-  %a.supplier(href="/order/non_remote/#{supplier.id}")
-    =supplier.name
+%ul.float_ul
+  - @suppliers.each do |supplier|
+    %li
+      - if supplier.order_template.present?
+        %a.supplier(href="/order/non_remote/#{supplier.id}/new")
+          = supplier.name
+      - else
+        %a.supplier(href="/supplier/#{supplier.id}")
+          = supplier.name
+          (!)
+  -#    - if supplier.mail temp...
+  -#    %a(href="/order/non_remote/#{supplier.id}/new")
+  -#      New Order
+  -#    -# direct link to order? and also, show whether settings are needed
 %br
