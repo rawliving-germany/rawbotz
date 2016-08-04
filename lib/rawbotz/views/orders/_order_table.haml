@@ -14,11 +14,11 @@
               - if supplier == settings.supplier
                 %a.pure-button(href="/order/new")
                   = add_icon
-                  Create New Order
+                  Create New Remote Order
               - else
                 %a.pure-button(href="/order/non_remote/#{supplier.id}/new")
                   = add_icon
-                  Create New Order
+                  Create New Mail Order
       - orders.each do |order|
         %tr
           %td=order.created_at
