@@ -38,11 +38,11 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @order.save
         add_flash :success, "New Order created"
 
-        redirect "/order/non_remote/#{@supplier.id}/#{@order.id}".to_sym
+        redirect "/order/non_remote/#{@order.id}".to_sym
       end
     end
 
-    # app.get  '/order/non_remote/:supplier_id/:order_id', &show_supplier_order
+    # app.get  '/order/non_remote/:order_id', &show_supplier_order
     show_supplier_order = lambda do
       @supplier = Supplier.find(params[:supplier_id])
       if @supplier.order_template.to_s == ""
@@ -64,7 +64,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       end
     end
 
-    # app.post '/order/non_remote/:supplier_id/:order_id', &show_supplier_order_preview
+    # app.post '/order/non_remote/:order_id', &show_supplier_order_preview
     show_supplier_order_preview = lambda do
       @supplier = Supplier.find(params[:supplier_id])
       @products = @supplier.local_products
@@ -99,8 +99,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
     # routes
     app.get  '/orders/non_remote', &show_suppliers_orders
+    app.get  '/order/non_remote/:order_id', &show_supplier_order
+    app.post '/order/non_remote/:order_id', &show_supplier_order_preview
     app.get  '/order/non_remote/:supplier_id/new', &create_supplier_order
-    app.get  '/order/non_remote/:supplier_id/:order_id', &show_supplier_order
-    app.post '/order/non_remote/:supplier_id/:order_id', &show_supplier_order_preview
   end
 end
