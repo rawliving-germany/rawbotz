@@ -9,7 +9,7 @@
         %a.supplier(href="/order/non_remote/#{supplier.id}/new")
           = supplier.name
       - else
-        %a.supplier(href="/supplier/#{supplier.id}")
+        %a.supplier(href="/supplier/#{supplier.id}#tab_order_settings")
           = supplier.name
           (!)
   -#    - if supplier.mail temp...
