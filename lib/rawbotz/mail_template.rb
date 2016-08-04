@@ -3,12 +3,12 @@ module Rawbotz
     # Substitute certain patterns in template
     def self.consume template, order
       result = ""
-      result = template.gsub(/SUPPLIERNAME/, order[:supplier][:name])
+      result = template.gsub(/SUPPLIERNAME/, order.supplier[:name])
 
       lines = result.split("\n")
       subject, lines = lines.partition{|l| l.start_with?("SUBJECT=")}
       product_line = lines.detect{|l| l.start_with?("* ")}
-      order_lines = order[:order_items].map do |oi|
+      order_lines = order.order_items.map do |oi|
         next if product_line.nil?
         order_item_line = product_line[2..-1]
         order_item_line.gsub!(/SUPPLIERSKU/, oi[:local_product][:supplier_sku].to_s)
@@ -32,7 +32,7 @@ module Rawbotz
 
     def self.extract_subject template, order
       result = ""
-      result = template.gsub(/SUPPLIERNAME/, order[:supplier][:name])
+      result = template.gsub(/SUPPLIERNAME/, order.supplier[:name])
 
       lines = result.split("\n")
       subject, lines = lines.partition{|l| l.start_with?("SUBJECT=")}
@@ -42,7 +42,6 @@ module Rawbotz
         "Order"
       end
     end
-
 
     def self.create_mailto_url supplier, order
       mail_preview = self.consume supplier[:order_template], order

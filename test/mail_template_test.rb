@@ -3,6 +3,8 @@ require 'minitest/autorun'
 
 require 'rawbotz/mail_template'
 
+require 'ostruct'
+
 class MailTemplateTest < MiniTest::Test
   def test_substitution
     template = "Dear SUPPLIERNAME\n"\
@@ -16,6 +18,7 @@ class MailTemplateTest < MiniTest::Test
       {num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}},
       {num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}}
     ]}
+    order = OpenStruct.new order
 
     expected = "Dear Suppliername\n"\
       "\n"\
@@ -38,6 +41,7 @@ class MailTemplateTest < MiniTest::Test
     order = {supplier: {name: "Suppliername"}, order_items: [
       {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
     ]}
+    order = OpenStruct.new order
     result = Rawbotz::MailTemplate.extract_subject(template, order)
     assert_equal "I mail you Suppliername", result
   end
@@ -49,6 +53,7 @@ class MailTemplateTest < MiniTest::Test
     order = {supplier: {name: "Suppliername"}, order_items: [
       {num_wished: 1, local_product: {name: "First Product", packsize: 4}},
     ]}
+    order = OpenStruct.new order
     result = Rawbotz::MailTemplate.extract_subject(template, order)
     assert_equal "Order", result
   end
@@ -65,6 +70,7 @@ class MailTemplateTest < MiniTest::Test
       {num_wished: 5, local_product: {name: "Second Product", packsize: 5, supplier_sku: 'sku1', supplier_prod_name: 'Suppliers first'}},
       {num_wished: 7, local_product: {name: "Third Product", supplier_sku: '', supplier_prod_name: ''}}
     ]}
+    order = OpenStruct.new order
 
     expected = "mailto:mailme@plea.se?Subject=I mail you Suppliername&body=Dear%20Suppliername%0A%0A%20%0A%201%20(0.25%20of%204)%20First%20Product%0Asku1%205%20(1%20of%205)%20Suppliers%20first%0A%207%20(%20of%20)%20Third%20Product%0Asee%20you"
     supplier = { email: "mailme@plea.se", order_template: template }
