@@ -18,9 +18,10 @@ class MailTemplateTest < MiniTest::Test
       "\n"\
       " \n"\
       "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
+      "PUBLIC_COMMENT\n"\
       "see you"
     order = {supplier: {name: "Suppliername"}, order_items: [
-      OI_BARE, OI_FULL, OI_HALF]}
+      OI_BARE, OI_FULL, OI_HALF], public_comment: "Call me when finished"}
     order = OpenStruct.new order
 
     expected = "Dear Suppliername\n"\
@@ -29,6 +30,7 @@ class MailTemplateTest < MiniTest::Test
       " 1 (0.25 of 4) First Product\n"\
       "sku1 5 (1 of 5) Suppliers first\n"\
       " 7 ( of ) Third Product\n"\
+      "Call me when finished\n"\
       "see you"
     result = Rawbotz::MailTemplate.consume(template, order)
     assert_equal expected, result

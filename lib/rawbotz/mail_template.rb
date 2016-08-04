@@ -4,6 +4,7 @@ module Rawbotz
     def self.consume template, order
       result = ""
       result = template.gsub(/SUPPLIERNAME/, order.supplier[:name])
+      result = result.gsub(/PUBLIC_COMMENT/, order.public_comment || "")
 
       lines = result.split("\n")
       subject, lines = lines.partition{|l| l.start_with?("SUBJECT=")}
