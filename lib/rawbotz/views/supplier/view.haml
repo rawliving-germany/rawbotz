@@ -29,11 +29,12 @@
     = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}
   #tab_orders
     %h2 Orders of #{@supplier.name}
+    = haml "orders/_order_table".to_sym, locals: {orders: @supplier.orders, supplier: @supplier}
     - @supplier.orders.find_each do |order|
-      = order.id
+      %br
     - if @supplier != settings.supplier
       - if @supplier.order_template.present?
-        %a(href="/order/non_remote/#{@supplier.id}")
+        %a(href="/order/non_remote/#{@supplier.id}/new")
           Create mail order
       - else
         Please specify mail order template (in Settings tab) before continuing.
@@ -43,6 +44,11 @@
     %form.pure-form.pure-form-aligned(action="" method="post")
       %input(type="hidden" name="_method" value="put")
       %fieldset
+        .pure-control-group
+          %label
+            Order method
+          %input(readonly value="#{@supplier.order_method || 'mail'}")
+
         .pure-control-group
           %label(for="email") E-Mail address
           %input#email(name="email" type="email" value="#{@supplier.email}")
