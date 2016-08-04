@@ -43,6 +43,10 @@
         %p
           Add another item?
     %br
+    %label(for="internal_comment")
+      Internal Comment
+    %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
+    %br
     %h2 Action
     %center
       -#(Find remote order? Delete?)

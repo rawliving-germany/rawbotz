@@ -48,6 +48,8 @@ module Rawbotz::RawbotzApp::Routing::Orders
           OrderItem.find(k[5..-1]).update(num_wished: v.to_i)
         end
       end
+      @order.internal_comment = params[:internal_comment]
+      @order.save
       if params['action'] == 'order'
         @order.update(state: :queued)
         add_flash :success, 'Order queued'
