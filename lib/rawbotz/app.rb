@@ -77,8 +77,9 @@ class RawbotzApp < Sinatra::Base
   register Rawbotz::RawbotzApp::Routing::Suppliers
 
   # get  '/orders/non_remote'
-  # get  '/order/non_remote/:supplier_id'
-  # post '/order/non_remote/:supplier_id'
+  # get  '/order/non_remote/:supplier_id/new'
+  # get  '/order/non_remote/:supplier_id/:order_id'
+  # post '/order/non_remote/:supplier_id/:order_id'
   register Rawbotz::RawbotzApp::Routing::NonRemoteOrders
 
   get '/maintenance' do

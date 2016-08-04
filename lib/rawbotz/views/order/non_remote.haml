@@ -42,13 +42,17 @@
         %tr
           %th Name
           %th Qty
-          %th Packsize
-          %th Rough Avg. sales/ m
+          %th # / pack
+          %th Avg. sales / m
           %th Stock
+          %th Missing
           %th Purchase Price
           %th Chart
       %tbody
-        - @products.find_each do |product|
+        - @order.order_items.find_each do |order_item|
+          - product = order_item.local_product
+          - product_monthly_sales = @monthly_sales && @monthly_sales[product.product_id]
+          - product_stock = @stock[product.product_id]
           %tr
             %td
               = product_link product
@@ -62,17 +66,21 @@
                   = error_icon
                   = product.order_info
             %td
-              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id}
+              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
             %td
               - if product.packsize.present?
                 = product.packsize
               - else
                 %i.fa.fa-ban
             %td
-              - if @monthly_sales
-                = @monthly_sales[product.product_id]
+              = product_monthly_sales
             %td
-              = @stock[product.product_id]
+              = product_stock
+            %td
+              - if product_stock && product_monthly_sales
+                -# red/yellow/green
+                -# if negative, put button
+                = product_stock - product_monthly_sales
             %td
               - if product.purchase_price
                 = product.purchase_price
@@ -87,7 +95,7 @@
     %center
       %button.pure-button.pure-button-primary
         %i.fa.fa-envelope
-          Show me the mail!
+          Save and show mail
       -#%button#ajax_mailto.pure-button.pure-button-secondary
       -#  %i.fa.fa-envelope
       -#    Open mail
@@ -111,8 +119,26 @@
 -#Edit supplier ...
 
 %br
-%h2 Mail template
-%pre~ @supplier.order_template
-%a.pure-button(href="/supplier/#{@supplier.id}")
-  Edit template
-%br
+- if @mail_preview_text.to_s != ""
+  %table.pure-table
+    %tr
+      %td
+        %h2 Mail preview
+        %pre~ "SUBJECT: #{@mail_preview_subject}"
+        %pre~ "TO: #{@supplier.email}"
+        %pre~ @mail_preview_text
+        %a{:href => @mailto_url, :target => 'rawbotz_mail_order'}
+          Open mail
+      %td
+        %h2 Mail template
+        %pre~ @supplier.order_template
+        %a.pure-button(href="/supplier/#{@supplier.id}#tab_order_settings")
+          Edit template
+        %br
+- else
+  %h2 Mail template
+  %pre~ @supplier.order_template
+  %a.pure-button(href="/supplier/#{@supplier.id}#tab_order_settings")
+    Edit template
+  %br
+
