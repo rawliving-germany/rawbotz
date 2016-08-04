@@ -82,13 +82,47 @@
               - stock_url = "/product/#{product.id}/stock_sales_plot"
               %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
                 Stock/Sales
+    %br
+    %center
+      Total price (updates on 'Save' click):
+      %br
+      %b
+        = "%.2f" % @order.order_items.inject(0.0) {|acc, oi| acc += oi.num_wished.to_i * oi.local_product.purchase_price.to_f}
+        €
+        - if @order.order_items.detect{|oi| oi.num_wished.to_i >= 0 && oi.local_product.purchase_price.present?}
+          \... plus products without purchase price
+      %br
 
+    .br
+    %table.pure-table.pure-table-bordered(width="100%")
+      %thead
+        %tr
+          %th
+            %label(for="internal_comment")
+              Internal Comment
+          %th
+            %label(for="public")
+              Public Comment
+      %tbody
+        %tr
+          %td
+            %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
+          %td
+            %textarea#public_comment(name="public_comment")~ @order.public_comment
 
     %br
     %center
-      %button.pure-button.pure-button-primary
-        %i.fa.fa-envelope
-          Save and show mail
+      %h2 Actions
+      - if @order.state != "deleted" && @order.state != "mailed"
+        %button.pure-button.pure-button-primary(name="action" value="save")
+          = save_icon
+          Save
+      - if @order.state != "deleted" && @order.state != "mailed"
+        %button.pure-button.pure-button-secondary(name="action" value="fix")
+          Save and fix, mark as mailed
+      - if @order.state != "deleted"
+        %button.pure-button.pure-button-primary(name="action" value="delete")
+          Delete
       -#%button#ajax_mailto.pure-button.pure-button-secondary
       -#  %i.fa.fa-envelope
       -#    Open mail
@@ -134,4 +168,3 @@
   %a.pure-button(href="/supplier/#{@supplier.id}#tab_order_settings")
     Edit template
   %br
-
