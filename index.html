@@ -73,6 +73,10 @@
 <li>supplier attribute</li>
 <li>shelve attribute</li>
 <li>packsize attribute</li>
+<li>supplier_sku attribute</li>
+<li>supplier_prod_name attribute</li>
+<li>order_info attribute</li>
+<li>purchase_price attribute</li>
 <li>Ubuntu 14.04 installation, using rvm in an unprivileged users home.</li>
 </ul>
 
@@ -117,12 +121,15 @@ attribute_ids:
   supplier_name: 666
   shelve_nr: 42
   packsize: 1337
+  supplier_sku: 1222
+  supplier_prod_name: 1921
 
 # Remote Magento Web Interface (for our mech)
 remote_shop:
   base_uri: https://magentoshop.remote
   user: mylogin@email.address
   pass: whatnottobenamed
+  form_token: 982103978ab8776F98872Lw
 
 supplier_name: MagentoShop Remote
 
@@ -212,21 +219,39 @@ This will query the remote magento shop (scraping it via html GET requests) and 
 
 <p>.</p>
 
-<h3>
-<a id="deployment-or-web-app-startup" class="anchor" href="#deployment-or-web-app-startup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deployment or web-app startup</h3>
+<h2>
+<a id="deployment-or-web-app-startup" class="anchor" href="#deployment-or-web-app-startup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deployment or web-app startup</h2>
 
 <p>You can run <code>(bundle exec) exe/rawbotz</code>, <code>rackup</code> or put rawbotz behind a phusion passenger.
 There is a <code>-c</code> option to pass in a config file.</p>
 
-<p>As usual, for <code>rackup</code> you can specify port (<code>-p</code>) and host (<code>-o</code>) parameters.  The path to config file has to be exposed as RAWBOTZ_CONFIG env var.</p>
+<p>As usual, for <code>rackup</code> you can specify port (<code>-p</code>) and host (<code>-o</code>) parameters.  The path to config file has to be exposed as <code>RAWBOTZ_CONFIG</code> env var (e.g. <code>export RAWBOTZ_CONFIG=/path/to/rawbotz.conf</code>).</p>
 
 <h3>
 <a id="stock-history-update-via-cron" class="anchor" href="#stock-history-update-via-cron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stock History Update via cron</h3>
 
-<p>Assuming an Ubuntu Server Setup, run <code>crontab -e</code> and add following line to fetch stock values every day at 03:00 am.</p>
+<p>Assuming an Ubuntu Server Setup, run <code>crontab -e</code> and add following line to fetch stock values every day at 06:00 am.</p>
+
+<p>0 6 * * * /path/to/rawbotz_stock_update.sh &gt;&gt; /path/to/rawbotz_stock_update.log</p>
 
 <h3>
-<a id="other-tools-included" class="anchor" href="#other-tools-included" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other tools included</h3>
+<a id="local-magento-mysql-db-product-update-via-cron" class="anchor" href="#local-magento-mysql-db-product-update-via-cron" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Local (Magento MySQL DB) Product Update via cron</h3>
+
+<p>Assuming an Ubuntu Server Setup, run <code>crontab -e</code> and add following line to fetch stock values every day at 03:00 am.</p>
+
+<p>0 3 * * * /path/to/rawbotz_local_product_update.sh &gt;&gt; /path/to/rawbotz_local_product_update.log</p>
+
+<h3>
+<a id="picking-up-orders" class="anchor" href="#picking-up-orders" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Picking up Orders</h3>
+
+<p>The poor mans job scheduler can be implemented by checking every minute for an order that is in the <code>queued</code> state (with cron):</p>
+
+<ul>
+<li>* * * * /path/to/rawbotz_process_order_queue.sh</li>
+</ul>
+
+<h2>
+<a id="other-tools-included" class="anchor" href="#other-tools-included" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other tools included</h2>
 
 <h4>
 <a id="rawbotz_update_local_products" class="anchor" href="#rawbotz_update_local_products" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rawbotz_update_local_products</h4>
@@ -241,6 +266,11 @@ There is a <code>-c</code> option to pass in a config file.</p>
 <p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To release a new version, update the version number in <code>version.rb</code>, and then run <code>bundle exec rake release</code>, which will create a git tag for the version, push git commits and tags, and push the <code>.gem</code> file to <a href="https://rubygems.org">rubygems.org</a>.</p>
 
 <p>You can <code>bundle console</code> to jump into a pre-setup irb, then call <code>RawgentoModels::establish_connection "rawbotz.conf"</code> to setup the database connection and deal with real world data.</p>
+
+<h3>
+<a id="life-cycle-of-order" class="anchor" href="#life-cycle-of-order" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Life cycle of order</h3>
+
+<p>Orders get created as <code>new</code> and then go into <code>queued</code> or <code>mailed</code> state. From every state they can exit into <code>deleted</code>.  State changes are done by hand.</p>
 
 <h2>
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
