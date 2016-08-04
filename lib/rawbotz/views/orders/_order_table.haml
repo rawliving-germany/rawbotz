@@ -2,31 +2,58 @@
   %thead
     %tr
       %th Date
-      -#%th Supplier
+      %th Supplier
       %th Number of Items
       %th Action
       %th State
     %tbody
+      - if supplier.present?
+        %tr
+          %td(colspan=5)
+            %center
+              - if supplier == settings.supplier
+                %a.pure-button(href="/order/new")
+                  = add_icon
+                  Create New Order
+              - else
+                %a.pure-button(href="/order/non_remote/#{supplier.id}/new")
+                  = add_icon
+                  Create New Order
       - orders.each do |order|
         %tr
           %td=order.created_at
-          -#%td
-          -#  = order.supplier
-          -#  = supplier_link order.supplier
-          -#  - if order.supplier == settings.supplier
-          -#    (remote)
+          %td
+            = supplier_link order.supplier
+            - if order.supplier == settings.supplier
+              (remote)
           %td
             = order.order_items.count
             (
             = order.order_items.processible.count
             )
           %td
-            %a.pure-button(href="/order/#{order.id}")
-              %i.fa.fa-eye
-              View
+            - if order.supplier == settings.supplier
+              %a.pure-button(href="/order/#{order.id}")
+                %i.fa.fa-eye
+                View
+            - else
+              %a.pure-button(href="/order/non_remote/#{order.id}")
+                %i.fa.fa-eye
+                View
+
             - if order.state == "ordered"
               %a.pure-button(href="/order/#{order.id}/packlist")
                 %i.fa.fa-paper
                 Packlist
 
-          %td=order.state
+          %td
+            = order.state
+            - if order.state == 'processing'
+              = order.order_items.where("num_ordered > ?", 0).count
+              of
+              = order.order_items.where("num_wished > ?", 0).count
+              (
+              = order.order_items.where("num_ordered > ?", 0).count.to_f / order.order_items.where("num_wished > ?", 0).count
+              \%
+
+
