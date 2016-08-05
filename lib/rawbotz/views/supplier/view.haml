@@ -3,11 +3,19 @@
 
 = haml "maintenance/menu".to_sym
 
+#modal-plot.modal-plot
+
 %h2 Supplier #{@supplier.name}
 
 :javascript
   $(function() {
-    $( "#tabs" ).tabs();
+    $( "#tabs" ).tabs({
+      beforeLoad: function( event, ui ) {
+        ui.jqXHR.fail(function() {
+          ui.panel.html("Couldn't load this tab, there was an error.");
+        });
+      }
+     });
   });
 
 #tabs
@@ -24,6 +32,9 @@
       %a(href="#tab_order_settings")
         = settings_icon
         Order Settings
+    %li
+      %a(href="/stockexplorer/#{@supplier.id}")
+        Stock explorer Pack icons
   #tab_products
     %h2 Products of #{@supplier.name}
     = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}
