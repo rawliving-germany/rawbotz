@@ -130,10 +130,43 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       haml "order/non_remote".to_sym
     end
 
+    # app.get  '/stockexplorer/:supplier_id', &show_stock_explorer
+    show_stock_explorer = lambda do
+      @supplier = Supplier.find(params[:supplier_id])
+        @stock    = {}
+        #begin
+          #@monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
+          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
+        #rescue Exception => e
+        #  @monthly_sales = {}
+        #  add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+        #end
+
+      #-> db query num_sales_since
+      days_ago_30  = Date.today - 30
+      days_ago_60  = Date.today - 60
+      days_ago_90  = Date.today - 90
+      days_ago_356 = Date.today - 356
+
+      # TODO 30 90 356
+      product_ids = @supplier.local_products.map &:product_id
+      @sales_30 = RawgentoDB::Query.num_sales_since(days_ago_30, product_ids)
+      @sales_60 = RawgentoDB::Query.num_sales_since(days_ago_60, product_ids)
+      @sales_90 = RawgentoDB::Query.num_sales_since(days_ago_90, product_ids)
+      @sales_356 = RawgentoDB::Query.num_sales_since(days_ago_356, product_ids)
+
+      @out_of_stock_days_30 = @supplier.local_products.map{|l| [l.product_id, l.stock_items.where("qty <= ? AND date >= ?", 0, days_ago_30).count]}.to_h
+      @out_of_stock_days_60 = @supplier.local_products.map{|l| [l.product_id, l.stock_items.where("qty <= ? AND date >= ?", 0, days_ago_60).count]}.to_h
+      @out_of_stock_days_90 = @supplier.local_products.map{|l| [l.product_id, l.stock_items.where("qty <= ? AND date >= ?", 0, days_ago_90).count]}.to_h
+      @out_of_stock_days_356 = @supplier.local_products.map{|l| [l.product_id, l.stock_items.where("qty <= ? AND date >= ?", 0, days_ago_356).count]}.to_h
+      haml 'stockexplorer/stockexplorer'.to_sym, layout: !request.xhr?
+    end
+
     # routes
     app.get  '/orders/non_remote', &show_suppliers_orders
     app.get  '/order/non_remote/:order_id', &show_supplier_order
     app.post '/order/non_remote/:order_id', &show_supplier_order_preview
     app.get  '/order/non_remote/:supplier_id/new', &create_supplier_order
+    app.get  '/stockexplorer/:supplier_id', &show_stock_explorer
   end
 end
