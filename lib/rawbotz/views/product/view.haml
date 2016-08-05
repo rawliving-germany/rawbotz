@@ -51,7 +51,7 @@
         = @product.purchase_price
 
 %h2 Actions
-- if !@product.remote_product.present?
+- if @product.supplier == settings.supplier && !@product.remote_product.present?
   = haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: 'product'}
   %br
 = haml :"_hide_unhide_button", locals: {product: @product}
