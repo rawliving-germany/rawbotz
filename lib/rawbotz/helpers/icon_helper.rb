@@ -19,6 +19,9 @@ module Rawbotz
       def order_icon
         '<i class="fa fa-shopping-cart"></i>'
       end
+      def packsize_icon
+        '<i class="fa fa-cube"></i>'
+      end
       def product_icon
         '<i class="fa fa-cube"></i>'
       end
@@ -28,11 +31,23 @@ module Rawbotz
       def remote_icon
         '<i class="fa fa-globe"></i>'
       end
+      def sales_icon
+        '<i class="fa fa-shopping-cart"></i>'
+      end
       def save_icon
         '<i class="fa fa-envelope"></i>'
       end
       def settings_icon
         '<i class="fa fa-wrench"></i>'
+      end
+      def stock_empty_icon
+        '<i class="fa fa-battery-0"></i>'
+      end
+      def stock_icon
+        '<i class="fa fa-battery-2"></i>'
+      end
+      def stock_full_icon
+        '<i class="fa fa-battery-4"></i>'
       end
       def success_icon
         '<i class="fa fa-smile-o"></i>'
