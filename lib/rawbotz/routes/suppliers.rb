@@ -19,9 +19,9 @@ module Rawbotz::RawbotzApp::Routing::Suppliers
     # app.post '/supplier/:id', &update_supplier
     update_supplier = lambda do
       @supplier = Supplier.find(params[:id])
-      @supplier.email          = params[:email]
-      @supplier.order_info     = params[:order_info]
-      @supplier.order_template = params[:order_template]
+      @supplier.email               = params[:email]
+      @supplier.order_info          = params[:order_info]
+      @supplier.order_template      = params[:order_template]
       @supplier.delivery_time_days  = params[:delivery_time_days]
       @supplier.minimum_order_value = params[:minimum_order_value]
       if @supplier.save
@@ -30,9 +30,10 @@ module Rawbotz::RawbotzApp::Routing::Suppliers
         add_flash :error, "Supplier could not be saved"
       end
       # This should redirect to the correct tab!
-      haml "supplier/view".to_sym
+      redirect "/supplier/#{@supplier.id}#tab_order_settings".to_sym
     end
 
+    # routes
     app.get  '/suppliers',    &show_suppliers
     app.get  '/supplier/:id', &show_supplier
     app.post '/supplier/:id', &update_supplier
