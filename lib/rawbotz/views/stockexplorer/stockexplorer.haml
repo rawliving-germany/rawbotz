@@ -114,6 +114,9 @@
             = @sales_30[product.product_id]
           %td
             = @out_of_stock_days_30[product.product_id]
+            - if product.stock_items.present? && (Date.today - product.stock_items.order(created_at: :asc).first.created_at.to_date).to_i < 30
+              .stock_warning(title="Warning, first stock for this product is from #{product.stock_items.order(created_at: :asc).first.created_at}")
+                = error_icon
           %td.left-bordered
             = @sales_60[product.product_id]
           %td
