@@ -41,7 +41,7 @@
                 %i.fa.fa-eye
                 View
 
-            - if order.state == "ordered"
+            - if order.state == "ordered" || order.state == 'mailed'
               %a.pure-button(href="/order/#{order.id}/packlist")
                 %i.fa.fa-paper
                 Packlist
