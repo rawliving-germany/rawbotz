@@ -112,7 +112,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @order.save
       if params['action'] == 'fix'
         @order.order_items.find_each do |oi|
-          oi.num_ordered = oi.num_wished
+          oi.num_ordered   = oi.num_wished
+          oi.current_stock = @stock[oi.local_product.product_id]
           oi.save
         end
         @order.update(state: :mailed)
