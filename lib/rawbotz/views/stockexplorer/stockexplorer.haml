@@ -1,0 +1,154 @@
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
+%h1 Stockexplorer supplier #{@supplier.name}
+
+#supplier_info
+  - if @supplier.order_info.present?
+    #flash.ui-state-highlight
+      = info_icon
+      %b Delivery info:
+      = @supplier.order_info
+  
+  - if @supplier.delivery_time_days
+    #flash.ui-state-highlight
+      = info_icon
+      %b Delivery Time (in days):
+      = @supplier.delivery_time_days
+  
+  - if @supplier.minimum_order_value
+    #flash.ui-state-highlight
+      = info_icon
+      %b Minimum Order Value
+      = @supplier.minimum_order_value
+      €
+  
+  - if @supplier.order_info.present? || @supplier.delivery_time_days || @supplier.minimum_order_value
+    %br
+
+%center
+  %table.pure-table.pure-table-striped
+    %thead
+      %tr
+        %th
+        %th
+        %th
+        %th.left-bordered(colspan=2)
+          %center
+            30 days
+        %th.left-bordered(colspan=3)
+          %center
+            60 days
+        %th.left-bordered(colspan=3)
+          %center
+            90 days
+        %th.left-bordered(colspan=3)
+          %center
+            356 days
+        %th.left-bordered
+        %th
+        %th
+      %tr
+        %th Name
+        %th(title="Packsize")
+          = packsize_icon
+        %th(title="Current Stock")
+          = stock_icon
+        %th.left-bordered(title="Sales in the last 30 days")
+          = sales_icon
+        %th(title="Days where Product was unavailable (out of stock) in the last 30 days")
+          %span.fa-stack
+            %i.fa.fa-shopping-cart.fa-stack-1x
+              %i.fa.fa-ban.fa-stack-2x.text-danger
+        %th.left-bordered(title="Sales in the last 60 days")
+          = sales_icon
+        %th(title="Days where Product was unavailable (out of stock) in the last 60 days")
+          %span.fa-stack
+            %i.fa.fa-shopping-cart.fa-stack-1x
+              %i.fa.fa-ban.fa-stack-2x.text-danger
+        %th(title="The 30 days average sales looking at 60 days. The second value equals takes in account the days in which the product was not available.)")
+          average / cleaned
+        %th.left-bordered(title="Sales in the last 90 days")
+          = sales_icon
+        %th(title="Days where Product was unavailable (out of stock) in the last 90 days")
+          %span.fa-stack
+            %i.fa.fa-shopping-cart.fa-stack-1x
+              %i.fa.fa-ban.fa-stack-2x.text-danger
+        %th(title="The 30 days average sales looking at 90 days. The second value equals takes in account the days in which the product was not available.)")
+          average / cleaned
+        %th.left-bordered(title="Sales in the last 356 days")
+          = sales_icon
+        %th(title="Days where Product was unavailable (out of stock) in the last 356 days")
+          %span.fa-stack
+            %i.fa.fa-shopping-cart.fa-stack-1x
+              %i.fa.fa-ban.fa-stack-2x.text-danger
+        %th(title="The 356 days average sales looking at 90 days. The second value equals takes in account the days in which the product was not available.)")
+          average / cleaned
+        %th.left-bordered Missing
+        %th Purchase Price
+        %th Chart
+    %tbody
+      - @supplier.local_products.find_each do |product|
+        %tr
+          %td
+            = product_link product
+            - if product.supplier_prod_name
+              %br
+              %small
+                = product.supplier_sku
+                = product.supplier_prod_name
+            - if product.order_info.present?
+              #flash.ui-state-highlight
+                = error_icon
+                = product.order_info
+          %td
+            - if product.packsize.present?
+              = product.packsize
+            - else
+              %i.fa.fa-ban
+          %td
+            = @stock[product.product_id]
+          %td.left-bordered
+            = @sales_30[product.product_id]
+          %td
+            = @out_of_stock_days_30[product.product_id]
+          %td.left-bordered
+            = @sales_60[product.product_id]
+          %td
+            = @out_of_stock_days_60[product.product_id]
+          %td
+            = (@sales_60[product.product_id].to_f / 2.0).to_i
+            \/
+            = (@sales_60[product.product_id].to_f / (60 - @out_of_stock_days_60[product.product_id]) * 30).to_i
+          %td.left-bordered
+            = @sales_90[product.product_id]
+          %td
+            = @out_of_stock_days_90[product.product_id]
+          %td
+            = (@sales_90[product.product_id].to_f / 3.0).to_i
+            \/
+            = (@sales_90[product.product_id].to_f / (90 - @out_of_stock_days_90[product.product_id]) * 30).to_i
+          %td.left-bordered
+            = @sales_356[product.product_id]
+          %td
+            = @out_of_stock_days_356[product.product_id]
+          %td
+            = (@sales_356[product.product_id].to_f / 11.86).to_i
+            \/
+            = (@sales_356[product.product_id].to_f / (356 - @out_of_stock_days_356[product.product_id]) * 30).to_i
+          -#%td
+          -#  - if product_stock && product_monthly_sales
+          -#    -# red/yellow/green
+          -#    -# if negative, put button
+          -#    = product_stock - product_monthly_sales
+          %td.left-bordered
+          %td
+            - if product.purchase_price
+              = product.purchase_price
+              €
+          %td
+            - stock_url = "/product/#{product.id}/stock_sales_plot"
+            %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
+              Stock/Sales

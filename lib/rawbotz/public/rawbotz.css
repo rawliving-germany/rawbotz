@@ -109,3 +109,9 @@ th {
 #flash {
   padding-left: 0.5em;
 }
+.pure-table > tbody > tr > td.left-bordered {
+  border-left: 2px solid;
+}
+.pure-table > thead > tr > th.left-bordered {
+  border-left: 2px solid;
+}
