@@ -89,7 +89,7 @@
       %b
         = "%.2f" % @order.order_items.inject(0.0) {|acc, oi| acc += oi.num_wished.to_i * oi.local_product.purchase_price.to_f}
         €
-        - if @order.order_items.detect{|oi| oi.num_wished.to_i >= 0 && oi.local_product.purchase_price.present?}
+        - if @order.order_items.detect{|oi| oi.num_wished.to_i > 0 && oi.local_product.purchase_price.present?}
           \... plus products without purchase price
       %br
 
