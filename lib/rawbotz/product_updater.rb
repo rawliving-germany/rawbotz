@@ -30,7 +30,7 @@ module Rawbotz
         "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"
     end
 
-    def sync
+    def sync(dry_run=false)
       ensure_existence
 
       @logger.info "#{@local_products.count} products"
@@ -45,7 +45,8 @@ module Rawbotz
       # Supplier SKU
       update_attribute(@supplier_sku_attribute_id, :supplier_sku)
       # Supplier Product name
-      update_attribute(@supplier_prod_name_attribute_id, :supplier_prod_name)
+      #update_attribute(@supplier_prod_name_attribute_id, :supplier_prod_name)
+      update_names
       # Order Info
       update_attribute(@order_info_attribute_id, :order_info)
       # Purchase Price
@@ -55,7 +56,7 @@ module Rawbotz
 
       @change_text = changes
 
-      save_changes
+      save_changes if !dry_run
     end
 
     private
@@ -89,6 +90,17 @@ module Rawbotz
         #@logger.info("Ensuring product #{p.product_id} exists")
         l = RawgentoModels::LocalProduct.unscoped.find_or_initialize_by(product_id: p.product_id)
         @local_products[p.product_id] = l
+      end
+    end
+
+    # This works at least for magento 1.7, later versions might require
+    # attribute name update
+    def update_names
+      RawgentoDB::Query.product_names().each do |product_id, name|
+        p = @local_products[product_id]
+        if p
+          p.assign_attributes(name: name)
+        end
       end
     end
 

@@ -11,6 +11,10 @@ optparse = Rawbotz::OptionParser.new do |opts, options|
           "send mail with result") do |v|
     options[:mail] = v
   end
+  opts.on("-d", "--[no-]dry-run",
+          "simulate, log potential changes but do not save them") do |d|
+    options[:dry_run] = d
+  end
 end
 optparse.parse!
 options = optparse.options
@@ -34,7 +38,7 @@ end
 product_count = RawgentoModels::LocalProduct.unscoped.count
 
 updater = Rawbotz::ProductUpdater.new logger
-updater.sync
+updater.sync(options[:dry_run])
 
 logger.info("Finished updating local products.")
 
