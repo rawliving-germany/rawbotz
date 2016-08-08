@@ -2,6 +2,8 @@
 
 Rawbotz provides a Web-Interface to do certain management tasks for a particular Magento Web-Shop (RawLiving Germany).
 
+Its main purpose is to somewhat **automate orders from suppliers**, such that the current stock level is optimal.
+
 In this shop, products are supplied by different suppliers, of which one offers a magento-shop itself.
 
 Rawbotz couples the `rawgento_db`, `rawgento_models` and `magento_remote` gems to make it easy to order items from this particular other shop and provides further functionality, e.g. accessing stock and sales history information.
