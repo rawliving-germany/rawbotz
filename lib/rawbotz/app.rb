@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require "sinatra/reloader"
 require 'open-uri'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'haml'
@@ -31,10 +30,6 @@ class RawbotzApp < Sinatra::Base
     set :supplier, Supplier.find_by(name:
                                     conf["supplier_name"])
     set :conf, conf
-  end
-
-  configure :development do
-    register Sinatra::Reloader
   end
 
   helpers do ; end

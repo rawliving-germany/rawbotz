@@ -202,6 +202,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 You can `bundle console` to jump into a pre-setup irb, then call `RawgentoModels::establish_connection "rawbotz.conf"` to setup the database connection and deal with real world data.
 
+As in-process code reloading [is hard](http://www.sinatrarb.com/faq.html#reloading), use `rerun rackup` in development.
+
 ### Life cycle of order
 
 Orders get created as `new` and then go into `queued` or `mailed` state. From every state they can exit into `deleted`.  State changes are done by hand.
