@@ -55,6 +55,8 @@ module Rawbotz::CLI
           rows:     extra_items,
           style:    {width:60}).to_s
       end
+
+      out
     end
   end
 end
