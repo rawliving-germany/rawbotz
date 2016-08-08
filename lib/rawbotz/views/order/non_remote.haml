@@ -1,5 +1,10 @@
 = haml "orders/menu".to_sym
 
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
 %h1 Non-Remote Order for supplier #{@supplier.name}
 
 #modal-plot.modal-plot
@@ -35,7 +40,8 @@
         %tr
           %th Name
           %th Qty
-          %th # / pack
+          %th(title="Packsize")
+            = packsize_icon
           %th Avg. sales / m
           %th Stock
           %th Missing
@@ -46,7 +52,7 @@
           - product = order_item.local_product
           - product_monthly_sales = @monthly_sales && @monthly_sales[product.product_id]
           - product_stock = @stock[product.product_id]
-          %tr
+          %tr(title="Complete sales info")
             %td
               = product_link product
               - if product.supplier_prod_name
