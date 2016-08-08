@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "sinatra", '~> 1.4'
+  spec.add_dependency "sinatra-contrib", '~> 1.4'
   spec.add_dependency 'pony', '~> 1.11'
   spec.add_dependency 'haml', '~> 4.0'
   spec.add_dependency "rawgento_models", '~> 0.2.6'
