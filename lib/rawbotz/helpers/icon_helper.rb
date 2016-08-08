@@ -52,6 +52,9 @@ module Rawbotz
       def success_icon
         '<i class="fa fa-smile-o"></i>'
       end
+      def supplier_icon
+        '<i class="fa fa-truck"></i>'
+      end
       def warning_icon
         '<i class="fa fa-warning"></i>'
       end
