@@ -1,25 +1,53 @@
 %h2 General
-%dl
-  %dt
-    Supplier
-  %dd
-    = order.supplier.try(:name)
-  %dt
-    Created at
-  %dd
-    = order.created_at
-  %dt
-    Updated at
-  %dd
-    = order.updated_at
-  %dt
-    State
-  %dd
-    = order.state
-  %dt
-    Comment
-  %dd
+
+.pure-g
+  .pure-u-1-2
+    %dl
+      %dt
+        Supplier
+      %dd
+        = order.supplier.try(:name)
+      %dt
+        Created at
+      %dd
+        = order.created_at
+      %dt
+        Updated at
+      %dd
+        = order.updated_at
+  .pure-u-1-2
+    %dl
+      %dt
+        State
+      %dd
+        = order_state_icon order
+        = order.state
+      - if order.supplier.minimum_order_value.present?
+        %dt
+          Supplier minimum order value
+        %dd
+          %b
+            = order.supplier.minimum_order_value
+      - if order.supplier.order_info.present?
+        %dt
+          Supplier Order Info
+        %dd
+          %b
+            = order.supplier.order_info
+      - if order.supplier.delivery_time_days.present?
+        %dt
+          Supplier Delivery time (days)
+        %dd
+          %b
+            = order.supplier.delivery_time_days
+- if order.internal_comment.present?
+  .internal_comment
+    %h3 Internal Comment
     = order.internal_comment
+- if order.public_comment.present?
+  .public_comment
+    %h3 Public Comment
+    = order.public_comment
 
 %h2 Content
 = order.order_items.count
