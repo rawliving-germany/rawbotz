@@ -13,7 +13,9 @@ ID #{@remote_order_id}
       %th Local Name
       %th Qty
       %th Refund
-      %th Shelve
+      %th
+        = shelve_icon
+        Shelve
   %tbody
     - @remote_products_qty.sort_by{|p,_| p.name}.each do |p, q|
       %tr
