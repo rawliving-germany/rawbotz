@@ -1,12 +1,15 @@
 require "rawbotz/version"
 require "rawbotz/remote_shop"
 require "rawbotz/local_shop"
-require "rawbotz/order_processor"
-require "rawbotz/order_linker"
+require "rawbotz/processors/stock_processor"
+require "rawbotz/processors/order_processor"
+require "rawbotz/processors/order_linker"
 require "rawbotz/datapolate"
 require "rawbotz/sales_data"
+require "rawbotz/models/stock_product"
+require "rawbotz/models/stock_product_factory"
 require "rawbotz/chart_month_dataset"
-require "rawbotz/product_updater"
+require "rawbotz/processors/product_updater"
 require "rawbotz/mail_template"
 
 require 'rawgento_models'
