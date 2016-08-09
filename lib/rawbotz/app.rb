@@ -42,6 +42,7 @@ class RawbotzApp < Sinatra::Base
     haml :index
   end
 
+  # routes:
   # get  '/orders'
   # get  '/order/new'
   # get  '/order/:id'
