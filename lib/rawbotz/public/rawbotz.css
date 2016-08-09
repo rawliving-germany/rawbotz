@@ -115,3 +115,9 @@ th {
 .pure-table > thead > tr > th.left-bordered {
   border-left: 2px solid;
 }
+
+.state-label {
+  border-radius: 4px;
+  background-color: #bbb;
+  padding: .5em 1em;
+}
