@@ -17,8 +17,10 @@ module Rawbotz::RawbotzApp::Routing::Orders
         @order = settings.supplier.orders.where(state: 'new').first
       else
         @order = Order.create(state: :new)
-        @order.supplier = settings.supplier
+        @order.supplier     = settings.supplier
+        @order.order_method = :magento
 
+        # There is hell a lot of products missing if with remote order
         RawgentoDB::Query.understocked.each do |product_id, name, min_qty, stock|
           local_product = LocalProduct.find_by(product_id: product_id)
           if local_product.present? && local_product.supplier == settings.supplier
