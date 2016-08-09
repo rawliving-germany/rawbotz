@@ -19,6 +19,9 @@ module Rawbotz
       def order_icon tooltip_text: nil
         icon "shopping-cart", tooltip_text: tooltip_text
       end
+      def pack_icon tooltip_text: nil
+        icon "square-o", tooltip_text: tooltip_text
+      end
       def packlist_icon tooltip_text: nil
         icon "paperclip", tooltip_text: tooltip_text
       end
