@@ -17,7 +17,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
       else
-        @order    = Order.create(state: :new, supplier: @supplier)
+        @order    = Order.create(state: :new, supplier: @supplier, order_method: @supplier.order_method)
         @products = LocalProduct.supplied_by(@supplier)
         @stock    = {}
         begin
