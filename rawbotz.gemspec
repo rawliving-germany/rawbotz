@@ -20,17 +20,16 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.required_ruby_version = '~> 2.3'
 
-  spec.add_dependency "sinatra", '~> 1.4'
-  spec.add_dependency "sinatra-contrib", '~> 1.4'
-  spec.add_dependency 'pony', '~> 1.11'
-  spec.add_dependency 'haml', '~> 4.0'
-  spec.add_dependency "rawgento_models", '~> 0.2.6'
-  spec.add_dependency "rawgento_db", "~> 0.1.3"
-  spec.add_dependency "magento_remote", "~> 0.2.5"
-  spec.add_dependency "terminal-table", '~> 1.5'
+  spec.add_dependency "sinatra",         '~> 1.4'
+  spec.add_dependency 'pony',            '~> 1.11'
+  spec.add_dependency 'haml',            '~> 4.0'
+  spec.add_dependency "rawgento_models", '~> 0.4'
+  spec.add_dependency "rawgento_db",     '~> 0.2'
+  spec.add_dependency "magento_remote",  '~> 0.3'
+  spec.add_dependency "terminal-table",  '~> 1.5'
 
   spec.add_development_dependency "bundler", "~> 1.11"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake",    "~> 10.0"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "rerun"
 end
