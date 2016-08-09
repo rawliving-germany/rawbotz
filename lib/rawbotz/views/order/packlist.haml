@@ -1,13 +1,25 @@
 = haml "orders/menu".to_sym
 
-%h2 Order #{@order.supplier} from #{@order.created_at}
+%h2 Order #{@order.supplier.name} from #{@order.created_at}
+
+%center
+  Last changed #{@order.updated_at}
+
+= haml "order/_head".to_sym, locals: {order: @order}
+%br
 
 %table.pure-table.pure-table-striped
   %thead
     %tr
-      %th Product
-      %th Shelve
-      %th Quantity
+      %th
+        = products_icon
+        Product
+      %th
+        = shelve_icon
+        Shelve
+      %th
+        = order_icon
+        Quantity Ordered
   %tbody
     - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
       %tr
