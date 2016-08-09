@@ -17,7 +17,7 @@ ID #{@remote_order_id}
         = shelve_icon
         Shelve
   %tbody
-    - @remote_products_qty.sort_by{|p,_| p.name}.each do |p, q|
+    - @remote_products_qty.sort_by{|p,_| p.name}.each do |p, qty, refunded|
       %tr
         %td
           = remote_product_link p
@@ -30,8 +30,8 @@ ID #{@remote_order_id}
               Link (broken)
           -else
             not in database
-        %td=q
-        %td
+        %td=qty
+        %td=refunded
         %td
           -if shelve = p.local_product.try(:shelve_nr)
             = shelve

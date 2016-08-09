@@ -24,7 +24,7 @@ module Rawbotz::RawbotzApp::Routing::RemoteShop
       @remote_order_id = params[:id]
       @remote_order_items = Rawbotz.mech.products_from_order params[:id]
       @remote_products_qty = @remote_order_items.map do |remote_product|
-        [RemoteProduct.find_by(name: remote_product[0]) || OpenStruct.new(name: remote_product[0]), remote_product[2]]
+        [RemoteProduct.find_by(name: remote_product[0]) || OpenStruct.new(name: remote_product[0]), remote_product[2], remote_product[3]]
       end
       # TODO catch problem if one is missing ...
       haml "remote_order/view".to_sym
