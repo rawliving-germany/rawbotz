@@ -1,0 +1,30 @@
+= haml "orders/menu".to_sym
+
+%h1 Link order from #{@order.updated_at} to a remote order
+
+%center
+  %table.pure-table.pure-table-striped
+    %thead
+      %tr
+        %th Date
+        %th Volume
+        %th Order ID
+        %th State
+        %th Action
+    %tbody
+      - @last_orders.each do |remote_order|
+        %form.pure-form(method="post")
+          %input(type="hidden" name="remote_order_link" value="#{remote_order[2]}")
+          %input(type="hidden" name="remote_order_id"   value="#{remote_order[3]}")
+          %tr
+            %td=remote_order[0]
+            %td=remote_order[1]
+            %td=remote_order[3]
+            %td=remote_order[4]
+            %td
+              %a(href="#{remote_order[2]}" target="remote_shop")
+                Visit remote shop
+              %br
+              %button.pure-button.pure-button-primary(type="submit" href="/remote_order/#{remote_order[2][/\d+/]}")
+                = add_icon
+                Link to this order
