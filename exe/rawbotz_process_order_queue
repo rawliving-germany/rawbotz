@@ -8,7 +8,6 @@ require "rawbotz"
 require 'rawbotz/option_parser'
 require 'rawbotz/cli/order_result_table'
 
-
 optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS] ORDER_ID"
   opts.separator ""
@@ -50,9 +49,6 @@ def main options
   order.update(state: :processing)
 
   logger.info ("#{order.order_items.processible.count} products to order.")
-
-  mech = Rawbotz.new_mech
-  mech.login
 
   begin
     order_processor = Rawbotz::OrderProcessor.new(order, logger)
