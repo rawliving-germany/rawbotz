@@ -97,6 +97,10 @@ module Rawbotz::RawbotzApp::Routing::Orders
       attachment "packlist_order.pdf"
       @order = Order.find(params[:id])
       html = haml "order/packlist.pdf".to_sym, layout: :pdf_layout
+      PDFKit.configure do |config|
+        config.verbose = false
+      end
+
       kit = PDFKit.new(html)
 
       kit.stylesheets << File.join(settings.root, "public",
