@@ -8,12 +8,16 @@
     %thead
       %tr
         %th
+          = product_icon
           Product
         %th
           Local Name
         %th
           Quantity
     %tbody
+      - if @cart_products.empty?
+        %tr
+          %td(colspan=3) Remote Cart empty
       - @cart_products.each do |product, qty|
         - if product.nil?
           %tr
@@ -28,3 +32,9 @@
               = local_product_link(product.local_product) rescue "unlinked"
             %td
               = qty
+  %br
+  %br
+  %a(href="#{Rawbotz::RemoteShop::cart_page_url settings.conf}" target="remote_shop")
+    = view_icon
+    = external_link_icon
+    View Remote Cart
