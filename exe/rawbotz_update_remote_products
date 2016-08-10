@@ -53,9 +53,9 @@ optparse = OptionParser.new do |opts|
           "try LIMIT products #{options.print_default(:limit)}") do |v|
     options[:limit] = v
   end
-  opts.on("-n", "--check-new", Integer,
+  opts.on("-n", "--[no-]check-new",
           "check only for new products") do |v|
-    options[:check_new] = true
+    options[:check_new] = v
   end
 
   opts.separator ""
@@ -78,6 +78,8 @@ optparse = OptionParser.new do |opts|
 end
 optparse.parse!
 
+STDOUT.sync = true
+
 if options[:check_new] && options[:start_pid] != 0
   STDERR.puts "Cannot define both check-new and start-pid options"
   exit 1
@@ -92,6 +94,7 @@ def main options
 
   mech_config = (YAML.load_file options[:config])["remote_shop"]
   logger.debug(mech_config)
+
   mech = MagentoMech.from_config(mech_config)
   mech.log_to! logger
 
