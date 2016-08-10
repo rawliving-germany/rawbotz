@@ -1,0 +1,26 @@
+%center
+  %h2 Actions
+  - if order.state == "new"
+    %button.pure-button.pure-button-secondary(name="action" value="save")
+      = save_icon
+      Save
+  - if order.state == "new"
+    %button.pure-button.pure-button-primary(name="action" value="order")
+      = order_icon
+      Order!
+  - if !["new", "deleted"].include? order.state
+    %a.pure-button(href="/order/#{order.id}/packlist")
+      = view_icon
+      = packlist_icon
+      Packlist
+    %a.pure-button(href="/order/#{order.id}/packlist/pdf")
+      %i.fa.fa-file-pdf-o
+      Download Packlist
+  - if !["stocked", "deleted"].include? order.state
+    %a.pure-button(href="/order/#{order.id}/stock")
+      = stock_icon
+      Stock
+  - if order.state != "deleted"
+    %button.pure-button.pure-button-primary(name="action" value="delete")
+      = delete_icon
+      Delete
