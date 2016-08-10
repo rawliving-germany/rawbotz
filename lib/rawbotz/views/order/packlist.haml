@@ -2,6 +2,11 @@
 
 %h2 Packlist for order #{@order.supplier.name} from #{@order.created_at}
 
+- if @order.supplier == settings.supplier && !@order.remote_order_link.present?
+  .ui-state-error
+    = error_icon
+    This order is not linked up to a remote order, thus no refunds or extra items are shown
+
 %center
   Last changed #{@order.updated_at}
 
