@@ -7,6 +7,9 @@ module Rawbotz
       def error_icon tooltip_text: nil
         icon "flash", tooltip_text: tooltip_text
       end
+      def external_link_icon tooltip_text: nil
+        icon "external-link", tooltip_text: tooltip_text
+      end
       def index_icon tooltip_text: nil
         icon "th-list", tooltip_text: tooltip_text
       end
