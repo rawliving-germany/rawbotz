@@ -22,6 +22,10 @@ optparse = OptionParser.new do |opts|
     options[:config] = c
   end
 
+  opts.on("-f", "--fake VALUE", 'Fake value. If quantity is higher than 0.9*VALUE, subtract VALUE.') do |f|
+    options[:fake_value] = f
+  end
+
   opts.separator ""
   opts.separator "Output options"
   opts.on("-v", "--verbose", 'print debug output (WARNING: including PASSWORD)') do |v|
@@ -73,7 +77,12 @@ def main options
     if product.nil?
       logger.info("No such product #{s.product_id}")
     else
-      product.stock_items.create(qty: s.qty, date: now)
+      qty = s.qty
+      if options[:fake_value].to_i > 0 && options[:fake_value].to_i * 0.9 < s.qty.to_i
+        qty = qty - options[:fake_value].to_i
+        logger.info("Fake value (#{options[:fake_value]}) applies for product_id #{product.product_id}: #{s.qty}")
+      end
+      product.stock_items.create(qty: qty, date: now)
       logger.info("Updated stock for #{s.product_id}")
     end
   end
