@@ -1,0 +1,108 @@
+= haml "stock/menu".to_sym
+
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
+#modal-plot.modal-plot
+
+- if !@wrongly_out_of_stocks.nil? && !@wrongly_out_of_stocks.empty?
+  %h2 Products with stock which are set 'not in stock'
+  = haml "products/table".to_sym, locals: {products: @wrongly_out_of_stocks}
+
+
+
+%h2 Stock/Sales Statistics
+
+Where stock does not last for 10 days.
+
+- @suppliers.find_each do |supplier|
+  %h3
+    = supplier_icon
+    = supplier.name
+
+  - if supplier.minimum_order_value.present?
+    Minimum Order Value: #{supplier.minimum_order_value}
+    %br
+
+  %table.pure-table.pure-table-striped
+    - predicted_stock_title = "Predicted stock duration (days)"
+    - avg_30_title = "Average sales per 30 days, based on sales in last 30 days, corrected by days where product was out of stock"
+    - avg_60_title = "Average sales per 30 days, based on sales in last 60 days, corrected by days where product was out of stock"
+    - avg_90_title = "Average sales per 30 days, based on sales in last 90 days, corrected by days where product was out of stock"
+    - avg_356_title = "Average sales per 30 days, based on sales in last 365 days, corrected by days where product was out of stock"
+    %thead
+      %tr
+        %th Name
+        %th(title="Current Stock")
+          = stock_icon
+        %th(title="#{predicted_stock_title} based on last 30 days sales")
+          = stock_empty_icon
+        %th(title=avg_30_title)
+          = sales_icon
+          30
+        %th(title=avg_60_title)
+          = sales_icon
+          60
+        %th(title=avg_90_title)
+          = sales_icon
+          90
+        %th(title=avg_90_title)
+          = sales_icon
+          356
+        %th
+          Notes
+    %tbody
+      - suppliers_stock_product = @stock_products.select{|s|s.product.supplier == supplier}
+      - if suppliers_stock_product.empty?
+        %tr
+          %td(colspan=6)
+            Nothing to see here
+      - suppliers_stock_product.sort_by{|s| s.expected_stock_lifetime}.each do |p|
+        %tr
+          %td
+            = product_link p.product
+          %td(title="Current Stock")
+            = p.current_stock
+          %td(title="#{predicted_stock_title} based on last 30 days sales")
+            = "%.2f" % p.expected_stock_lifetime
+          %td(title=avg_30_title)
+            %div(title="Average corrected sales, based on last 30 days. Sales: #{p.sales_last_30.try(:qty)} - Days out of stock: #{p.out_of_stock_days 30}")
+              = "%.2f" % p.corrected_sales_last_30
+            - if p.days_since_first_stock_date < 30
+              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+            - if p.num_days_first_sale < 30
+              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+          %td
+            %div(title="Average corrected sales, based on last 60 days. Sales: #{p.sales_last_60.try(:qty)} - Days out of stock: #{p.out_of_stock_days 60}")
+              = "%.2f" % (p.corrected_sales_last_60 / 2.0)
+            - if p.days_since_first_stock_date < 60
+              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+            - if p.num_days_first_sale < 60
+              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+          %td
+            %div(title="Average corrected sales, based on last 90 days. Sales: #{p.sales_last_90.try(:qty)} - Days out of stock: #{p.out_of_stock_days 90}")
+              = "%.2f" % (p.corrected_sales_last_90 / 3.0)
+            - if p.days_since_first_stock_date < 90
+              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+            - if p.num_days_first_sale < 90
+              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+          %td
+            %div(title="Average corrected sales, based on last 365 days. Sales: #{p.sales_last_365.try(:qty)} - Days out of stock: #{p.out_of_stock_days 365}")
+              = "%.2f" % (p.corrected_sales_last_365 / 365.0 * 30.0)
+            - if p.days_since_first_stock_date < 365
+              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+            - if p.num_days_first_sale < 365
+              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+          %td
+            - if p.num_days_first_sale.to_i < 10
+              New Product! (First sale #{p.num_days_first_sale.to_i} days ago)
+            - if p.days_since_first_stock_date.to_i < 30
+              Not enough stock data (first stock recorded by rawbotz is #{p.days_since_first_stock_date.to_i} days ago)
+
+  %br
+  %center
+    %a.pure-button.pure-button-primary(href="/order/non_remote/#{supplier.id}/new")
+      Make an order for #{supplier.name}
+  %hr

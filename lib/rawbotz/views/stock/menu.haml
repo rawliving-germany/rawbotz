@@ -1,0 +1,20 @@
+.icon#headicon
+  = stock_icon
+
+.pure-u-1
+  .pure-menu.pure-menu-horizontal#submenu
+    %small
+      %center
+        %ul.pure-menu-list
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/stock")
+              = index_icon
+              Stock and Sales
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/stock/alerts")
+              = error_icon
+              Alerts
+          %li.pure-menu-item
+            %a.pure-menu-link(href="/stock/warnings")
+              = warning_icon
+              Warnings

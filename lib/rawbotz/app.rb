@@ -84,6 +84,11 @@ class RawbotzApp < Sinatra::Base
   # post '/supplier/:id'
   register Rawbotz::RawbotzApp::Routing::Suppliers
 
+  # get '/stock'
+  # get '/stock/alerts'
+  # get '/stock/warnings'
+  register Rawbotz::RawbotzApp::Routing::Stock
+
   # get  '/orders/non_remote'
   # get  '/order/non_remote/:order_id'
   # post '/order/non_remote/:order_id'
