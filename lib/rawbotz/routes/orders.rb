@@ -81,6 +81,14 @@ module Rawbotz::RawbotzApp::Routing::Orders
     # app.get '/order/:id/packlist', &show_order_packlist
     show_order_packlist = lambda do
       @order = Order.find(params[:id])
+      @orphans = []
+      @refunds = {}
+      if @order.supplier == settings.supplier && @order.remote_order_link.present?
+        order_linker = Rawbotz::OrderLinker.new @order
+        order_linker.link!
+        @orphans = order_linker.orphans
+        @refunds = order_linker.refunds
+      end
       haml "order/packlist".to_sym
     end
 
