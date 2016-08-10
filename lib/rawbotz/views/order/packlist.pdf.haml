@@ -1,0 +1,35 @@
+%h2 Packlist #{@order.supplier.name} from #{@order.created_at}
+
+%center
+  Last changed #{@order.updated_at}
+  - if @order.remote_order_id.present?
+    %br
+    Remote Order ID:
+    = @order.remote_order_id
+
+= haml "order/_head".to_sym, locals: {order: @order}
+%br
+
+%table.pure-table.pure-table-striped
+  %thead
+    %tr
+      %th
+        = products_icon
+        Product
+      %th
+        = shelve_icon
+        Shelve
+      %th
+        = order_icon
+        Quantity Ordered
+      %th
+        = stock_icon
+        Quantity Stocked
+  %tbody
+    - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
+      %tr
+        %td=p.local_product.name
+        %td=p.local_product.shelve_nr
+        %td=p.num_ordered
+        %td=p.num_stocked
+%br

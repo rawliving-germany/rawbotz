@@ -76,15 +76,16 @@ module Rawbotz::RawbotzApp::Routing::Orders
     show_pdf_packlist = lambda do
       attachment "packlist_order.pdf"
       @order = Order.find(params[:id])
-      html = haml "order/packlist".to_sym, layout: :pdf_layout
+      html = haml "order/packlist.pdf".to_sym, layout: :pdf_layout
       kit = PDFKit.new(html)
 
       kit.stylesheets << File.join(settings.root, "public",
                                    "pure-min.css")
       kit.stylesheets << File.join(settings.root, "public",
                                    "rawbotz.css")
-      kit.stylesheets << File.join(settings.root, "public",
-                                   "font-awesome-4.5.0/css/font-awesome.min.css")
+      # This would need more resources
+      #kit.stylesheets << File.join(settings.root, "public",
+      #                             "font-awesome-4.5.0/css/font-awesome.min.css")
       kit.stylesheets << File.join(settings.root, "public",
                                    "jui/jquery-ui.min.css")
       kit.to_pdf
