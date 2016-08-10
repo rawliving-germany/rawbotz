@@ -87,7 +87,7 @@ module Rawbotz
           icon "arrow-right"
         when 'deleted'
           icon "remove"
-        when 'deleted'
+        when 'stocked'
           icon "thumbs-o-up"
         else
           icon "question"
