@@ -18,7 +18,7 @@ module Rawbotz
     # Links a local rawbotz order to a remote (magento) order.
     #
     # Set @orphans (remote order items that do not directly match,
-    # @refunds (maps order_item to OrderItemLine)
+    # @refunds (maps not only refunded order_item to OrderItemLine)
     # and @matched_order_items
     def link!
       # My, thats a hairy regex
