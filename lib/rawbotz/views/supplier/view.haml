@@ -40,15 +40,12 @@
     = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}
   #tab_orders
     %h2 Orders of #{@supplier.name}
-    = haml "orders/_order_table".to_sym, locals: {orders: @supplier.orders, supplier: @supplier}
-    - @supplier.orders.find_each do |order|
+    - if @supplier != settings.supplier && !@supplier.order_template.present?
+      %center
+        .ui-state-error
+          Please specify mail order template (in Settings tab) before continuing.
       %br
-    - if @supplier != settings.supplier
-      - if @supplier.order_template.present?
-        %a(href="/order/non_remote/#{@supplier.id}/new")
-          Create mail order
-      - else
-        Please specify mail order template (in Settings tab) before continuing.
+    = haml "orders/_order_table".to_sym, locals: {orders: @supplier.orders, supplier: @supplier}
   #tab_order_settings
     %h2 Settings for #{@supplier.name}
 
