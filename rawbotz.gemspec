@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "sinatra",         '~> 1.4'
   spec.add_dependency 'pony',            '~> 1.11'
   spec.add_dependency 'haml',            '~> 4.0'
+  spec.add_dependency 'pdfkit',          '~> 0.8'
   spec.add_dependency "rawgento_models", '~> 0.4'
   spec.add_dependency "rawgento_db",     '~> 0.2'
   spec.add_dependency "magento_remote",  '~> 0.3'

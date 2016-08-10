@@ -1,4 +1,5 @@
 require 'rawbotz/routes'
+require 'pdfkit'
 
 module Rawbotz::RawbotzApp::Routing::Orders
   include RawgentoModels
@@ -71,11 +72,21 @@ module Rawbotz::RawbotzApp::Routing::Orders
       haml "order/packlist".to_sym
     end
 
+    # app.get  '/order/:id/packlist/pdf', &show_pdf_packlist
+    show_pdf_packlist = lambda do
+      attachment "packlist_order.pdf"
+      @order = Order.find(params[:id])
+      html = haml "order/packlist".to_sym, layout: false
+      kit = PDFKit.new(html)
+      kit.to_pdf
+    end
+
     # routes
     app.get  '/orders',             &show_orders
     app.get  '/order/new',          &create_order
     app.get  '/order/:id',          &show_order
     app.post '/order/:id',          &act_on_order
     app.get  '/order/:id/packlist', &show_order_packlist
+    app.get  '/order/:id/packlist/pdf', &show_pdf_packlist
   end
 end

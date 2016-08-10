@@ -24,6 +24,8 @@ While bundling rawbotz up and installing it as a gem should be possible, it is s
 
 Note that the dependencies should be handled with bundler if you are not running a development setup.
 
+As a side requirement you will need to have `wkhtmltopdf` installed in order to be able to generate pdf packlists.  You find links to instructions on the (pdfkit github page)[https://github.com/pdfkit/pdfkit/wiki/Installing-WKHTMLTOPDF].
+
 Anyway, the application is so specific to RawLiving Germanys needs that you probably want to get in contact first.
 
 ## Assumptions
