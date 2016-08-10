@@ -20,6 +20,10 @@
       %th
         = order_icon
         Quantity Ordered
+      - if !@refunds.empty? || !@orphans.empty?
+        %th
+          %i.fa.fa-times-circle-o
+          Refunded
       %th
         = stock_icon
         Quantity Stocked
@@ -28,6 +32,33 @@
       %tr
         %td=p.local_product.name
         %td=p.local_product.shelve_nr
-        %td=p.num_ordered
+        %td
+          =p.num_ordered
+          - if refund = @refunds[p.local_product.product_id]
+            (
+            = refund.qty_ordered
+            )
+        - if !@refunds.empty?
+          %td
+            - if remote_line = @refunds[p.local_product.product_id]
+              = @refunds[p.local_product.product_id].qty_refunded
         %td=p.num_stocked
+    - if !@orphans.empty?
+      %tr
+        %td(colspan=4)
+          %center
+            %b
+              = error_icon
+              Orphans (not ordered via rawbotz):
+              = error_icon
+      - @orphans.each do |orphan|
+        %tr
+          %td
+            = orphan[0]
+          %td
+          %td(title="Quantity ordered")
+            = orphan[1]
+          %td(title="Quantity refunded")
+            = orphan[2]
+          %td
 %br
