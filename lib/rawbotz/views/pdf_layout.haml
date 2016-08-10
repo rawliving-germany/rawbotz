@@ -1,0 +1,53 @@
+!!! 5
+%html
+  %head
+    %title Rawbotz
+    %meta{name: "pdfkit-page_size", content: "A4"}
+    %meta(name="viewport" content="width=device-width, initial-scale=1")
+    %meta(charset="utf-8")
+    %link(rel="stylesheet" txpe="text/css" href="/pure-min.css")
+    %link(rel="stylesheet" txpe="text/css" href="/font-awesome-4.5.0/css/font-awesome.min.css")
+    %link(rel="stylesheet" txpe="text/css" href="/rawbotz.css")
+    %script{:type => 'text/javascript', :src => "/Chart.min.js"}
+    %script{:type => 'text/javascript', :src => "/jquery-2.2.0.min.js"}
+    %script{:type => 'text/javascript', :src => "/jui/jquery-ui.min.js"}
+    %link(rel="stylesheet" type='text/css' href="/jui/jquery-ui.min.css")
+    %script{:type => 'text/javascript', :src => "/rawbotz.js"}
+    %script{:type => 'text/javascript', :src => "/rawbotz_link_line.js"}
+    %script{:type => 'text/javascript', :src => "/rawbotz_ajax_product_link.js"}
+  %body
+    .pure-g
+      .pure-u-1#main
+        - if flash
+          - if msg = flash.delete(:error)
+            #flash.ui-state-error
+              = error_icon
+              = msg.join(" | ")
+          - if msg = flash.delete(:success)
+            #flash.ui-state-highlight
+              = success_icon
+              = msg.join(" | ")
+          - if msg = flash.delete(:failure)
+            #flash.ui-state-highlight
+              = error_icon
+              = msg.join(" | ")
+          - if msg = flash.delete(:info)
+            #flash.ui-state-highlight
+              = info_icon
+              = msg.join(" | ")
+          -# Consume the remainder
+          - if flash.length > 0
+            #flash.ui-state-highlight
+              - flash.each do |f|
+                = error_icon
+                = flash.delete(f[0]).join(" | ")
+
+        =yield
+        %br
+      .pure-u-1
+        .pure-menu.pure-menu-horizontal#menu
+          %small
+            %center
+              %ul.pure-menu-list
+                %li.pure-menu-item
+                  Rawbotz #{Rawbotz::VERSION} 2016 (c) Felix Wolfsteller
