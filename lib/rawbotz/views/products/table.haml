@@ -1,13 +1,17 @@
-%table.pure-table
+%table.pure-table.pure-table-striped
   %thead
     %tr
       %th
+        = product_icon
         Product name
       %th
         Product ID
       %th
+        = supplier_icon
         Supplier
       %th
+        = stock_icon
+        = sales_icon
         Stock/ Sales
   %tbody
     - products.each do |product|
