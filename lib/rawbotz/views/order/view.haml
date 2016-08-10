@@ -52,17 +52,10 @@
       Internal Comment
     %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
     %br
-    %h2 Action
-    %center
-      -#(Find remote order? Delete?)
-      %button.pure-button.pure-button-secondary(name="action" value="save")
-        = save_icon
-        Save
-      %button.pure-button.pure-button-primary(name="action" value="order")
-        Order!
-      %button.pure-button.pure-button-primary(name="action" value="delete")
-        Delete
+    = haml "order/_order_actions".to_sym, locals: {order: @order}
 - else
+  = haml "order/_order_actions".to_sym, locals: {order: @order}
+  %br
   %table.pure-table
     %thead
       %tr
