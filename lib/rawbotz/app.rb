@@ -48,6 +48,7 @@ class RawbotzApp < Sinatra::Base
   # get  '/order/:id'
   # post '/order/:id/'
   # get  '/order/:id/packlist'
+  # get  '/order/:id/packlist/pdf'
   register Rawbotz::RawbotzApp::Routing::Orders
 
   # get  '/products'
