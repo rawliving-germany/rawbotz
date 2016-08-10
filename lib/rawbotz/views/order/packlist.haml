@@ -1,6 +1,6 @@
 = haml "orders/menu".to_sym
 
-%h2 Order #{@order.supplier.name} from #{@order.created_at}
+%h2 Packlist for order #{@order.supplier.name} from #{@order.created_at}
 
 %center
   Last changed #{@order.updated_at}
@@ -20,9 +20,14 @@
       %th
         = order_icon
         Quantity Ordered
+      %th
+        = stock_icon
+        Quantity Stocked
   %tbody
     - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
       %tr
         %td=p.local_product.name
         %td=p.local_product.shelve_nr
         %td=p.num_ordered
+        %td=p.num_stocked
+%br
