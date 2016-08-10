@@ -40,6 +40,18 @@
         %dd
           %b
             = order.supplier.delivery_time_days
+      - if order.remote_order_id.present?
+        %dt
+          Remote Order ID
+        %dd
+          = order.remote_order_id
+      - if order.remote_order_link
+        %dt
+          Remote Order Link
+        %dd
+          %a(href="#{order.remote_order_link}" target="remote_shop")
+            = external_link_icon
+            = order.remote_order_link
 - if order.internal_comment.present?
   .internal_comment
     %h3 Internal Comment
@@ -52,5 +64,3 @@
 %h2 Content
 = order.order_items.count
 Items.
-
-
