@@ -5,7 +5,9 @@
 - if @order.supplier == settings.supplier && !@order.remote_order_link.present?
   .ui-state-error
     = error_icon
-    This order is not linked up to a remote order, thus no refunds or extra items are shown
+    This order is not linked up to a remote order, thus no refunds or extra items are shown.
+    %a.button.pure-button(href="/order/#{order.id}/link_to_remote")
+      Link to a remote order
 
 %center
   Last changed #{@order.updated_at}
