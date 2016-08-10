@@ -51,6 +51,12 @@ class RawbotzApp < Sinatra::Base
   # get  '/order/:id/packlist/pdf'
   register Rawbotz::RawbotzApp::Routing::Orders
 
+  # get  '/order/:id/stock
+  # post '/order/:id/stock'
+  # get  '/order/:id/link_to_remote'
+  # post '/order/:id/link_to_remote'
+  register Rawbotz::RawbotzApp::Routing::Orders::Stock
+
   # get  '/products'
   # post '/products/search'
   # get  '/product/:id'
