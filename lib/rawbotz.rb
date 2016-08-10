@@ -1,3 +1,6 @@
+require 'rawgento_models'
+require 'rawgento_db'
+
 require "rawbotz/version"
 require "rawbotz/remote_shop"
 require "rawbotz/local_shop"
@@ -11,9 +14,6 @@ require "rawbotz/models/stock_product_factory"
 require "rawbotz/chart_month_dataset"
 require "rawbotz/processors/product_updater"
 require "rawbotz/mail_template"
-
-require 'rawgento_models'
-require 'rawgento_db'
 
 require "rawbotz/routes"
 
