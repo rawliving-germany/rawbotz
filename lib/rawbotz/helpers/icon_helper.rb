@@ -4,6 +4,9 @@ module Rawbotz
       def add_icon tooltip_text: nil
         icon "plus", tooltip_text: tooltip_text
       end
+      def delete_icon tooltip_text: nil
+        icon "remove", tooltip_text: tooltip_text
+      end
       def error_icon tooltip_text: nil
         icon "flash", tooltip_text: tooltip_text
       end
@@ -84,6 +87,8 @@ module Rawbotz
           icon "arrow-right"
         when 'deleted'
           icon "remove"
+        when 'deleted'
+          icon "thumbs-o-up"
         else
           icon "question"
         end
