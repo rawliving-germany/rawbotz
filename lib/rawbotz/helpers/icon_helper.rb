@@ -22,6 +22,9 @@ module Rawbotz
       def link_icon tooltip_text: nil
         icon "info-link", tooltip_text: tooltip_text
       end
+      def mail_icon tooltip_text: nil
+        icon "envelope-o", tooltip_text: tooltip_text
+      end
       def order_icon tooltip_text: nil
         icon "shopping-cart", tooltip_text: tooltip_text
       end
