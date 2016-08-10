@@ -1,0 +1,111 @@
+= haml "orders/menu".to_sym
+
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
+-# order by name, and use a striped table
+%h1 Stock Order from #{@order.supplier.name}
+
+
+%form.pure-form(action="" method="post")
+  %fieldset
+    %legend
+      Remote Order Information
+    %dl
+      %dt
+        (Remote) Order ID
+      %dd
+        %input{value: @order.remote_order_id, name: "remote_order_id"}
+      - if @order.supplier == settings.supplier
+        %dt
+          (Remote) Order Link
+        %dd
+          %input{value: @order.remote_order_link, name: "remote_order_link"}
+    = order_link @order
+    %br
+  
+  %fieldset
+    %legend
+      Items to stock
+    %table.pure-table.pure-table-striped
+      %thead
+        %tr
+          %th Remote Name
+          %th Local Name
+          %th
+            = shelve_icon
+            Shelve
+          %th(title="Quantity wished")
+            %i.fa.fa-magic
+          %th(title="Quantity actually ordered")
+            = product_icon
+          %th(title="Packs ordered")
+            Packs ordered
+          - if @order.supplier == settings.supplier
+            %th In remote
+            %th Refund
+          -#%th
+          -#  = supplier_icon
+          -#  Qty delivered
+          %th
+            - if @order.state == "stocked"
+              Number stocked
+            - else
+              Number to stock
+      %tbody
+        - @order.order_items.where("num_ordered > ?", 0).find_each do |order_item|
+          %tr
+            %td
+              - if order_item.local_product.remote_product.present?
+                = remote_product_link order_item.local_product
+              - elsif order_item.local_product.supplier_prod_name.present?
+                = order_item.local_product.supplier_prod_name
+              - else
+                [none]
+            %td
+              = local_product_link order_item.local_product
+            %td= order_item.local_product.shelve_nr
+            %td(title="Quantity wished")
+              = order_item.num_wished
+            %td(title="Quantity actually ordered")
+              = order_item.num_ordered
+            %td(title="Packs ordered")
+              - if order_item.num_ordered && order_item.local_product.packsize.present?
+                = "%g" % (order_item.num_ordered / order_item.local_product.packsize)
+                = pack_icon
+            - if @order.supplier == settings.supplier
+              %td
+                = @refunds[order_item].try :qty_ordered
+                - if @refunds[order_item].nil?
+                  = warning_icon
+              %td
+                = @refunds[order_item].try :qty_refunded
+                - if @refunds[order_item].nil?
+                  = warning_icon
+            -#%td
+            %td
+              - if order_item.stocked?
+                stocked #{order_item.num_stocked}
+              - else
+                - qty = order_item.num_ordered
+                - if @refunds[order_item].present?
+                  - qty = @refunds[order_item].qty_ordered.to_i - @refunds[order_item].qty_refunded.to_i
+                %input(name="qty_delivered_#{order_item.id}" value="#{qty}")
+        - if @orphans
+          %tr
+            %td(colspan=6)
+              %h3 'Extra' products
+              %b These products were not found in the original order, please take care of these by hand
+          - @orphans.each do |orphan|
+            %tr
+              %td(colspan=6)= orphan[0]
+              %td(title="Quantity ordered (in remote order)")= orphan[1]
+              %td(title="Quantity refunded (in remote order)")= orphan[2]
+              %td
+
+  - if @order.state != "stocked"
+    %button.pure-button
+      Add to Stock
+
