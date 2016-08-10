@@ -63,6 +63,10 @@
                     %i.fa.fa-thumbs-o-down
                 = packlist_icon
                 Packlist
+            - if order.state == "ordered" || order.state == 'mailed'
+              %a.pure-button(href="/order/#{order.id}/stock")
+                %i.fa.fa-cart-arrow-down
+                Stock
 
           %td
             .state-label
