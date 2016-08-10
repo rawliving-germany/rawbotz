@@ -17,5 +17,8 @@ module Rawbotz
       # settings could be memoized
       "#{settings['remote_shop']['base_uri']}catalog/product/view/id/#{product.product_id}"
     end
+    def self.cart_page_url(settings)
+      "#{settings['remote_shop']['base_uri']}checkout/cart/"
+    end
   end
 end
