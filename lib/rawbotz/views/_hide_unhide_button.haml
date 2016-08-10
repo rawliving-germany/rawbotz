@@ -1,4 +1,4 @@
-- if product.active?
+- if !product.hidden?
   %form.pure-form.pure-form-aligned(action="/product/#{product.id}/hide" method="post")
     %button.pure-button.pure-button-primary(type="submit")
       %i.fa.fa-ban

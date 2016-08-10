@@ -59,7 +59,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.post '/product/:id/hide',   &hide_product
     hide_product = lambda do
       @product = RawgentoModels::LocalProduct.find(params[:id])
-      @product.active = false
+      @product.hidden = true
       @product.save
 
       add_flash :success, "Product '#{@product.name}' is now hidden"
@@ -69,7 +69,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.post '/product/:id/unhide', &unhide_product
     unhide_product = lambda do
       @product = RawgentoModels::LocalProduct.unscoped.find(params[:id])
-      @product.active = true
+      @product.hidden = false
       @product.save
 
       add_flash :success, "Product '#{@product.name}' is now not hidden anymore"
