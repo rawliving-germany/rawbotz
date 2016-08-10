@@ -1,5 +1,10 @@
 = haml "orders/menu".to_sym
 
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
 %h1 View Order
 
 #modal-plot.modal-plot
@@ -69,6 +74,8 @@
           Ordered Qty
         %th
           Stock at time
+        - if !@stock.empty?
+          %th Current Stock
     %tbody
       - @order.order_items.find_each do |item|
         %tr{:class => order_item_class(item)}
@@ -78,11 +85,14 @@
             %br
             - if item.local_product.order_info.present?
               %small= item.local_product.order_info
-          %td
+          %td(title="Quantity wished")
             =item.num_wished
-          %td
+          %td(title="Quantity ordered")
             =item.num_ordered
-          %td
+          %td(title="Stock at that time")
             =item.current_stock
--#  %h2 Action
--#  (Find remote order? Delete?)
+          - if !@stock.empty?
+            %td(title="Current Stock")
+              = @stock[item.local_product.product_id]
+  %br
+  = haml "order/_order_actions".to_sym, locals: {order: @order}

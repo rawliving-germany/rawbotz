@@ -40,6 +40,12 @@ module Rawbotz::RawbotzApp::Routing::Orders
     # app.get '/order/:id',          &show_order
     show_order = lambda do
       @order = Order.find(params[:id])
+      @stock = {}
+      begin
+        RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
+      rescue Exception => e
+        add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+      end
       haml 'order/view'.to_sym
     end
 
@@ -62,6 +68,12 @@ module Rawbotz::RawbotzApp::Routing::Orders
         add_flash :success, 'Order marked deleted'
         redirect '/orders'
       else
+        @stock = {}
+        begin
+          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
+        rescue Exception => e
+          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+        end
         haml "order/view".to_sym
       end
     end
