@@ -1,3 +1,8 @@
+:javascript
+  $( function() {
+    $( document ).tooltip();
+  });
+
 %table.pure-table
   %thead
     %tr
@@ -44,7 +49,18 @@
                 View
 
             - if order.state == "ordered" || order.state == 'mailed' || order.state == "stocked"
-              %a.pure-button(href="/order/#{order.id}/packlist")
+              - tooltip = "Packlist"
+              - if order.supplier == settings.supplier
+                - if order.remote_order_link.present?
+                  - tooltip += " with real values from remote order"
+                - else
+                  - tooltip += " without refunds, with rawbotz data only"
+              %a.pure-button(href="/order/#{order.id}/packlist" title="#{tooltip}")
+                - if order.supplier == settings.supplier
+                  - if order.remote_order_link.present?
+                    %i.fa.fa-thumbs-o-up
+                  - else
+                    %i.fa.fa-thumbs-o-down
                 = packlist_icon
                 Packlist
 
