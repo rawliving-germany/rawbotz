@@ -5,7 +5,8 @@ module Rawbotz
     attr_accessor :name_attribute_id, :supplier_attribute_id,
       :shelve_attribute_id, :packsize_attribute_id,
       :supplier_sku_attribute_id, :supplier_prod_name_attribute_id,
-      :order_info_attribute_id, :purchase_price_attribute_id
+      :order_info_attribute_id, :purchase_price_attribute_id,
+      :active_attribute_id
     attr_accessor :change_text
 
     def initialize logger
@@ -20,12 +21,14 @@ module Rawbotz
       @supplier_sku_attribute_id = Rawbotz.attribute_ids["supplier_sku"]
       @purchase_price_attribute_id     = Rawbotz.attribute_ids["purchase_price"]
       @supplier_prod_name_attribute_id = Rawbotz.attribute_ids["supplier_prod_name"]
+      @active_attribute_id = Rawbotz.attribute_ids["active_attribute_id"]
       @logger.debug "Attribute-ids: Name: #{@name_attribute_id}, "\
         "Supplier: #{@supplier_attribute_id}, "\
         "Shelve-Nr: #{@shelve_attribute_id}, "\
         "Packsize: #{@packsize_attribute_id}"\
         "Order Info: #{@order_info_attribute_id}"\
         "Purchase Price: #{@purchase_price_attribute_id}"\
+        "Active: #{@active_attribute_id}"\
         "Supplier-SKU: #{@supplier_sku_attribute_id}"\
         "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"
     end
@@ -51,6 +54,10 @@ module Rawbotz
       update_attribute(@order_info_attribute_id, :order_info)
       # Purchase Price
       update_attribute(@purchase_price_attribute_id, :purchase_price)
+      # Active?
+      update_attribute_int_bool(@active_attribute_id, :active)
+
+      unhide_if_reactivated
 
       log_changes
 
@@ -73,7 +80,15 @@ module Rawbotz
           @logger.info "something changed"
         end
         if p.changed?
-          @logger.info("Changes for #{p.product_id} (#{p.name}): #{p.changes}")
+          @logger.info(product_change_line p)
+        end
+      end
+    end
+
+    def unhide_if_reactivated
+      @local_products.values.each do |p|
+        if p.changed? && p.active_was == false
+          p.hidden = false
         end
       end
     end
@@ -81,7 +96,7 @@ module Rawbotz
     def changes
       local_changed_products = @local_products.values.select {|p| p.changed? }
       changes_string = local_changed_products.map do |p|
-        "Changes for #{p.product_id} (#{p.name}): #{p.changes}"
+        product_change_line p
       end.join("\n")
     end
 
@@ -117,6 +132,17 @@ module Rawbotz
       end
     end
 
+    # Fetches magento attribute and sets corresponding value with a weird bool mapping
+    def update_attribute_int_bool attribute_id, attribute_sym
+      # need to unhide re-activated products!
+      RawgentoDB::Query.attribute_int(attribute_id).each do |product_id, value|
+        p = @local_products[product_id]
+        if !value.nil? && value.to_s != ""
+          p.assign_attributes(attribute_sym => (value.to_i == 1))
+        end
+      end
+    end
+
     def update_supplier_from_option attribute_id
       RawgentoDB::Query.attribute_option(attribute_id).each do |product_id, value|
         p = @local_products[product_id]
@@ -124,6 +150,10 @@ module Rawbotz
         p.supplier = supplier
         #logger.info "Updating supplier of #{product_id}: #{value}"
       end
+    end
+
+    def product_change_line product
+      "Changes for #{product.product_id} (#{product.name}): #{product.changes}"
     end
   end
 end
