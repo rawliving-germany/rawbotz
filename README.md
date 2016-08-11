@@ -207,6 +207,8 @@ You can `bundle console` to jump into a pre-setup irb, then call `RawgentoModels
 
 As in-process code reloading [is hard](http://www.sinatrarb.com/faq.html#reloading), use `rerun rackup` in development.
 
+A tiny development readme is found in `doc/development.md`.
+
 ### Life cycle of order
 
 Orders get created as `new` and then go into `queued` or `mailed` state. From every state they can exit into `deleted`.  State changes are done by hand.
