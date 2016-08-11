@@ -109,6 +109,7 @@ def main options
   number_dead = 0
   product_count = RawgentoModels::RemoteProduct.count
 
+  changes = []
 
   current_pid = options[:start_pid]
   if options[:check_new]
@@ -125,8 +126,24 @@ def main options
     p = mech.scrape_products(current_pid, 1, options[:sleep_time])
     if !p.empty?
       logger.info "Found #{p[0].inspect}"
+
       product_db = RawgentoModels::RemoteProduct.find_or_initialize_by(product_id: p[0][1].to_i, supplier: supplier)
-      product_db.update!(name: p[0][0], product_id: p[0][1].to_i, supplier: supplier)
+      product_db.name = p[0][0]
+      product_db.product_id = p[0][1].to_i
+      product_db.supplier = supplier
+
+      if product_db.persisted?
+        logger.debug "Product #{product_db.product_id} already existed"
+      else
+        logger.debug "Product #{product_db.product_id} is new!"
+      end
+
+      if product_db.changed?
+        change_line = "Changes for #{product_db.product_id} (#{product_db.name}): #{product_db.changes}"
+        logger.info(change_line)
+        changes << change_line
+      end
+
       product_db.save!
       number_dead = 0
     else
@@ -156,7 +173,8 @@ def main options
   if options[:mail]
     logger.debug("Sending mail")
     Rawbotz::mail("rawbotz remote product update",
-                  "Found #{RawgentoModels::RemoteProduct.count - product_count} remote products")
+                  "Found #{RawgentoModels::RemoteProduct.count - product_count} new remote products\n"\
+                  "#{changes.join('\n')}")
   end
 end
 
