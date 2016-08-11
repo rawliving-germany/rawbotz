@@ -80,6 +80,7 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       packsize: 1337
       supplier_sku: 1222
       supplier_prod_name: 1921
+      active_attribute_id: 2273
     
     # Remote Magento Web Interface (for our mech)
     remote_shop:
@@ -131,7 +132,7 @@ Note that a script with basic support for maintenance-tasks is underway (exe/raw
 
 #### Setup the database
 
-Run `rake db:setup` (if `db/schema.rb` is present) or `rake db:migrate` to setup the database.
+Run `rake db:setup` (if `db/schema.rb` is present) or `rake db:migrate` to setup the database (call as `bundle exec rake` in dev).
 Unfortunately, there is no way to pass in the config file, so for now you have to create `db/config.yml` (which can be nearly the same as `rawbotz.conf`) temporarily.
 
 #### Populate the database with local and remote products
