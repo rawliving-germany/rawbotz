@@ -30,6 +30,7 @@ optparse = OptionParser.new do |opts|
   opts.separator "Configuration file (remote shop info, local db info)"
   opts.on("-c", "--config FILE", 'file path to YAML config file.') do |c|
     options[:config] = c
+    Rawbotz.conf_file_path = c
   end
   opts.separator ""
   opts.separator "Parsing/scraping options"
