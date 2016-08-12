@@ -45,7 +45,7 @@
         .ui-state-error
           Please specify mail order template (in Settings tab) before continuing.
       %br
-    = haml "orders/_order_table".to_sym, locals: {orders: @supplier.orders, supplier: @supplier}
+    = haml "orders/_order_table".to_sym, locals: {orders: @supplier.orders.order(updated_at: :desc), supplier: @supplier}
   #tab_order_settings
     %h2 Settings for #{@supplier.name}
 
