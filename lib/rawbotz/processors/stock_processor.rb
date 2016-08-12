@@ -38,8 +38,8 @@ module Rawbotz
       return if order_item.blank? || order_item.stocked?
 
       begin
-        #RawgentoDB::Query.update_stock order_item.local_product.product_id, qty.to_i
-        #RawgentoDB::Query.set_available_on_stock order_item.local_product.product_id
+        RawgentoDB::Query.update_stock order_item.local_product.product_id, qty.to_i
+        RawgentoDB::Query.set_available_on_stock order_item.local_product.product_id
         # Would be good to log that
         order_item.update(num_stocked: qty.to_i, state: :stocked)
         order_item.save
