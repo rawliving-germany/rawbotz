@@ -25,10 +25,10 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
     # app.post '/order/:id/stock',    &stock_order
     stock_order = lambda do
       @order = Order.find(params[:id])
-      if @order.supplier == settings.supplier
-        add_flash :error, "Currently only mail orders can be stocked"
-        redirect "/orders"
-      end
+      #if @order.supplier == settings.supplier
+      #  add_flash :error, "Currently only mail orders can be stocked"
+      #  redirect "/orders"
+      #end
 
       @order.remote_order_id   = params[:remote_order_id]
       @order.remote_order_link = params[:remote_order_link]
