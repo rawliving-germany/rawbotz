@@ -98,6 +98,25 @@ class MailTemplateTest < MiniTest::Test
     assert_equal expected, result
   end
 
+  def test_mailto_no_address_url_creation
+    template = "Dear SUPPLIERNAME\n"\
+      "SUBJECT=I mail you SUPPLIERNAME\n"\
+      "\n"\
+      " \n"\
+      "* SUPPLIERSKU QTY (NUM_PACKS of PACKSIZE) PRODUCTNAME\n"\
+      "see you"
+    order = {supplier: {name: "Suppliername"}, order_items: [
+      OI_BARE, OI_FULL, OI_HALF
+    ]}
+    order = OpenStruct.new order
+
+    expected = "mailto:?Subject=I mail you Suppliername&body=Dear%20Suppliername%0A%0A%20%0A%201%20(0.25%20of%204)%20First%20Product%0Asku1%205%20(1%20of%205)%20Suppliers%20first%0A%207%20(%20of%20)%20Third%20Product%0Asee%20you"
+    supplier = { order_template: template }
+    result = Rawbotz::MailTemplate.create_mailto_url(supplier, order)
+    assert_equal expected, result
+  end
+
+
   def test_mailto_multiple_url_creation
     template = "Dear SUPPLIERNAME\n"\
       "SUBJECT=I mail you SUPPLIERNAME\n"\
