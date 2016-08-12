@@ -8,6 +8,7 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
     # app.get  '/order/:id/stock',    &show_stock_order
     show_stock_order = lambda do
       @order = Order.find(params[:id])
+      @refunds = {}
       if @order.supplier == settings.supplier && @order.remote_order_link.blank?
         add_flash :message, "You need to select a remote order"
         redirect "/order/#{@order.id}/link_to_remote"
@@ -41,6 +42,14 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
       else
         errors.each{|e| add_flash :error, e}
       end
+
+      @refunds = {}
+        if @order.supplier == settings.supplier
+          order_linker = Rawbotz::OrderLinker.new @order
+          order_linker.link!
+          @orphans = order_linker.orphans
+          @refunds = order_linker.refunds
+        end
 
       haml "order/stock".to_sym
     end
