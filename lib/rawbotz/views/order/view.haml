@@ -61,10 +61,12 @@
       %tr
         %th
           Item
+        %th(title="Wished Qty")
+          %i.fa.fa-magic
+        %th(title="Ordered Qty")
+          %i.fa.fa-arrow-right
         %th
-          Wished Qty
-        %th
-          Ordered Qty
+          Stocked Qty
         %th
           Stock at time
         - if !@stock.empty?
@@ -82,6 +84,8 @@
             =item.num_wished
           %td(title="Quantity ordered")
             =item.num_ordered
+          %td(title="Quantity stocked")
+            =item.num_stocked
           %td(title="Stock at that time")
             =item.current_stock
           - if !@stock.empty?
