@@ -44,6 +44,8 @@ module Rawbotz
         order_item.update(num_stocked: qty.to_i, state: :stocked)
         order_item.save
       rescue Exception => e
+        STDERR.puts e.message.to_s
+        STDERR.puts e.backtrace
         @errors << e.message
       end
     end
