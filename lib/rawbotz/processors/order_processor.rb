@@ -18,7 +18,9 @@ module Rawbotz
 
           begin
             ordered_qty = mech.add_to_cart! item.remote_product_id, item.num_wished, @form_token
-          rescue
+          rescue Exception => e
+            STDERR.puts e.message.to_s
+            STDERR.puts e.backtrace
             ordered_qty = nil
             item.update(state: "error")
           end
