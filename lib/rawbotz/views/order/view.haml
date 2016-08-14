@@ -66,9 +66,9 @@
         %th(title="Ordered Qty")
           %i.fa.fa-arrow-right
         %th
-          Stocked Qty
-        %th
           Stock at time
+        %th
+          Stocked Qty
         - if !@stock.empty?
           %th Current Stock
     %tbody
@@ -81,13 +81,17 @@
             - if item.local_product.order_info.present?
               %small= item.local_product.order_info
           %td(title="Quantity wished")
+            - if item.state == error
+              = error_icon tooltip_text: "There was an error during ordering - does the product exist?"
             =item.num_wished
           %td(title="Quantity ordered")
+            - if item.state == error
+              = error_icon tooltip_text: "There was an error during ordering - does the product exist?"
             =item.num_ordered
-          %td(title="Quantity stocked")
-            =item.num_stocked
           %td(title="Stock at that time")
             =item.current_stock
+          %td(title="Quantity stocked")
+            =item.num_stocked
           - if !@stock.empty?
             %td(title="Current Stock")
               = @stock[item.local_product.product_id]
