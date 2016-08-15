@@ -81,11 +81,11 @@
             - if item.local_product.order_info.present?
               %small= item.local_product.order_info
           %td(title="Quantity wished")
-            - if item.state == error
+            - if item.state == "error"
               = error_icon tooltip_text: "There was an error during ordering - does the product exist?"
             =item.num_wished
           %td(title="Quantity ordered")
-            - if item.state == error
+            - if item.state == "error"
               = error_icon tooltip_text: "There was an error during ordering - does the product exist?"
             =item.num_ordered
           %td(title="Stock at that time")
