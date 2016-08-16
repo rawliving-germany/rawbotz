@@ -33,9 +33,13 @@ class RawbotzApp < Sinatra::Base
                                     conf["supplier_name"])
     set :conf, conf
 
-    if !conf["authentication"].empty?
+    if conf["authentication"] && !conf["authentication"].empty?
       use Rack::Auth::Basic, "Protected Area, no robots allowed" do |username, password|
-        BCrypt::Password.new(conf["authentication"][username]) == password
+        if username.nil? || password.nil? || conf["authentication"][username].nil?
+          nil
+        else
+          BCrypt::Password.new(conf["authentication"][username]) == password
+        end
       end
     end
   end
