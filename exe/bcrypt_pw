@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'bcrypt'
+
+if ARGV.length != 1
+  STDERR.puts "Please provide an argument to #{$PROGRAMNAME}"
+  exit 1
+end
+
+puts BCrypt::Password.create ARGV[0]

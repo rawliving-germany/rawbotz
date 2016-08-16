@@ -178,7 +178,7 @@ As usual, for `rackup` you can specify port (`-p`) and host (`-o`) parameters.  
 ### Authentication
 
 For sake of simplicity, you can use Sinatra/Racks http basic auth (which is not recommended).
-Therefor the `authentication` hash in `rawbotz.conf` is optional.  Specify it (username pointing to a bcrypt hash) if you want to use lame inbuilt http basic auth.  The passwords can e.g. be created in an irb session (`require 'bcrypt'; puts BCrypt::Password.create('my password')`).
+Therefor the `authentication` hash in `rawbotz.conf` is optional.  Specify it (username pointing to a bcrypt hash) if you want to use lame inbuilt http basic auth.  The passwords can e.g. be created in an irb session (`require 'bcrypt'; puts BCrypt::Password.create('my password')`) or with the `exe/bcrypt_pw` tool.
 
 ### via nginx and unicorn
 
