@@ -101,6 +101,9 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
       user: senders@email.user
       pass: senders.email.password
       port: 587
+    
+    authentication:
+      felix: "AbpQPfaibY9GnFhAe1o6VeiIg5i7dF7a.yOnb//JA8zeuM2z6VMgm"
 
 Then, tell RawbotzApp to eat your config via `exe/rawbotz -c rawbotz.conf`.
 To have fun directly with rack instead use the environment variable `RAWBOTZ_CONFIG`, like in `RAWBOTZ_CONFIG=/home/rawbotz/rawbotz.conf rackup`.
@@ -171,6 +174,20 @@ You can run `(bundle exec) exe/rawbotz`, `rackup` or put rawbotz behind a phusio
 There is a `-c` option to pass in a config file.
 
 As usual, for `rackup` you can specify port (`-p`) and host (`-o`) parameters.  The path to config file has to be exposed as `RAWBOTZ_CONFIG` env var (e.g. `export RAWBOTZ_CONFIG=/path/to/rawbotz.conf`).
+
+### Authentication
+
+For sake of simplicity, you can use Sinatra/Racks http basic auth (which is not recommended).
+Therefor the `authentication` hash in `rawbotz.conf` is optional.  Specify it (username pointing to a bcrypt hash) if you want to use lame inbuilt http basic auth.  The passwords can e.g. be created in an irb session (`require 'bcrypt'; puts BCrypt::Password.create('my password')`).
+
+### via nginx and unicorn
+
+Follow the (sinatra recipe)[http://recipes.sinatrarb.com/p/deployment/nginx_proxied_to_unicorn].
+
+  mkdir tmp
+  mkdir tmp/sockets
+  mkdir tmp/pids
+  mkdir log
 
 ### Stock History Update via cron
 

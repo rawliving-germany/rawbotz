@@ -8,6 +8,8 @@ require 'rawbotz/helpers/resource_link_helper'
 require 'rawbotz/helpers/order_item_color_helper'
 require 'tilt/haml'
 
+require 'bcrypt'
+
 class RawbotzApp < Sinatra::Base
   include RawgentoModels
 
@@ -30,6 +32,12 @@ class RawbotzApp < Sinatra::Base
     set :supplier, Supplier.find_by(name:
                                     conf["supplier_name"])
     set :conf, conf
+
+    if !conf["authentication"].empty?
+      use Rack::Auth::Basic, "Protected Area, no robots allowed" do |username, password|
+        BCrypt::Password.new(conf["authentication"][username]) == password
+      end
+    end
   end
 
   helpers do ; end
