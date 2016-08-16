@@ -41,12 +41,13 @@ Anyway, the application is so specific to RawLiving Germanys needs that you prob
 
 ## Usage
 
-Until `rawgento_models`, `rawgento_db` and `magento_remote` (gems by same author) have settled, please adjust the `Gemfile` and checkout these gems in the parent folder.
+rawbotz provides a sinatra-driven web-interface to deal with various magento-shop-maintenance tasks and deliver information about stock changes, foreign supplier orders, sales etc.
+
+The web-interface is accompanied by tools to update the database, fill remote magento shopping carts and much more.  These tools are fit to be used in cron jobs.
 
 ### Configuration
 
 Rawbotz combines the configuration files of `rawgento_db`, `rawgento_models` and `magento_remote` in a single file (default: `rawbotz.conf`).  In theory, the components configure themselves using their respective default configuration file paths.
-
 
 #### Unified appraoch
 
@@ -210,6 +211,8 @@ The poor mans job scheduler can be implemented by checking every minute for an o
 
 ## Other tools included
 
+Tools reside in the `exe/` subdirectory
+
 #### rawbotz_update_local_products
 
 Updates Products from magento MySQL database.  See `--help` for more information.
@@ -226,7 +229,7 @@ As in-process code reloading [is hard](http://www.sinatrarb.com/faq.html#reloadi
 
 A tiny development readme is found in `doc/development.md`.
 
-### Life cycle of order
+### Life cycle of an order
 
 Orders get created as `new` and then go into `queued` or `mailed` state. From every state they can exit into `deleted`.  State changes are done by hand.
 
