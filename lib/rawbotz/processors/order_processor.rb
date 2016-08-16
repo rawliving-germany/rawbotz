@@ -69,7 +69,7 @@ module Rawbotz
         diff[:extra] << [name, qty]
       end
 
-      if item.state == "error"
+      @order.order_items.where(state: "error").find_each do |item|
         diff[:error] << [item.local_product.name]
       end
 
