@@ -2,6 +2,17 @@ module Rawbotz::CLI
   module OrderResultTable
     def self.tables diffs
       out = ""
+      if !diffs[:error].empty?
+        error_items = diffs[:error].map do |p|
+          p[0..35]
+        end
+        out << Terminal::Table.new(title: "With error",
+          headings: ['Product'],
+          rows:     error_items,
+          style:    {width: 60}).to_s
+        out << "\n\n"
+      end
+
       if !diffs[:perfect].empty?
         perfect_items = diffs[:perfect].map do |p, q|
           [p.local_product.remote_product.name[0..35], q]

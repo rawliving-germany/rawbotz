@@ -39,7 +39,7 @@ module Rawbotz
 
     # Returns diff -> perfect: [], ...
     def check_against_cart
-      diff = {perfect: [], under_avail: [], extra: [], modified: [], miss: []}.to_h
+      diff = {perfect: [], under_avail: [], extra: [], modified: [], miss: [], error: []}.to_h
       # have logger
       mech = Rawbotz::new_mech
       mech.login
@@ -67,6 +67,10 @@ module Rawbotz
       end
       cart.each do |name, qty|
         diff[:extra] << [name, qty]
+      end
+
+      if item.state == "error"
+        diff[:error] << [item.local_product.name]
       end
 
       diff
