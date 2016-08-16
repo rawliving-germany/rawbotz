@@ -94,6 +94,7 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
     
     local_shop:
       base_uri: https://magentoshop.mine
+      magento_shell_path: "/var/www/magento/shell/indexer.php"
     
     mail:
       to: your@email.address

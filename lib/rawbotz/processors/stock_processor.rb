@@ -3,11 +3,13 @@ module Rawbotz
     include RawgentoModels
 
     attr_accessor :errors
+    attr_accessor :magento_shell_path
 
     def initialize(order, params)
       @order  = order
       @params = params
       @errors = []
+      @magento_shell_path = Rawbotz::conf_file_path["local_shop"]["magento_shell_path"]
     end
 
     # Add items to stock, setting them available if they were not before (and
@@ -15,9 +17,12 @@ module Rawbotz
     #
     # Returns and sets @error hash which is empty if everything went smooth.
     def process!
+      num_stocked = 0
+
       @params.each do |param_name, param_value|
         if param_name.to_s.start_with?("qty_delivered_") && param_value != ""
-          order! param_name[14..-1], param_value
+          stock! param_name[14..-1], param_value
+          num_stocked += 1
         end
       end
 
@@ -27,12 +32,19 @@ module Rawbotz
         @errors << "Not all items stocked"
       end
 
+      if num_stocked > 0 && num_stocked >= @errors.length && !magento_shell_path.nil?
+        reindex_status = system("php #{@magento_shell_path} --reindex cataloginventory_stock")
+        if reindex_status.nil?
+          @errors << "Magento database reindexing failed"
+        end
+      end
+
       @errors
     end
 
     private
 
-    def order! order_item_id, qty
+    def stock! order_item_id, qty
       order_item = @order.order_items.find(order_item_id)
       # This should be logged
       return if order_item.blank? || order_item.stocked?
