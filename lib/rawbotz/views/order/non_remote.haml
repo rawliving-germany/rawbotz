@@ -65,7 +65,10 @@
                   = error_icon
                   = product.order_info
             %td
-              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
+              - if @order.state == "new"
+                = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
+              - else
+                %input.qty{readonly: true, value: order_item.num_wished, size: 2}
             %td
               - if product.packsize.present?
                 = product.packsize
