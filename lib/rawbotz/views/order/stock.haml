@@ -23,6 +23,11 @@
           (Remote) Order Link
         %dd
           %input{value: @order.remote_order_link, name: "remote_order_link"}
+          - if @order.remote_order_link.present?
+            %a(href="#{@order.remote_order_link}" target="remote_shop")
+              = external_link_icon
+              = order.remote_order_link
+
     = order_link @order
     %br
   
