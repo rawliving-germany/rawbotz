@@ -6,8 +6,8 @@ module Rawbotz::RawbotzApp::Routing::Products
   def self.registered(app)
     # app.get  '/products',           &show_products
     show_products = lambda do
-      @products = LocalProduct
-      @suppliers = Supplier.order(:name).all
+      @products = LocalProduct.includes(:supplier, :remote_product)
+      @suppliers = Supplier.includes(:local_products).order(:name).all
       haml "products/index".to_sym
     end
 
@@ -21,7 +21,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.get  '/product/:id',        &show_product
     show_product = lambda do
       settings = RawgentoDB.settings(Rawbotz.conf_file_path)
-      @product = LocalProduct.unscoped.find(params[:id])
+      @product = LocalProduct.unscoped.includes(:supplier).find(params[:id])
       begin
         @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
                                                        Date.today,

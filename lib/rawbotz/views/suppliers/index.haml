@@ -6,7 +6,7 @@
 %h1 Suppliers
 
 %ul.float_ul
-  - @suppliers.each do |supplier|
+  - @suppliers.find_each do |supplier|
     %li
       %a.supplier(href="/supplier/#{supplier.id}")
         =supplier.name
