@@ -92,7 +92,7 @@
     %tbody
       - @supplier.local_products.find_each do |product|
         %tr
-          %td
+          %td(title="Product Name")
             = product_link product
             - if product.supplier_prod_name
               %br

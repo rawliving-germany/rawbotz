@@ -7,7 +7,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
   def self.registered(app)
     # app.get '/orders',             &show_orders
     show_orders = lambda do
-      @orders = Order.order(created_at: :desc)
+      @orders = Order.order(created_at: :desc).all
       haml "orders/index".to_sym
     end
 
