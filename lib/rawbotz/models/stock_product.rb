@@ -13,7 +13,7 @@ module Rawbotz
 
       def expected_stock_lifetime
         # division by zero?
-        if @current_stock == 0 || sales_per_day == 0.0
+        if @current_stock.to_i == 0 || sales_per_day == 0.0
           return 0.0
         end
         @current_stock / sales_per_day
