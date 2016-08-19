@@ -9,7 +9,7 @@ module Rawbotz
       @order  = order
       @params = params
       @errors = []
-      @magento_shell_path = Rawbotz::conf_file_path["local_shop"]["magento_shell_path"]
+      @magento_shell_path = YAML.load_file(Rawbotz.conf_file_path)["local_shop"]["magento_shell_path"]
     end
 
     # Add items to stock, setting them available if they were not before (and
