@@ -23,7 +23,12 @@ Where stock does not last for 10 days.
     = supplier.name
 
   - if supplier.minimum_order_value.present?
-    Minimum Order Value: #{supplier.minimum_order_value}
+    %small
+      Minimum Order Value: #{supplier.minimum_order_value}
+    %br
+  - if supplier.delivery_time_days.present?
+    %small
+      Deliver time in days: #{supplier.delivery_time_days}
     %br
 
   %table.pure-table.pure-table-striped
