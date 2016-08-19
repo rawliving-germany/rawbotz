@@ -64,26 +64,26 @@
                 #flash.ui-state-highlight
                   = error_icon
                   = product.order_info
-            %td
+            %td(title="Quantity to order")
               - if @order.state == "new"
                 = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
               - else
                 %input.qty{readonly: true, value: order_item.num_wished, size: 2}
-            %td
+            %td(title="Packsize of product")
               - if product.packsize.present?
                 = product.packsize
               - else
                 %i.fa.fa-ban
-            %td
+            %td(title="Monthly sales of product")
               = product_monthly_sales
-            %td
+            %td(title="Product Stock")
               = product_stock
-            %td
+            %td(title="Predicted quantity missing to stock for 30 days")
               - if product_stock && product_monthly_sales
                 -# red/yellow/green
                 -# if negative, put button
                 = product_stock - product_monthly_sales
-            %td
+            %td(title="Purchase Price")
               - if product.purchase_price
                 = product.purchase_price
                 €
