@@ -4,7 +4,7 @@ module Rawbotz::CLI
       out = ""
       if !diffs[:error].empty?
         error_items = diffs[:error].map do |p|
-          p[0..35]
+          [p[0][0..35]]
         end
         out << Terminal::Table.new(title: "With error",
           headings: ['Product'],
