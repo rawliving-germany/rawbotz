@@ -26,7 +26,8 @@
                 %a.pure-button(href="/order/non_remote/#{supplier.id}/new")
                   = add_icon
                   Create New Mail Order
-      - orders.find_each do |order|
+      -# find_each ignores order!
+      - orders.each do |order|
         %tr
           %td=order.created_at
           %td
