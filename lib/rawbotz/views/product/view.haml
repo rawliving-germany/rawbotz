@@ -27,6 +27,11 @@
         %a(href="/product/#{@product.id}/link") Link to ...
       - else
         = remote_product_link @product
+    - if @product.supplier == settings.supplier || @product.remote_product.present?
+      .pure-control-group
+        %label(for="remote_frontend") Remote Frontend Product page
+        %a(href="#{Rawbotz::RemoteShop.product_page_url(@product, settings.conf)}" target="remote_shop")
+          = Rawbotz::RemoteShop.product_page_url(@product, settings.conf)
     .pure-control-group
       %label(for="packsize") Pack size
       = @product.packsize
