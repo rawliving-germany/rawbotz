@@ -16,7 +16,7 @@
     %a.pure-button(href="/order/#{order.id}/packlist/pdf")
       %i.fa.fa-file-pdf-o
       Download Packlist
-  - if !["stocked", "deleted"].include? order.state
+  - if !["stocked", "deleted", "new"].include? order.state
     %a.pure-button(href="/order/#{order.id}/stock")
       = stock_icon
       Stock
