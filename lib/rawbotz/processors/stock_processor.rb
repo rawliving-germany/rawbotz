@@ -1,3 +1,5 @@
+require 'date'
+
 module Rawbotz
   class StockProcessor
     include RawgentoModels
@@ -27,7 +29,7 @@ module Rawbotz
       end
 
       if @order.order_items.processible.where("num_stocked IS NULL").count == 0
-        @order.update(state: 'stocked')
+        @order.update(state: 'stocked', stocked_at: DateTime.now)
       else
         @errors << "Not all items stocked"
       end

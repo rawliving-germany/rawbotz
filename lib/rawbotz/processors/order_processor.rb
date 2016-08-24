@@ -1,3 +1,5 @@
+require 'date'
+
 module Rawbotz
   class OrderProcessor
     def initialize(order, logger=Logger.new("/dev/null"))
@@ -35,6 +37,7 @@ module Rawbotz
           @logger.warn(item.attributes)
         end
       end
+      @order.update(ordered_at: DateTime.now)
     end
 
     # Returns diff -> perfect: [], ...
