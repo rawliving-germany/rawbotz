@@ -40,7 +40,7 @@ module Rawbotz
         end
       end
       def order_link order
-        "<a href=\"/order/#{order.id}\">Order #{order.id} (#{order.supplier.name})</a>"
+        "<a href=\"/order/#{order.id}\">Order #{order.id} (#{order.supplier.try(:name) || "no supplier"})</a>"
       end
     end
   end
