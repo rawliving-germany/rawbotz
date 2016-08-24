@@ -4,6 +4,12 @@
 
 %form.pure-form.pure-form-aligned(action="" method="post")
   %input(type="hidden" name="_method" value="put")
+  - if @product.hidden?
+    .ui-state-error
+      This product is hidden (in rawbotz).
+  - if !@product.active?
+    .ui-state-error
+      This product is deactivated (in magento).
   %fieldset
     .pure-control-group
       %label(for="product_id") Product ID
