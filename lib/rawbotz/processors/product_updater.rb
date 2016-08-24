@@ -40,7 +40,8 @@ module Rawbotz
 
       @logger.info "#{@local_products.count} products"
       # Name
-      update_attribute(@name_attribute_id, :name)
+      #update_attribute(@name_attribute_id, :name)
+      update_names
       # Supplier
       update_supplier_from_option(@supplier_attribute_id)
       # Shelve
@@ -50,8 +51,7 @@ module Rawbotz
       # Supplier SKU
       update_attribute(@supplier_sku_attribute_id, :supplier_sku)
       # Supplier Product name
-      #update_attribute(@supplier_prod_name_attribute_id, :supplier_prod_name)
-      update_names
+      update_attribute(@supplier_prod_name_attribute_id, :supplier_prod_name)
       # Order Info
       update_attribute(@order_info_attribute_id, :order_info)
       # Purchase Price
