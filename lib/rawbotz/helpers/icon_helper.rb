@@ -13,6 +13,9 @@ module Rawbotz
       def external_link_icon tooltip_text: nil
         icon "external-link", tooltip_text: tooltip_text
       end
+      def false_icon tooltip_text: nil
+        icon "close", tooltip_text: tooltip_text
+      end
       def index_icon tooltip_text: nil
         icon "th-list", tooltip_text: tooltip_text
       end
@@ -73,11 +76,22 @@ module Rawbotz
       def supplier_icon tooltip_text: nil
         icon "truck", tooltip_text: tooltip_text
       end
+      def true_icon tooltip_text: nil
+        icon "check-circle-o", tooltip_text: tooltip_text
+      end
       def view_icon tooltip_text: nil
         icon "eye", tooltip_text: tooltip_text
       end
       def warning_icon tooltip_text: nil
         icon "warning", tooltip_text: tooltip_text
+      end
+
+      def bool_icon attr
+        if attr
+          true_icon
+        else
+          false_icon
+        end
       end
 
       def order_state_icon order
