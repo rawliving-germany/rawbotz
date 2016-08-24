@@ -1,4 +1,5 @@
 require 'rawbotz/routes'
+require 'date'
 
 module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
   include RawgentoModels
@@ -109,6 +110,7 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @supplier, @order)
 
       @order.order_result = @mail_preview_text
+      @order.ordered_at = DateTime.now
       @order.save
       if params['action'] == 'fix'
         @order.order_items.find_each do |oi|
