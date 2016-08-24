@@ -54,6 +54,10 @@
       .pure-control-group
         %label(for="purchase_price") Purchase Price
         = @product.purchase_price
+    .pure-control-group
+      %label(for="organic") Organic
+      = bool_icon @product.organic?
+
 
 %h2 Actions
 - if @product.supplier == settings.supplier && !@product.remote_product.present?

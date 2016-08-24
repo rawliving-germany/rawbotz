@@ -6,7 +6,7 @@ module Rawbotz
       :shelve_attribute_id, :packsize_attribute_id,
       :supplier_sku_attribute_id, :supplier_prod_name_attribute_id,
       :order_info_attribute_id, :purchase_price_attribute_id,
-      :active_attribute_id
+      :active_attribute_id, :organic_attribute_id
     attr_accessor :change_text
 
     def initialize logger
@@ -21,7 +21,8 @@ module Rawbotz
       @supplier_sku_attribute_id = Rawbotz.attribute_ids["supplier_sku"]
       @purchase_price_attribute_id     = Rawbotz.attribute_ids["purchase_price"]
       @supplier_prod_name_attribute_id = Rawbotz.attribute_ids["supplier_prod_name"]
-      @active_attribute_id = Rawbotz.attribute_ids["active_attribute_id"]
+      @active_attribute_id  = Rawbotz.attribute_ids["active_attribute_id"]
+      @organic_attribute_id = Rawbotz.attribute_ids["organic"]
       @logger.debug "Attribute-ids: Name: #{@name_attribute_id}, "\
         "Supplier: #{@supplier_attribute_id}, "\
         "Shelve-Nr: #{@shelve_attribute_id}, "\
@@ -30,7 +31,8 @@ module Rawbotz
         "Purchase Price: #{@purchase_price_attribute_id}"\
         "Active: #{@active_attribute_id}"\
         "Supplier-SKU: #{@supplier_sku_attribute_id}"\
-        "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"
+        "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"\
+        "Organic: #{@organic_attribute_id}"
     end
 
     def sync(dry_run=false)
@@ -56,6 +58,8 @@ module Rawbotz
       update_attribute(@purchase_price_attribute_id, :purchase_price)
       # Active?
       update_attribute_int_bool(@active_attribute_id, :active)
+      # Organic?
+      update_attribute_int_bool(@organic_attribute_id, :organic)
 
       unhide_if_reactivated
 
