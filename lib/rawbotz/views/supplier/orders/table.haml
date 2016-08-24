@@ -1,0 +1,26 @@
+%table.pure-table
+  %thead
+    %tr
+      %th Product
+      %th qty stocked
+      %th Stock date
+      %th order date
+      %th order number
+      %th supplier
+  %tbody
+    - Supplier.find_each do |supplier|
+      - supplier.orders.find_each do |order|
+        - if order.order_items.where("num_stocked > 0").present?
+          %tr
+            %td(colspan=6)
+              %center
+                %em
+                  Order #{order.remote_order_id} from #{order.supplier.name}
+          - order.order_items.where("num_stocked > 0").each do |item|
+            %tr
+              %td= product_link item.local_product
+              %td= item.num_stocked
+              %td= order.stocked_at
+              %td= order.ordered_at
+              %td= order.remote_order_id
+              %td= order.supplier.name
