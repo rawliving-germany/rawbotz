@@ -15,9 +15,9 @@ module Rawbotz
     end
 
     # Add items to stock, setting them available if they were not before (and
-    # stock is positive.
+    # stock is positive).
     #
-    # Returns and sets @error hash which is empty if everything went smooth.
+    # Returns and sets @error array which is empty if everything went smooth.
     def process!
       num_stocked = 0
 
