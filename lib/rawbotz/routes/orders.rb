@@ -99,6 +99,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
       html = haml "order/packlist.pdf".to_sym, layout: :pdf_layout
       PDFKit.configure do |config|
         config.verbose = false
+        config.default_options[:quiet] = true
       end
 
       kit = PDFKit.new(html)
@@ -107,7 +108,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
                                    "pure-min.css")
       kit.stylesheets << File.join(settings.root, "public",
                                    "rawbotz.css")
-      # This would need more resources
+      # This would need more resources (base64 encoded woff?)
       #kit.stylesheets << File.join(settings.root, "public",
       #                             "font-awesome-4.5.0/css/font-awesome.min.css")
       kit.stylesheets << File.join(settings.root, "public",
