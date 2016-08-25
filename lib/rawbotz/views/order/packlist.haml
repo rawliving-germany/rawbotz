@@ -40,7 +40,7 @@
         %td=p.local_product.name
         %td=p.local_product.shelve_nr
         %td
-          =p.num_ordered
+          = p.num_ordered
           - if refund = @refunds[p.local_product.product_id]
             (
             = refund.qty_ordered
