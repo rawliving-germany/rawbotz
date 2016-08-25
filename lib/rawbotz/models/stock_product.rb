@@ -69,8 +69,9 @@ module Rawbotz
         #  @sales_last_365.qty / days_in_stock(365).to_f
         #elsif @sales_last_90.present?
         #  @sales_last_90.qty / days_in_stock(90).to_f
-        #elsif @sales_last_60.present?
-        #  @sales_last_60.qty / days_in_stock(60).to_f
+        elsif @sales_last_60.present?
+          return 0 if days_in_stock(60) == 60.0
+           @sales_last_60.qty / days_in_stock(60).to_f
         elsif @sales_last_30.present?
           if days_in_stock(30) != 0
             @sales_last_30.qty / days_in_stock(30).to_f
@@ -82,7 +83,23 @@ module Rawbotz
         end
       end
 
+      def sales_per_day_base
+        product_days_first_stock = @product.days_since_first_stock
+        if @sales_last_365.present? && product_days_first_stock >= 365
+          return 365
+        elsif @sales_last_90.present? && product_days_first_stock >= 90
+          return 90
+        elsif @sales_last_60.present? && product_days_first_stock >= 60
+          return 60
+        #elsif @sales_last_30.present?
+        else
+          # today - last sale ?
+          return 30
+        end
+      end
+
       private
+
       # From the last num_days, how many days was the product in stock?
       def days_in_stock num_days
         num_days - out_of_stock_days(num_days)
