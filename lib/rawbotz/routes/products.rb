@@ -1,6 +1,7 @@
 require 'rawbotz/routes'
 
 module Rawbotz::RawbotzApp::Routing::Products
+  include Rawbotz
   include RawgentoModels
 
   def self.registered(app)
@@ -21,17 +22,14 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.get  '/product/:id',        &show_product
     show_product = lambda do
       settings = RawgentoDB.settings(Rawbotz.conf_file_path)
-      @product = LocalProduct.unscoped.includes(:supplier).find(params[:id])
+      @product_id = params[:id]
+      @product = LocalProduct.unscoped.includes(:supplier).find(@product_id)
       begin
-        @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
-                                                       Date.today,
-                                                       Date.today - 30,
-                                                       settings)
-        @sales_monthly = RawgentoDB::Query.sales_monthly_between(@product.product_id,
-                                                         Date.today,
-                                                         Date.today - (12 * 30),
-                                                         settings).uniq
-      rescue
+        @sales = Models::Sales.daily_since(@product_id, settings)
+        @sales_monthly = Models::Sales.monthly_since(@product_id, settings)
+      rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @sales = []
         @sales_monthly = []
         add_flash :error, 'Cannot connect to MySQL database'
@@ -86,7 +84,9 @@ module Rawbotz::RawbotzApp::Routing::Products
     search_remote_products = lambda do
       @products = RemoteProduct.supplied_by(settings.supplier)
         .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
-      @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
+      @products.map do |p|
+        {name: p[0], product_id: p[1]}
+      end.to_json
     end
 
     # app.get  '/remote_product/:id',  &show_remote_product
@@ -104,6 +104,6 @@ module Rawbotz::RawbotzApp::Routing::Products
 
     app.get  '/remote_products',        &show_remote_products
     app.post '/remote_products/search', &search_remote_products
-    app.get  '/remote_product/:id',      &show_remote_product
+    app.get  '/remote_product/:id',     &show_remote_product
   end
 end
