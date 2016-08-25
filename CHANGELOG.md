@@ -2,13 +2,14 @@
 
 Changelog, History of changes for Rawbotz
 
-## 0.2.0 (released 2016-08-)
+## 0.2.0 (released 2016-08-25)
   - Vastly improved non-remote (mail) orders, which now get saved
   - Generally improved UI and iconography
+  - Show predicted sales values
   - Store additional information about Suppliers and Orders (e.g.
     minimum delivery value) and display them in crucial views
   - Add new optional (magento) attributes to ease orders (e.g. product
-    order information, purchase price)
+    order information, purchase price, organic)
   - Add functionality to 'stock' an order
   - Show refunds of remote shop order
   - Compatibility with (remote) magento >= 1.8
