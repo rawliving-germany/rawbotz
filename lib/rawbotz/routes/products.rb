@@ -22,11 +22,11 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.get  '/product/:id',        &show_product
     show_product = lambda do
       settings = RawgentoDB.settings(Rawbotz.conf_file_path)
-      @product_id = params[:id]
-      @product = LocalProduct.unscoped.includes(:supplier).find(@product_id)
+      @product = LocalProduct.unscoped.includes(:supplier).find(params[:id])
       begin
-        @sales = Models::Sales.daily_since(@product_id, settings)
-        @sales_monthly = Models::Sales.monthly_since(@product_id, settings)
+        product_id = @product.product_id
+        @sales = Models::Sales.daily_since product_id
+        @sales_monthly = Models::Sales.monthly_since product_id
       rescue Exception => e
         STDERR.puts e.message
         STDERR.puts e.backtrace
