@@ -149,4 +149,14 @@ class StockProductTest < MiniTest::Test
       stock_product.corrected_sales(1200)
     end
   end
+
+  def test_corrected_sales_per_day
+    product_mock = mock_product 15
+    stock_product = StockProduct.new(product: product_mock,
+                                     sales_last_30: ProductQty.new(200, 60),
+                                     sales_last_60: ProductQty.new(200, 360)
+                                    )
+    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
+  end
 end

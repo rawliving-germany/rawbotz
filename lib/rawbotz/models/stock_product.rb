@@ -36,15 +36,16 @@ module Rawbotz
         end
       end
 
-      def corrected_sales num_days
+      def corrected_sales num_days, per_day: false
+        factor = per_day ? num_days.to_f : 1.0
         if num_days == 30
-          corrected_sales_last_30
+          corrected_sales_last_30 / factor
         elsif num_days == 60
-          corrected_sales_last_60
+          corrected_sales_last_60 / factor
         elsif num_days == 90
-          corrected_sales_last_90
+          corrected_sales_last_90 / factor
         elsif num_days == 365
-          corrected_sales_last_365
+          corrected_sales_last_365 / factor
         else
           raise UnsupportedNumberOfDaysError
         end
