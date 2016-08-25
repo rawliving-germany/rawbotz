@@ -36,6 +36,20 @@ module Rawbotz
         end
       end
 
+      def corrected_sales num_days
+        if num_days == 30
+          corrected_sales_last_30
+        elsif num_days == 60
+          corrected_sales_last_60
+        elsif num_days == 90
+          corrected_sales_last_90
+        elsif num_days == 365
+          corrected_sales_last_365
+        else
+          raise UnsupportedNumberOfDaysError
+        end
+      end
+
       # We should also extrapolate (out of-) stock days!
 
       def corrected_sales_last_30
