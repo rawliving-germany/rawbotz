@@ -42,10 +42,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     show_product_stock_sales_plot = lambda do
       @product = LocalProduct.unscoped.find(params[:id])
       begin
-        @sales = RawgentoDB::Query.sales_daily_between(@product.product_id,
-                                                       Date.today,
-                                                       Date.today - 30,
-                                                       RawgentoDB.settings(Rawbotz.conf_file_path))
+        @sales = Models::Sales.daily_since(@product.product_id)
       rescue
         @sales = []
         add_flash :error, 'Cannot connect to MySQL database'
@@ -83,7 +80,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.post '/remote_products/search', &search_remote_products
     search_remote_products = lambda do
       @products = RemoteProduct.supplied_by(settings.supplier)
-        .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
+        .ilike(params[:term]).limit(20).pluck(:name, :id)
       @products.map do |p|
         {name: p[0], product_id: p[1]}
       end.to_json
