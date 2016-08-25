@@ -2,6 +2,9 @@ require 'active_model'
 
 module Rawbotz
   module Models
+    class UnsupportedNumberOfDaysError < StandardError
+    end
+
     class StockProduct
       include ActiveModel::Model # convenience
 
@@ -17,6 +20,20 @@ module Rawbotz
           return 0.0
         end
         @current_stock / sales_per_day
+      end
+
+      def real_sales num_days
+        if num_days == 30
+          @sales_last_30.qty
+        elsif num_days == 60
+          @sales_last_60.qty
+        elsif num_days == 90
+          @sales_last_90.qty
+        elsif num_days == 365
+          @sales_last_365.qty
+        else
+          raise UnsupportedNumberOfDaysError
+        end
       end
 
       # We should also extrapolate (out of-) stock days!

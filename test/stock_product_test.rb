@@ -98,4 +98,23 @@ class StockProductTest < MiniTest::Test
     assert_equal 20/50.0, stock_product.sales_per_day
   end
 
+  def test_real_sales
+    product_mock = mock_product 10, Date.today - 61, 200
+
+    stock_product = StockProduct.new(product: product_mock,
+                                     sales_last_30: ProductQty.new(200, 10),
+                                     sales_last_60: ProductQty.new(200, 30),
+                                     sales_last_90: ProductQty.new(200, 80),
+                                     sales_last_365: ProductQty.new(200, 110)
+                                    )
+    assert_equal 10, stock_product.real_sales(30)
+    assert_equal 30, stock_product.real_sales(60)
+    assert_equal 80, stock_product.real_sales(90)
+    assert_equal 110, stock_product.real_sales(365)
+    assert_equal 110, stock_product.real_sales(365)
+    assert_raises UnsupportedNumberOfDaysError do
+      stock_product.real_sales(1200)
+    end
+  end
+
 end
