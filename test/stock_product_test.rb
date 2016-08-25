@@ -159,4 +159,29 @@ class StockProductTest < MiniTest::Test
     assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
     assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
   end
+
+  def test_corrected_sales_memoization
+    product_mock = mock_product 15
+    stock_product = StockProduct.new(product: product_mock,
+                                     sales_last_30: ProductQty.new(200, 60),
+                                     sales_last_60: ProductQty.new(200, 360)
+                                    )
+    # Proper mocking would make expectation that caclulate-functions are called just once, along these lines
+    #call_mock = MiniTest::Mock.new
+    #call_mock.expect :call, 4.0, [30]
+
+    #stock_product.stub :calculate_corrected_sales, call_mock do
+    #  stock_product.calculate_corrected_sales
+    #end
+
+    #call_mock.verify
+
+
+    assert_equal 120.0, stock_product.corrected_sales(30)
+    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
+    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
+    assert_equal 480.0, stock_product.corrected_sales(60)
+  end
 end

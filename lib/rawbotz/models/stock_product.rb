@@ -10,7 +10,7 @@ module Rawbotz
 
       attr_accessor :product, :current_stock,
         :sales_last_30, :sales_last_60, :sales_last_90, :sales_last_365,
-        :num_days_first_sale
+        :num_days_first_sale, :mem_corrected_sales
 
       delegate :name, to: :product
 
@@ -54,35 +54,23 @@ module Rawbotz
       # We should also extrapolate (out of-) stock days!
 
       def corrected_sales_last_30
-        if @sales_last_30.present? && days_in_stock(30).to_i != 0
-          @sales_last_30.qty * factor_days_in_stock(30)
-        else
-          0
-        end
+        @mem_corrected_sales ||= {}
+        @mem_corrected_sales[30] ||= calculate_corrected_sales(30)
       end
 
       def corrected_sales_last_60
-        if @sales_last_60.present? && days_in_stock(60).to_i != 0
-          @sales_last_60.qty * factor_days_in_stock(60)
-        else
-          0
-        end
+        @mem_corrected_sales ||= {}
+        @mem_corrected_sales[60] ||= calculate_corrected_sales(60)
       end
 
       def corrected_sales_last_90
-        if @sales_last_90.present? && days_in_stock(90).to_i != 0
-          @sales_last_90.qty * factor_days_in_stock(90)
-        else
-          0
-        end
+        @mem_corrected_sales ||= {}
+        @mem_corrected_sales[90] ||= calculate_corrected_sales(90)
       end
 
       def corrected_sales_last_365
-        if @sales_last_365.present? && days_in_stock(365).to_i != 0
-          @sales_last_365.qty * factor_days_in_stock(365)
-        else
-          0
-        end
+        @mem_corrected_sales ||= {}
+        @mem_corrected_sales[365] ||= calculate_corrected_sales(365)
       end
 
       def days_since_first_stock_date
@@ -131,6 +119,15 @@ module Rawbotz
       end
 
       private
+
+      # For easier memoization
+      def calculate_corrected_sales num_days
+        if days_in_stock(num_days).to_i != 0
+          real_sales(num_days) * factor_days_in_stock(num_days)
+        else
+          0
+        end
+      end
 
       # From the last num_days, how many days was the product in stock?
       def days_in_stock num_days
