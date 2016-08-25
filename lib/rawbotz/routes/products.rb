@@ -32,7 +32,7 @@ module Rawbotz::RawbotzApp::Routing::Products
         STDERR.puts e.backtrace
         @sales = []
         @sales_monthly = []
-        add_flash :error, 'Cannot connect to MySQL database'
+        add_flash :error, "Cannot connect to MySQL database/ #{e.message}"
       end
       @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items.where(created_at: (Date.today - 30)..Date.today)
       haml "product/view".to_sym
