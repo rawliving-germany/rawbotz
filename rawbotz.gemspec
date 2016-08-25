@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{web-interface and other tools to manage a magento shop}
   spec.description   = %q{provides a (sinatra) web interface to order from another shop, view stock history ...}
   spec.homepage      = %q{https://rawliving-germany.github.io/rawbotz/}
-  spec.licenses      = ['AGPLv3+']
+  spec.licenses      = ['AGPL-3.0+']
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
