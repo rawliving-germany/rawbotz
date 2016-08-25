@@ -1,0 +1,22 @@
+- if stock_product.days_since_first_stock_date.to_i < num_days
+  - warn = warning_icon(tooltip_text: "First stock value is only #{stock_product.days_since_first_stock_date.to_i} days ago!")
+- else
+  - warn = ""
+
+%tr
+  %td
+    = num_days
+  %td
+    - if stock_product.num_days_first_sale.to_i < num_days
+      = warning_icon tooltip_text: "First sale only #{stock_product.num_days_first_sale.to_i} days ago!"
+    = stock_product.real_sales num_days
+  %td
+    = warn
+    = stock_product.out_of_stock_days num_days
+  %td
+    = warn
+    = friendly_float stock_product.corrected_sales num_days
+  %td
+    = warn
+    = friendly_float stock_product.corrected_sales(num_days, per_days: 1)
+

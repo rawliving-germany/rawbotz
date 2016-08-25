@@ -110,5 +110,29 @@
 
     .pure-u-3-5
       = haml :"product/_stock_sales_plot", locals: {plot_data: @plot_data, markers: @sales_monthly}
--#%h2 Orders
--#= product.order_items.order ... link
+
+%br
+
+- if @stock_product.present?
+  %h2 Stock and Sales data statistics
+  = haml "stock_product/value_table".to_sym, locals: {stock_product: @stock_product}
+%br
+
+- if @product.order_items.present?
+  %h2 Orders
+  %table.pure-table
+    %thead
+      %tr
+        %th Order
+        %th Date
+        %th Num ordered
+        %th Num stocked
+    %tbody
+      - @product.order_items.where("num_ordered > 0").order(updated_at: :desc).find_each do |order_item|
+        %tr
+          %td= order_link order_item.order
+          %td= order_item.order.updated_at
+          %td= order_item.num_ordered
+          %td= order_item.num_stocked
+
+

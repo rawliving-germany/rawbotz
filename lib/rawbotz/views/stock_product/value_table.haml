@@ -1,0 +1,28 @@
+%table.pure-table.pure-table-striped
+  %thead
+    %tr
+      %th Number of days
+      %th Sales
+      %th Days out of stock
+      %th Corrected sales
+      %th Corrected sales per day
+  %tbody
+    - [30, 60, 90, 365].each do |num_days|
+      = haml "stock_product/_value_table_line".to_sym,
+        locals: {stock_product: stock_product, num_days: num_days}
+%dl
+  %dt
+    Number of days since first sale
+  %dd
+    = stock_product.num_days_first_sale.to_i
+  %dt
+    Number of days since first stock entry
+  %dd
+    = stock_product.days_since_first_stock_date.to_i
+
+-#%h3 Sales Prediction
+-#.pure-u-1-1
+-#  %h2 Stock
+-#  %h4 First registered stock
+-#  -#= stock_product.days_since_first_stock
+
