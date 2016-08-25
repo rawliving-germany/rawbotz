@@ -27,12 +27,18 @@
     .pure-control-group
       %label(for="supplier") Supplier
       = supplier_link @product.supplier
-    .pure-control-group
-      %label(for="supplier") Remote Product
-      - if @product.remote_product.nil?
-        %a(href="/product/#{@product.id}/link") Link to ...
-      - else
-        = remote_product_link @product
+    - if @product.supplier == settings.supplier || @product.remote_product.present?
+      .pure-control-group
+        %label(for="supplier") Remote Product
+        - if @product.supplier != settings.supplier
+          = error_icon
+          = remote_product_link @product
+          (but not from remote shop!)
+        - elsif @product.remote_product.nil?
+          not linked
+          %a(href="/product/#{@product.id}/link") Linking View
+        - else
+          = remote_product_link @product
     - if @product.supplier == settings.supplier || @product.remote_product.present?
       .pure-control-group
         %label(for="remote_frontend") Remote Frontend Product page
