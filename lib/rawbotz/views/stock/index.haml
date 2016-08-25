@@ -66,40 +66,46 @@ Where stock does not last for 10 days.
             Nothing to see here
       - suppliers_stock_product.sort_by{|s| s.expected_stock_lifetime}.each do |p|
         %tr
+          - stock_warn =  info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+          - sales_warn = info_icon tooltip_text: "Not enough sales data (first sale #{p.num_days_first_sale.to_i} days ago)!"
           %td
             = product_link p.product
           %td(title="Current Stock")
             = p.current_stock
-          %td(title="#{predicted_stock_title} based on last 30 days sales")
-            = "%.2f" % p.expected_stock_lifetime
+          %td(title="#{predicted_stock_title} based on last #{p.sales_per_day_base} days sales")
+            = friendly_float p.expected_stock_lifetime
           %td(title=avg_30_title)
-            %div(title="Average corrected sales, based on last 30 days. Sales: #{p.sales_last_30.try(:qty)} - Days out of stock: #{p.out_of_stock_days 30}")
-              = "%.2f" % p.corrected_sales_last_30
+            - title = "Average corrected sales, based on last %d days. Sales: %s - Days out of stock: %d" % [30, p.real_sales(30), p.out_of_stock_days(30)]
+            %div(title="#{title}")
+              = friendly_float(p.corrected_sales(30)) || "?"
             - if p.days_since_first_stock_date < 30
-              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+              = stock_warn
             - if p.num_days_first_sale < 30
-              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+              = sales_warn
           %td
-            %div(title="Average corrected sales, based on last 60 days. Sales: #{p.sales_last_60.try(:qty)} - Days out of stock: #{p.out_of_stock_days 60}")
-              = "%.2f" % (p.corrected_sales_last_60 / 2.0)
+            %div(title="Average corrected sales, based on last 60 days. Sales: #{p.sales_last_60} - Days out of stock: #{p.out_of_stock_days 60}")
+              = friendly_float(p.corrected_sales(60, per_days: 30))
+              -#= "%.2f" % (p.corrected_sales_last_60 / 2.0)
             - if p.days_since_first_stock_date < 60
-              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+              = stock_warn
             - if p.num_days_first_sale < 60
-              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+              = sales_warn
           %td
-            %div(title="Average corrected sales, based on last 90 days. Sales: #{p.sales_last_90.try(:qty)} - Days out of stock: #{p.out_of_stock_days 90}")
-              = "%.2f" % (p.corrected_sales_last_90 / 3.0)
+            %div(title="Average corrected sales, based on last 90 days. Sales: #{p.sales_last_90} - Days out of stock: #{p.out_of_stock_days 90}")
+              = friendly_float(p.corrected_sales(90, per_days: 30))
+              -#= "%.2f" % (p.corrected_sales_last_90 / 3.0)
             - if p.days_since_first_stock_date < 90
-              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+              = stock_warn
             - if p.num_days_first_sale < 90
-              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+              = sales_warn
           %td
-            %div(title="Average corrected sales, based on last 365 days. Sales: #{p.sales_last_365.try(:qty)} - Days out of stock: #{p.out_of_stock_days 365}")
-              = "%.2f" % (p.corrected_sales_last_365 / 365.0 * 30.0)
+            %div(title="Average corrected sales, based on last 365 days. Sales: #{p.sales_last_365} - Days out of stock: #{p.out_of_stock_days 365}")
+              = friendly_float(p.corrected_sales(365, per_days: 30))
+              -#= "%.2f" % (p.corrected_sales_last_365 / 365.0 * 30.0)
             - if p.days_since_first_stock_date < 365
-              = info_icon tooltip_text: "Not enough stock data (first stock record #{p.days_since_first_stock_date.to_i} days ago)!"
+              = stock_warn
             - if p.num_days_first_sale < 365
-              = info_icon tooltip_text: "Not enough sale data (first sale #{p.num_days_first_sale.to_i} days ago)!"
+              = sales_warn
           %td
             - if p.num_days_first_sale.to_i < 10
               New Product! (First sale #{p.num_days_first_sale.to_i} days ago)

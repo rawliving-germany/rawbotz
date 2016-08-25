@@ -18,20 +18,21 @@ module Rawbotz
         # Default to today instead of nil date
         first_sales.default = Date.today
 
+        # stock product has trouble when empty values ...
         stock = Query.stock.find {|s| s.product_id = product_id}.qty
-        StockProduct.new(product: LocalProduct.find_by(product_id: product_id),
+        StockProduct.new(product: LocalProduct.unscoped.find_by(product_id: product_id),
                          current_stock: stock[product_id],
-                         sales_last_30: sales_30[product_id],
-                         sales_last_60: sales_60[product_id],
-                         sales_last_90: sales_90[product_id],
-                         sales_last_365: sales_365[product_id],
+                         sales_last_30: sales_30[product_id]&.qty ,
+                         sales_last_60: sales_60[product_id]&.qty ,
+                         sales_last_90: sales_90[product_id]&.qty ,
+                         sales_last_365: sales_365[product_id]&.qty ,
                          num_days_first_sale: Date.today - first_sales[product_id].to_date
                         )
 
       end
 
       def self.create suppliers
-        product_ids = LocalProduct.where(supplier_id: suppliers.map(&:id), active: true).pluck(:product_id)
+        product_ids = LocalProduct.unscoped.where(supplier_id: suppliers.map(&:id), active: true).pluck(:product_id)
 
         sales_30  = Query.num_sales_since(Date.today - 30,  product_ids)
         sales_60  = Query.num_sales_since(Date.today - 60,  product_ids)
@@ -48,12 +49,12 @@ module Rawbotz
 
         Query.stock.each {|s| stock[s.product_id] = s.qty}
         product_ids.map do |product_id|
-          StockProduct.new(product: LocalProduct.find_by(product_id: product_id),
+          StockProduct.new(product: LocalProduct.unscoped.find_by(product_id: product_id),
                            current_stock: stock[product_id],
-                           sales_last_30: sales_30[product_id],
-                           sales_last_60: sales_60[product_id],
-                           sales_last_90: sales_90[product_id],
-                           sales_last_365: sales_365[product_id],
+                           sales_last_30: sales_30[product_id]&.qty,
+                           sales_last_60: sales_60[product_id]&.qty,
+                           sales_last_90: sales_90[product_id]&.qty,
+                           sales_last_365: sales_365[product_id]&.qty,
                            num_days_first_sale: Date.today - first_sales[product_id].to_date
                           )
         end

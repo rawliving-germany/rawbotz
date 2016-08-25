@@ -31,7 +31,7 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 0
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 20)
+                                     sales_last_30: 20
                                     )
     assert_equal 20, stock_product.corrected_sales_last_30
   end
@@ -40,7 +40,7 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 15
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10)
+                                     sales_last_30: 10
                                     )
     assert_equal 20, stock_product.corrected_sales_last_30
   end
@@ -49,16 +49,16 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 30
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10)
+                                     sales_last_30: 10
                                     )
-    assert_equal 0, stock_product.corrected_sales_last_30
+    assert_equal nil, stock_product.corrected_sales_last_30
   end
 
   def test_expected_lifetime # and _base
-    product_mock = mock_product 10
+    product_mock = mock_product 10, Date.today - 100
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10),
+                                     sales_last_30: 10,
                                      current_stock: 100
                                     )
     # Sold 10 times in 30 days, of which 10 were out of stock:
@@ -71,7 +71,7 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 10, Date.today - 40, 300
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10)
+                                     sales_last_30: 10,
                                     )
     # Sold 10 times in 30 days, of which 10 were out of stock:
     #  per day = 10 sales / 20 days
@@ -83,7 +83,7 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 10, Date.today - 61, 200
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10)
+                                     sales_last_30: 10,
                                     )
     # Sold 10 times in 30 days, of which 10 were out of stock:
     #  per day = 10 sales / 20 days
@@ -91,8 +91,8 @@ class StockProductTest < MiniTest::Test
     assert_equal 30, stock_product.sales_per_day_base
     assert_equal 10/20.0, stock_product.sales_per_day
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10),
-                                     sales_last_60: ProductQty.new(200, 20)
+                                     sales_last_30: 10,
+                                     sales_last_60: 20
                                     )
     assert_equal 60, stock_product.sales_per_day_base
     assert_equal 20/50.0, stock_product.sales_per_day
@@ -102,10 +102,10 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 10, Date.today - 61, 200
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 10),
-                                     sales_last_60: ProductQty.new(200, 30),
-                                     sales_last_90: ProductQty.new(200, 80),
-                                     sales_last_365: ProductQty.new(200, 110)
+                                     sales_last_30: 10,
+                                     sales_last_60: 30,
+                                     sales_last_90: 80,
+                                     sales_last_365: 110
                                     )
     assert_equal 10, stock_product.real_sales(30)
     assert_equal 30, stock_product.real_sales(60)
@@ -121,10 +121,10 @@ class StockProductTest < MiniTest::Test
     product_mock = mock_product 15
 
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 20),
-                                     sales_last_60: ProductQty.new(200, 40),
-                                     sales_last_90: ProductQty.new(200, 50),
-                                     sales_last_365: ProductQty.new(200, 200)
+                                     sales_last_30: 20,
+                                     sales_last_60: 40,
+                                     sales_last_90: 50,
+                                     sales_last_365: 200
                                     )
     assert_equal 40, stock_product.corrected_sales_last_30
     assert_equal stock_product.corrected_sales(30),
@@ -153,18 +153,18 @@ class StockProductTest < MiniTest::Test
   def test_corrected_sales_per_day
     product_mock = mock_product 15
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 60),
-                                     sales_last_60: ProductQty.new(200, 360)
+                                     sales_last_30: 60,
+                                     sales_last_60: 360
                                     )
-    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
-    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
+    assert_equal 4.0, stock_product.corrected_sales(30, per_days: 1)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_days: 1)
   end
 
   def test_corrected_sales_memoization
     product_mock = mock_product 15
     stock_product = StockProduct.new(product: product_mock,
-                                     sales_last_30: ProductQty.new(200, 60),
-                                     sales_last_60: ProductQty.new(200, 360)
+                                     sales_last_30: 60,
+                                     sales_last_60: 360
                                     )
     # Proper mocking would make expectation that caclulate-functions are called just once, along these lines
     #call_mock = MiniTest::Mock.new
@@ -178,10 +178,10 @@ class StockProductTest < MiniTest::Test
 
 
     assert_equal 120.0, stock_product.corrected_sales(30)
-    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
-    assert_equal 4.0, stock_product.corrected_sales(30, per_day: true)
-    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
-    assert_equal 8.0, stock_product.corrected_sales(60, per_day: true)
+    assert_equal 4.0, stock_product.corrected_sales(30, per_days: 1)
+    assert_equal 4.0, stock_product.corrected_sales(30, per_days: 1)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_days: 1)
+    assert_equal 8.0, stock_product.corrected_sales(60, per_days: 1)
     assert_equal 480.0, stock_product.corrected_sales(60)
   end
 end
