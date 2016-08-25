@@ -1,9 +1,10 @@
 require "bundler/gem_tasks"
-require 'rawgento_models'
 
 require 'rake/testtask'
 
-task :default => :spec
+require 'rawgento_models'
+
+task :default => :test
 
 RawgentoModels.load_tasks
 
