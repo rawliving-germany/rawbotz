@@ -27,6 +27,7 @@ module Rawbotz::RawbotzApp::Routing::Products
         product_id = @product.product_id
         @sales = Models::Sales.daily_since product_id
         @sales_monthly = Models::Sales.monthly_since product_id
+        @stock_product = Models::StockProductFactory.create_single @product
       rescue Exception => e
         STDERR.puts e.message
         STDERR.puts e.backtrace
