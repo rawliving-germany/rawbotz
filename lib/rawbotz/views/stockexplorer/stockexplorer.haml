@@ -103,44 +103,44 @@
               #flash.ui-state-highlight
                 = error_icon
                 = product.order_info
-          %td
+          %td(title="Product Packsize")
             - if product.packsize.present?
               = product.packsize
             - else
               %i.fa.fa-ban
-          %td
+          %td(title="Product Stock (current)")
             = @stock[product.product_id]
-          %td.left-bordered
-            = @sales_30[product.product_id]
-          %td
+          %td.left-bordered(title="Sales in last 30 days")
+            = @sales_30[product.product_id].qty
+          %td(title="Number of days where product was out of stock in the last 30 days")
             = @out_of_stock_days_30[product.product_id]
             - if product.stock_items.present? && (Date.today - product.stock_items.order(created_at: :asc).first.created_at.to_date).to_i < 30
               .stock_warning(title="Warning, first stock for this product is from #{product.stock_items.order(created_at: :asc).first.created_at}")
                 = error_icon
-          %td.left-bordered
-            = @sales_60[product.product_id]
+          %td.left-bordered(title="Sales in the last 60 days")
+            = @sales_60[product.product_id].qty
           %td
             = @out_of_stock_days_60[product.product_id]
           %td
-            = (@sales_60[product.product_id].to_f / 2.0).to_i
+            = (@sales_60[product.product_id].qty.to_f / 2.0).to_i
             \/
-            = (@sales_60[product.product_id].to_f / (60 - @out_of_stock_days_60[product.product_id]) * 30).to_i
-          %td.left-bordered
-            = @sales_90[product.product_id]
+            = (@sales_60[product.product_id].qty.to_f / (60 - @out_of_stock_days_60[product.product_id]) * 30).to_i
+          %td.left-bordered(title="Sales in the last 90 days")
+            = @sales_90[product.product_id].qty
           %td
             = @out_of_stock_days_90[product.product_id]
           %td
-            = (@sales_90[product.product_id].to_f / 3.0).to_i
+            = (@sales_90[product.product_id].qty.to_f / 3.0).to_i
             \/
-            = (@sales_90[product.product_id].to_f / (90 - @out_of_stock_days_90[product.product_id]) * 30).to_i
+            = (@sales_90[product.product_id].qty.to_f / (90 - @out_of_stock_days_90[product.product_id]) * 30).to_i
           %td.left-bordered
-            = @sales_356[product.product_id]
+            = @sales_356[product.product_id].qty
           %td
             = @out_of_stock_days_356[product.product_id]
           %td
-            = (@sales_356[product.product_id].to_f / 11.86).to_i
+            = (@sales_356[product.product_id].qty.to_f / 11.86).to_i
             \/
-            = (@sales_356[product.product_id].to_f / (356 - @out_of_stock_days_356[product.product_id]) * 30).to_i
+            = (@sales_356[product.product_id].qty.to_f / (356 - @out_of_stock_days_356[product.product_id]) * 30).to_i
           -#%td
           -#  - if product_stock && product_monthly_sales
           -#    -# red/yellow/green
