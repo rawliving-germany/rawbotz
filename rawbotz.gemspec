@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'haml',            '~> 4.0'
   spec.add_dependency 'pdfkit',          '~> 0.8'
   spec.add_dependency "rawgento_models", '~> 0.5'
-  spec.add_dependency "rawgento_db",     '~> 0.3'
+  spec.add_dependency "rawgento_db",     '~> 0.3.1'
   spec.add_dependency "magento_remote",  '~> 0.4.1'
   spec.add_dependency "terminal-table",  '~> 1.5'
   spec.add_dependency "bcrypt",          '~> 3.1.11'
