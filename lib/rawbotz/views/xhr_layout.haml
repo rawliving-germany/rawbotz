@@ -1,0 +1,26 @@
+.pure-u-1#main
+  - if flash
+    - if msg = flash.delete(:error)
+      #flash.ui-state-error
+        = error_icon
+        = msg.join(" | ")
+    - if msg = flash.delete(:success)
+      #flash.ui-state-highlight
+        = success_icon
+        = msg.join(" | ")
+    - if msg = flash.delete(:failure)
+      #flash.ui-state-highlight
+        = error_icon
+        = msg.join(" | ")
+    - if msg = flash.delete(:info)
+      #flash.ui-state-highlight
+        = info_icon
+        = msg.join(" | ")
+    -# Consume the remainder
+    - if flash.length > 0
+      #flash.ui-state-highlight
+        - flash.each do |f|
+          = error_icon
+          = flash.delete(f[0]).join(" | ")
+
+  =yield
