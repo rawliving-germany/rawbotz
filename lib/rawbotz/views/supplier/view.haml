@@ -35,6 +35,9 @@
     %li
       %a(href="/stockexplorer/#{@supplier.id}")
         Stock explorer Pack icons
+    %li
+      %a(href="/supplier/#{@supplier.id}/organic_deliveries")
+        Organic Deliveries list
   #tab_products
     %h2 Products of #{@supplier.name}
     = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}

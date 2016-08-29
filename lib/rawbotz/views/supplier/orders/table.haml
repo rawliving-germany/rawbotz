@@ -1,8 +1,10 @@
 %h1 Organic Deliveries table
 
-%a(href="/suppliers/orders.csv")
+%a(href="/supplier/#{@supplier.id}/organic_deliveries.csv")
   %i.fa.fa-file
   Download csv
+
+%br
 
 %table.pure-table
   %thead
@@ -13,20 +15,22 @@
       %th order date
       %th order number
       %th supplier
+      %th organic
   %tbody
-    - Supplier.find_each do |supplier|
-      - supplier.orders.find_each do |order|
-        - if order.order_items.where("num_stocked > 0").present?
+    -# includes(:local_product).where('local_product.organic = ?', true)
+    - @supplier.orders.find_each do |order|
+      - if order.order_items.where("num_stocked > 0").present?
+        %tr
+          %td(colspan=6)
+            %center
+              %em
+                Order #{order.remote_order_id} from #{order.supplier.name}
+        - order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").each do |item|
           %tr
-            %td(colspan=6)
-              %center
-                %em
-                  Order #{order.remote_order_id} from #{order.supplier.name}
-          - order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").each do |item|
-            %tr
-              %td= product_link item.local_product
-              %td= item.num_stocked
-              %td= order.stocked_at
-              %td= order.ordered_at
-              %td= order.remote_order_id
-              %td= order.supplier.name
+            %td= product_link item.local_product
+            %td= item.num_stocked
+            %td= order.stocked_at
+            %td= order.ordered_at
+            %td= order.remote_order_id
+            %td= order.supplier.name
+            %td= bool_icon(item.local_product.organic?)

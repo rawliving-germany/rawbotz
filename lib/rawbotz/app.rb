@@ -101,8 +101,8 @@ class RawbotzApp < Sinatra::Base
   # post '/supplier/:id'
   register Rawbotz::RawbotzApp::Routing::Suppliers
 
-  # get  '/suppliers/orders'
-  # get  '/suppliers/orders.csv'
+  # get '/supplier/:id/organic_deliveries'
+  # get '/supplier/:id/organic_deliveries.csv'
   register Rawbotz::RawbotzApp::Routing::Suppliers::Orders
 
   # get '/stock'
