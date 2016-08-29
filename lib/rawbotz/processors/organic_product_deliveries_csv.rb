@@ -16,12 +16,14 @@ module Rawbotz
     private
 
     def self.headings
-      ["product", "qty stocked", "stock date", "order date", "order nr", "supplier"]
+      ["product", "qty stocked", "stock date",
+       "order date", "order nr", "supplier"]
     end
 
     def self.supplier_lines supplier, csv
       supplier.orders.find_each do |order|
-        if order.order_items.where("num_stocked > 0").present?
+        # only organic (includes(:local_product).where('local_product.organic = ?', true)
+        if order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").present?
           order_lines order, csv
         end
       end
@@ -29,7 +31,7 @@ module Rawbotz
 
     def self.order_lines order, csv
       csv << ["Order #{order.remote_order_id} from #{order.supplier.name}"]
-      order.order_items.where("num_stocked > 0").each do |item|
+      order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").each do |item|
         csv << order_item_line(item)
       end
     end
@@ -42,6 +44,5 @@ module Rawbotz
        item.order.remote_order_id,
        item.order.supplier.name]
     end
-
   end
 end
