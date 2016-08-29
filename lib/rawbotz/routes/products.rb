@@ -50,10 +50,13 @@ module Rawbotz::RawbotzApp::Routing::Products
     show_product_stock_sales_plot = lambda do
       @product = LocalProduct.unscoped.find(params[:id])
       begin
-        @sales = Models::Sales.daily_since(@product.product_id)
-      rescue
+        @stock_product = Models::StockProductFactory.create_single @product
+        @sales = Models::Sales.daily_since(@product.product_id, Date.today - @product.stock_items.order(created_at: :asc).first.created_at.to_date)
+      rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @sales = []
-        add_flash :error, 'Cannot connect to MySQL database'
+        add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
       @plot_data = Rawbotz::Datapolate.create_data @sales, @product.stock_items
       haml "product/_stock_sales_plot".to_sym, layout: :thin_layout, locals: {plot_data: @plot_data}
