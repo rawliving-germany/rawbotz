@@ -5,10 +5,10 @@ module Rawbotz
 
       def local_product_link product
         if product.present?
-          if product.name.empty?
-            "<a href=\"/product/#{product.id}\">[no product name!]</a>"
-          else
+          if !product.name&.empty?
             "<a href=\"/product/#{product.id}\">#{product.name}</a>"
+          else
+            "<a href=\"/product/#{product.id}\">[no product name!]</a>"
           end
         else
           "Product not in database"
