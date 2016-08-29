@@ -32,7 +32,7 @@ module Rawbotz
       end
 
       def self.create suppliers
-        product_ids = LocalProduct.unscoped.where(supplier_id: suppliers.map(&:id), active: true).pluck(:product_id)
+        product_ids = LocalProduct.unscoped.where(supplier_id: [*suppliers].map(&:id), active: true).pluck(:product_id)
 
         sales_30  = Query.num_sales_since(Date.today - 30,  product_ids)
         sales_60  = Query.num_sales_since(Date.today - 60,  product_ids)
