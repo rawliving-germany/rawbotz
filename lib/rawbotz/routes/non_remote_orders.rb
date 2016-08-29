@@ -19,29 +19,20 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
       else
-        @order    = Order.create(state: :new, supplier: @supplier, order_method: @supplier.order_method)
-        @products = LocalProduct.supplied_by(@supplier)
-        @stock    = {}
         begin
-          @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
-          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
+          # make this survive mysql errors
+          order_creator = OrderCreator.new(@supplier)
+          order_creator.process!
+          @order = order_creator.order
+          @stock_products_hash = order_creator.stock_products_hash
+          add_flash :success, "New Order created"
+          redirect "/order/non_remote/#{@order.id}".to_sym
         rescue Exception => e
           STDERR.puts e.message
           STDERR.puts e.backtrace
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+          redirect "/supplier/#{@supplier.id}".to_sym
         end
-
-        # Get the current stock value
-        @products.find_each do |product|
-          @order.order_items.create(local_product: product,
-                                    current_stock: @stock[product.product_id],
-                                    min_stock:     nil)
-        end
-
-        @order.save
-        add_flash :success, "New Order created"
-
-        redirect "/order/non_remote/#{@order.id}".to_sym
       end
     end
 
@@ -53,11 +44,13 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
       else
-        @stock    = {}
         begin
+          # Order Creator, stock produuct hash
+          # StockProducts?
+          stock_products = Models::StockProductFactory.create @supplier
+          @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
+
           @products = @order.order_items.map{|oi| oi.local_product}
-          @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
-          RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
           STDERR.puts e.message
           STDERR.puts e.backtrace

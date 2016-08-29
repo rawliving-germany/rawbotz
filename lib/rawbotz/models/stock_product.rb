@@ -86,6 +86,11 @@ module Rawbotz
         @product.out_of_stock_days_since(Date.today - num_days)
       end
 
+      def missing for_days: 30.0
+        return nil if current_stock.nil? || sales_per_day.nil?
+        @missing_mem ||= (sales_per_day * for_days) - current_stock
+      end
+
       def sales_per_day
         case sales_per_day_base
         when 365

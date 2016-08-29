@@ -9,28 +9,7 @@
 
 #modal-plot.modal-plot
 
-#supplier_info
-  - if @supplier.order_info.present?
-    #flash.ui-state-highlight
-      = info_icon
-      %b Delivery info:
-      = @supplier.order_info
-  
-  - if @supplier.delivery_time_days
-    #flash.ui-state-highlight
-      = info_icon
-      %b Delivery Time (in days):
-      = @supplier.delivery_time_days
-  
-  - if @supplier.minimum_order_value
-    #flash.ui-state-highlight
-      = info_icon
-      %b Minimum Order Value
-      = @supplier.minimum_order_value
-      €
-  
-  - if @supplier.order_info.present? || @supplier.delivery_time_days || @supplier.minimum_order_value
-    %br
+= haml "order/_supplier_order_info_flash".to_sym, locals: {supplier: @supplier}
 
 %center
   %form#non_remote_order.pure-form(action="" method="post")
@@ -42,16 +21,25 @@
           %th Qty
           %th(title="Packsize")
             = packsize_icon
-          %th Avg. sales / m
-          %th Stock
-          %th Missing
-          %th Purchase Price
+          %th
+            Avg. sales / m
+            = sales_icon
+          %th
+            Stock
+            = stock_icon
+          %th
+            Missing
+          %th
+            Expected Duration in days
+          %th
+            Purchase Price
+            -#= price_icon
           %th Chart
       %tbody
-        - @order.order_items.find_each do |order_item|
+        -# find_each destroys order
+        - @order.order_items.to_a.sort_by{|oi| @stock_products_hash[oi.local_product.id]&.expected_stock_lifetime || 0.0}.each do |order_item|
           - product = order_item.local_product
-          - product_monthly_sales = @monthly_sales && @monthly_sales[product.product_id]
-          - product_stock = @stock[product.product_id]
+          - stock_product = @stock_products_hash[product.id]
           %tr(title="Complete sales info")
             %td
               = product_link product
@@ -74,15 +62,17 @@
                 = product.packsize
               - else
                 %i.fa.fa-ban
-            %td(title="Monthly sales of product")
-              = product_monthly_sales
-            %td(title="Product Stock")
-              = product_stock
+            %td(title="Monthly sales of product (based on ... days)")
+              - if stock_product.sales_per_day
+                = friendly_float stock_product.sales_per_day * 30.0
+              = "(#{stock_product.sales_per_day_base})"
+            %td(title="Product Stock (live)")
+              = stock_product.current_stock
             %td(title="Predicted quantity missing to stock for 30 days")
-              - if product_stock && product_monthly_sales
-                -# red/yellow/green
-                -# if negative, put button
-                = product_stock - product_monthly_sales
+              - if stock_product.missing && stock_product.missing > 0.0
+                = friendly_float stock_product.missing
+            %td(title="Expected Stock duration in days")
+              = friendly_float stock_product.expected_stock_lifetime
             %td(title="Purchase Price")
               - if product.purchase_price
                 = product.purchase_price
