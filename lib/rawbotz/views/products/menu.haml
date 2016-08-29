@@ -25,3 +25,9 @@
             %a.pure-menu-link(href="/products/link_wizard")
               %i(class="fa fa-magic")
               Product Link Wizard
+        %ul.pure-menu-list
+          %li.pure-menu-item
+            %form.pure-form(action="/products/search" method="post")
+              %input(title="Search Local Products for name, product_id or id" name="term" placeholder="product name" size="7")
+              %button.pure-button
+                %i(class="fa fa-search")
