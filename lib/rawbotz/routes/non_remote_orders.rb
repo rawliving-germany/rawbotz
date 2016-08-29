@@ -81,12 +81,13 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       end
 
       begin
-        @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
+        stock_products = Models::StockProductFactory.create @supplier
+        @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
         RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
       rescue Exception => e
         STDERR.puts e.message
         STDERR.puts e.backtrace
-        @monthly_sales = {}
+        @stock_products_hash = {}
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
 
