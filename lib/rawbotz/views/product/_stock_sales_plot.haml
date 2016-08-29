@@ -3,6 +3,11 @@
     %div
       %canvas(id="canvas" height="450" width="800")
 
+- if @stock_product.present?
+  %h2 Stock and Sales data statistics
+  = haml "stock_product/value_table".to_sym, locals: {stock_product: @stock_product}
+%br
+
 - month_datasets = []
 - if markers ||= nil
   - markers.sort_by{|m|m[0]}.last(4).each_with_index do |m,i|
