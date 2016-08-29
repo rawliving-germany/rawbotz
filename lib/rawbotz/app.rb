@@ -1,6 +1,8 @@
 require 'sinatra/base'
 require 'open-uri'
 require 'action_view' # Workaround https://github.com/haml/haml/issues/695
+require 'active_support'
+
 require 'haml'
 require 'rawbotz/helpers/icon_helper'
 require 'rawbotz/helpers/flash_helper'
@@ -13,6 +15,7 @@ require 'bcrypt'
 
 class RawbotzApp < Sinatra::Base
   include RawgentoModels
+  include ActionView::Helpers::TextHelper
 
   enable :sessions
 

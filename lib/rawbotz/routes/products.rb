@@ -14,9 +14,16 @@ module Rawbotz::RawbotzApp::Routing::Products
 
     # app.post '/products/search',    &search_products
     search_products = lambda do
-      @products = LocalProduct
-        .where('lower(name) LIKE ?', "%#{params[:term].downcase}%").limit(20).pluck(:name, :id)
-      @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
+      @term = params[:term]
+      if request.xhr?
+        @products = LocalProduct.name_ilike(@term).limit(20)
+          .pluck(:name, :id)
+        @products.map{|p| {name: p[0], product_id: p[1]}}.to_json
+      else
+        search = Models::Search.new(term: @term, fields: :all)
+        @products = search.perform!
+        haml "products/search_results".to_sym
+      end
     end
 
     # app.get  '/product/:id',        &show_product
