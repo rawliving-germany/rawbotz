@@ -26,7 +26,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
           @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
           RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
-          @monthly_sales = {}
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
 
@@ -58,7 +59,9 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
           @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
           RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
-          @monthly_sales = {}
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
+          @stock_products_hash = {}
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
         @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
@@ -88,6 +91,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @monthly_sales = Rawbotz::SalesData.sales_since(Date.today - 31 * 4, @products)
         RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
       rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @monthly_sales = {}
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
@@ -140,6 +145,8 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @stock_products = Models::StockProductFactory.create Supplier.where(id: params[:supplier_id])
         @stock_products = @stock_products.map{|s| [s.product.product_id, s]}.to_h
       rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @stock_products = {}
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
