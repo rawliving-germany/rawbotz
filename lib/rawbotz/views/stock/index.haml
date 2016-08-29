@@ -9,8 +9,7 @@
 
 - if !@wrongly_out_of_stocks.nil? && !@wrongly_out_of_stocks.empty?
   %h2 Products with stock which are set 'not in stock'
-  = haml "products/table".to_sym, locals: {products: @wrongly_out_of_stocks}
-
+  = haml "products/table".to_sym, locals: {products: @wrongly_out_of_stocks, stock: @stock}
 
 
 %h2 Stock/Sales Statistics

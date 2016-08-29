@@ -30,6 +30,7 @@ module Rawbotz::RawbotzApp::Routing::Stock
 
       mis_stocked_product_ids = RawgentoDB::Query.wrongly_not_in_stock
       @wrongly_out_of_stocks  = LocalProduct.where(product_id: mis_stocked_product_ids)
+      @stock = Rawbotz::Models::Stock.stock_for mis_stocked_product_ids
 
       haml "stock/index".to_sym
     end

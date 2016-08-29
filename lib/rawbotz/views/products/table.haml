@@ -1,3 +1,5 @@
+- stock ||= nil
+
 %table.pure-table.pure-table-striped
   %thead
     %tr
@@ -9,6 +11,9 @@
       %th
         = supplier_icon
         Supplier
+      - if stock.present?
+        %th
+          Current Stock
       %th
         = stock_icon
         = sales_icon
@@ -22,6 +27,9 @@
           = product.product_id
         %td
           = supplier_link product.supplier
+        - if stock.present?
+          %td
+            = stock[product.product_id]
         %td
           = haml "widgets/_stock_sales".to_sym, locals: {product: product}
           - stock_url = "/product/#{product.id}/stock_sales_plot"
