@@ -91,7 +91,7 @@ module Rawbotz::RawbotzApp::Routing::Products
     # app.post '/remote_products/search', &search_remote_products
     search_remote_products = lambda do
       @products = RemoteProduct.supplied_by(settings.supplier)
-        .ilike(params[:term]).limit(20).pluck(:name, :id)
+        .name_ilike(params[:term]).limit(20).pluck(:name, :id)
       @products.map do |p|
         {name: p[0], product_id: p[1]}
       end.to_json
