@@ -1,7 +1,7 @@
 require 'csv'
 
 module Rawbotz
-  class OrganicProductDeliveriesCSV
+  class OrganicProductDeliveriesVerticalCSV
     include RawgentoModels
 
     def self.generate
