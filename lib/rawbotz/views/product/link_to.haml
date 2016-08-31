@@ -2,6 +2,17 @@
 
 %h1 Link "#{@product.name}" to ...
 
+- if @product.remote_product.present?
+  %em
+    Currently linked to
+    %b
+      = @product.remote_product.name
+  %br
+
+= haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: "link_to"}
+
+%br
+
 :javascript
   $(function() {
     $( "#tabs" ).tabs();
