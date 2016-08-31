@@ -92,6 +92,7 @@ class RawbotzApp < Sinatra::Base
   # get  '/products/link_wizard/:idx'
   # get  '/product/:id/link'
   # post '/product/:id/link'
+  # get  '/product/:id/unlink'
   register Rawbotz::RawbotzApp::Routing::ProductLinks
 
   # get '/remote_cart'

@@ -35,6 +35,14 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
       haml 'product/link_to'.to_sym
     end
 
+    # app.get  '/product/:id/unlink',        &unlink_product
+    unlink_product = lambda do
+      @product = RawgentoModels::LocalProduct.find(params[:id])
+      @product.remote_product.update(local_product: nil)
+      add_flash :success, "Unlinked #{@product.name}"
+      redirect '/products/links'
+    end
+
     # app.post '/product/:id/link',          &link_product
     link_product = lambda do
       remote_product = RemoteProduct.find_by(id: params[:remote_product_id])
@@ -74,5 +82,6 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
 
     app.get  '/product/:id/link',          &link_product_view
     app.post '/product/:id/link',          &link_product
+    app.get  '/product/:id/unlink',        &unlink_product
   end
 end

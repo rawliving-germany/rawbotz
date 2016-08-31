@@ -7,6 +7,9 @@
     Currently linked to
     %b
       = @product.remote_product.name
+  %a.pure-button(href="/product/#{@product.id}/unlink")
+    = delete_icon
+    Delete this link (unlink)
   %br
 
 = haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: "link_to"}

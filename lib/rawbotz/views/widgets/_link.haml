@@ -1,6 +1,7 @@
 %form.pure-form(action="/product/#{local_product.id}/link" method="POST")
   %input(type="hidden" name="remote_product_id" id="remote_product_id")
   %input(type="hidden" name="redirect_to" value="#{redirect_to}")
+  %label(for="search-remote") Quick Link:
   %input#search-remote(placeholder="search ...")
   %button.pure-button
     Link!
