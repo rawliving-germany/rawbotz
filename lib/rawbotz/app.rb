@@ -4,9 +4,10 @@ require 'action_view' # Workaround https://github.com/haml/haml/issues/695
 require 'active_support'
 
 require 'haml'
-require 'rawbotz/helpers/icon_helper'
 require 'rawbotz/helpers/flash_helper'
 require 'rawbotz/helpers/format_helper'
+require 'rawbotz/helpers/icon_helper'
+require 'rawbotz/helpers/js_helper'
 require 'rawbotz/helpers/resource_link_helper'
 require 'rawbotz/helpers/order_item_color_helper'
 require 'tilt/haml'
@@ -49,9 +50,10 @@ class RawbotzApp < Sinatra::Base
   end
 
   helpers do ; end
-  helpers Rawbotz::Helpers::IconHelper
   helpers Rawbotz::Helpers::FlashHelper
   helpers Rawbotz::Helpers::FormatHelper
+  helpers Rawbotz::Helpers::IconHelper
+  helpers Rawbotz::Helpers::JSHelper
   helpers Rawbotz::Helpers::ResourceLinkHelper
   helpers Rawbotz::Helpers::OrderItemColorHelper
 
