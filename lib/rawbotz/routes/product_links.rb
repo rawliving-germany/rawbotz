@@ -7,8 +7,9 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
 
     # app.get  '/products/links',     &show_products_links
     show_products_links = lambda do
-      @local_products = LocalProduct.supplied_by(settings.supplier)
+      @local_products  = LocalProduct.supplied_by(settings.supplier)
       @remote_products = RemoteProduct.supplied_by(settings.supplier)
+      @weird_products  = RemoteProduct.where.not(local_product_id: nil).joins(:local_product).where.not(local_products: {supplier_id: 1})
       haml "products/links".to_sym
     end
 
