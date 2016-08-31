@@ -55,10 +55,12 @@ Where stock does not last for 10 days.
         %th(title=avg_90_title)
           = sales_icon
           356
+        %th(title="Expected Stock Lifetime in days")
+          Exp. Shelve live
         %th
           Notes
     %tbody
-      - suppliers_stock_product = @stock_products.select{|s|s.product.supplier == supplier}
+      - suppliers_stock_product = @stock_products.select{|s| s.product.supplier == supplier}
       - if suppliers_stock_product.empty?
         %tr
           %td(colspan=6)
@@ -106,6 +108,9 @@ Where stock does not last for 10 days.
             - if p.num_days_first_sale < 365
               = sales_warn
           %td
+            - if p.expected_stock_lifetime
+              = friendly_float(p.expected_stock_lifetime)
+          %td.notes
             - if p.num_days_first_sale.to_i < 10
               New Product! (First sale #{p.num_days_first_sale.to_i} days ago)
             - if p.days_since_first_stock_date.to_i < 30
