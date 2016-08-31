@@ -1,10 +1,10 @@
 - if !product.hidden?
-  %form.pure-form.pure-form-aligned(action="/product/#{product.id}/hide" method="post")
+  %form.pure-form(action="/product/#{product.id}/hide" method="post" style="display: inline-block;")
     %button.pure-button.pure-button-primary(type="submit")
       %i.fa.fa-ban
       Hide
 - else
-  %form.pure-form.pure-form-aligned(action="/product/#{product.id}/unhide" method="post")
+  %form.pure-form(action="/product/#{product.id}/unhide" method="post" style="display: inline-block;")
     %button.pure-button.pure-button-primary(type="submit")
       %i.fa.fa-eye
       Unhide
