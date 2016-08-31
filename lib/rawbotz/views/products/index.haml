@@ -6,7 +6,9 @@
 
 :javascript
   $(document).ready(function() {
-    $( "#tabs" ).tabs();
+    $("#tabs").tabs({
+      activate: function(event, ui) { window.location.hash = ui.newPanel.attr('id'); }
+    });
   });
 
 #tabs
