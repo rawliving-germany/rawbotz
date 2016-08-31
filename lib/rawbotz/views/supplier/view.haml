@@ -8,16 +8,7 @@
 %h2 Supplier #{@supplier.name}
 
 :javascript
-  $(function() {
-    $( "#tabs" ).tabs({
-      beforeLoad: function( event, ui ) {
-        ui.jqXHR.fail(function() {
-          ui.panel.html("Couldn't load this tab, there was an error.");
-        });
-      },
-      activate: function(event, ui) { window.location.hash = ui.newPanel.attr('id'); }
-     });
-  });
+  #{jqui_tab_init}
 
 #tabs
   %ul

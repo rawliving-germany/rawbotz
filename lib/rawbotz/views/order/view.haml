@@ -16,9 +16,7 @@
     -#%input(type="hidden" name="_method" value="put")
 
     :javascript
-      $(function() {
-        $( "#tabs" ).tabs();
-      });
+      #{jqui_tab_init}
 
     #tabs
       - supplier_name = settings.supplier

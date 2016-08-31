@@ -5,11 +5,7 @@
 #modal-plot.modal-plot
 
 :javascript
-  $(document).ready(function() {
-    $("#tabs").tabs({
-      activate: function(event, ui) { window.location.hash = ui.newPanel.attr('id'); }
-    });
-  });
+  #{jqui_tab_init}
 
 #tabs
   %ul

@@ -3,9 +3,7 @@
 %h1 Orders
 
 :javascript
-  $(document).ready(function() {
-    $( "#tabs" ).tabs();
-  });
+  #{jqui_tab_init}
 
 
 - if Order.in_state('processing').present?
