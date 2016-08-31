@@ -15,7 +15,11 @@ module Rawbotz
   module RemoteShop
     def self.product_page_url(product, settings)
       # settings could be memoized
-      "#{settings['remote_shop']['base_uri']}catalog/product/view/id/#{product.product_id}"
+      if product.is_a? RawgentoModels::RemoteProduct
+        "#{settings['remote_shop']['base_uri']}catalog/product/view/id/#{product.product_id}"
+      elsif product.is_a? RawgentoModels::LocalProduct
+        product_page_url product.remote_product, settings
+      end
     end
     def self.cart_page_url(settings)
       "#{settings['remote_shop']['base_uri']}checkout/cart/"
