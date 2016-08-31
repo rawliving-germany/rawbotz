@@ -36,15 +36,23 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
 
     # app.post '/product/:id/link',          &link_product
     link_product = lambda do
-      remote_product = RemoteProduct.find(params[:remote_product_id])
-      @product = RawgentoModels::LocalProduct.find(params[:id])
-      @product.remote_product = remote_product
-      @product.save
+      remote_product = RemoteProduct.find_by(id: params[:remote_product_id])
+
+      if remote_product.present?
+        @product = RawgentoModels::LocalProduct.find(params[:id])
+        if remote_product.local_product.present?
+          add_flash :info, "Changing link of '#{remote_product.name}', was: #{remote_product.local_product.name}"
+        end
+        @product.remote_product = remote_product
+        @product.save
+        add_flash :success, "Linked Product '#{@product.name}' to '#{@product.remote_product.name}'"
+      else
+        add_flash :error, "Could not set link for '#{@product.name}'."
+      end
 
       if request.xhr?
         remote_product_link remote_product
       else
-        add_flash :success, "Linked Product '#{@product.name}' to '#{@product.remote_product.name}'"
 
         if params[:redirect_to] == "link_wizard"
           redirect '/products/link_wizard'
@@ -58,6 +66,7 @@ module Rawbotz::RawbotzApp::Routing::ProductLinks
       end
     end
 
+    # routes
     app.get  '/products/links',            &show_products_links
     app.get  '/products/link_wizard',      &show_link_wizard
     app.get  '/products/link_wizard/:idx', &show_link_wizard_id
