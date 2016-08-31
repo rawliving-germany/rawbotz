@@ -37,8 +37,11 @@ module Rawbotz
 
   # Configure components (from config file path), exit 1 if fails.
   # 'logs' to STDERR (TODO)
-  def self.configure!
+  def self.configure! conf_file_path=nil
     begin
+      if !conf_file_path.nil?
+        @@conf_file_path = conf_file_path
+      end
       RawgentoModels.establish_connection @@conf_file_path
     rescue
       STDERR.puts "Could not establish rawbotz-database connection (read config from: #{@@conf_file_path})"
