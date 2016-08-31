@@ -27,18 +27,22 @@
     .pure-control-group
       %label(for="supplier") Supplier
       = supplier_link @product.supplier
-    - if @product.supplier == settings.supplier || @product.remote_product.present?
-      .pure-control-group
-        %label(for="supplier") Remote Product
+    .pure-control-group
+      %label(for="linked") Remote Product
+      - if @product.supplier == settings.supplier || @product.remote_product.present?
         - if @product.supplier != settings.supplier
           = error_icon
           = remote_product_link @product
           (but not from remote shop!)
+          %a(href="/product/#{@product.id}/link") [Change Link]
         - elsif @product.remote_product.nil?
           not linked
-          %a(href="/product/#{@product.id}/link") Linking View
+          %a(href="/product/#{@product.id}/link") Add Link
         - else
           = remote_product_link @product
+          %a(href="/product/#{@product.id}/link") [Change Link]
+      - else
+        %a(href="/product/#{@product.id}/link") Linking View
     - if @product.supplier == settings.supplier || @product.remote_product.present?
       .pure-control-group
         %label(for="remote_frontend") Remote Frontend Product page
@@ -72,9 +76,16 @@
 
 
 %h2 Actions
-- if @product.supplier == settings.supplier && !@product.remote_product.present?
-  = haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: 'product'}
-  %br
+- if @product.supplier == settings.supplier
+  - if @product.remote_product.present?
+    %a.pure-button(href="/product/#{@product.id}/link")
+      = link_icon
+      Change Link
+  - else
+    %a.pure-button(href="/product/#{@product.id}/link")
+      = link_icon
+      Set link
+  -#= haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: 'product'}
 = haml :"_hide_unhide_button", locals: {product: @product}
 
 - if @plot_data.any?
