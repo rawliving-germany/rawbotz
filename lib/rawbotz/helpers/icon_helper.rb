@@ -23,7 +23,7 @@ module Rawbotz
         icon "info-circle", tooltip_text: tooltip_text
       end
       def link_icon tooltip_text: nil
-        icon "info-link", tooltip_text: tooltip_text
+        icon "link", tooltip_text: tooltip_text
       end
       def mail_icon tooltip_text: nil
         icon "envelope-o", tooltip_text: tooltip_text
@@ -78,6 +78,9 @@ module Rawbotz
       end
       def true_icon tooltip_text: nil
         icon "check-circle-o", tooltip_text: tooltip_text
+      end
+      def unlink_icon tooltip_text: nil
+        icon "unlink", tooltip_text: tooltip_text
       end
       def view_icon tooltip_text: nil
         icon "eye", tooltip_text: tooltip_text

@@ -76,15 +76,14 @@
 
 
 %h2 Actions
-- if @product.supplier == settings.supplier
-  - if @product.remote_product.present?
-    %a.pure-button(href="/product/#{@product.id}/link")
-      = link_icon
-      Change Link
-  - else
-    %a.pure-button(href="/product/#{@product.id}/link")
-      = link_icon
-      Set link
+- if @product.remote_product.present?
+  %a.pure-button(href="/product/#{@product.id}/link")
+    = link_icon
+    Change Link
+- elsif @product.supplier == settings.supplier
+  %a.pure-button(href="/product/#{@product.id}/link")
+    = link_icon
+    Set link
   -#= haml "widgets/_link".to_sym, locals: {local_product: @product, redirect_to: 'product'}
 = haml :"_hide_unhide_button", locals: {product: @product}
 
