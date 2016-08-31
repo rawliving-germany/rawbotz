@@ -35,6 +35,7 @@ module Rawbotz
         end
       end
 
+      # Defaults to Sale Per Day, otherwise adjust num_days
       def corrected_sales num_days, per_days: num_days
         factor = num_days.to_f / per_days
         sales = nil
