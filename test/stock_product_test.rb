@@ -11,7 +11,7 @@ class StockProductTest < MiniTest::Test
   include Rawbotz::Models
   include RawgentoDB
 
-  def mock_product out_of_stock_days, first_stock_date=nil, num_days_first_sale=0
+  def mock_product out_of_stock_days, first_stock_date=nil
     Class.new do
       define_singleton_method(:out_of_stock_days_since) {|_arg| return out_of_stock_days}
       define_singleton_method(:first_stock_record) do
@@ -68,7 +68,7 @@ class StockProductTest < MiniTest::Test
   end
 
   def test_average_sales_base
-    product_mock = mock_product 10, Date.today - 40, 300
+    product_mock = mock_product 10, Date.today - 40
 
     stock_product = StockProduct.new(product: product_mock,
                                      sales_last_30: 10,
@@ -80,10 +80,11 @@ class StockProductTest < MiniTest::Test
   end
 
   def test_average_sales_base_60
-    product_mock = mock_product 10, Date.today - 61, 200
+    product_mock = mock_product 10, Date.today - 61
 
     stock_product = StockProduct.new(product: product_mock,
                                      sales_last_30: 10,
+                                     num_days_first_sale: 200
                                     )
     # Sold 10 times in 30 days, of which 10 were out of stock:
     #  per day = 10 sales / 20 days
@@ -92,14 +93,15 @@ class StockProductTest < MiniTest::Test
     assert_equal 10/20.0, stock_product.sales_per_day
     stock_product = StockProduct.new(product: product_mock,
                                      sales_last_30: 10,
-                                     sales_last_60: 20
+                                     sales_last_60: 20,
+                                     num_days_first_sale: 200
                                     )
     assert_equal 60, stock_product.sales_per_day_base
     assert_equal 20/50.0, stock_product.sales_per_day
   end
 
   def test_real_sales
-    product_mock = mock_product 10, Date.today - 61, 200
+    product_mock = mock_product 10, Date.today - 61
 
     stock_product = StockProduct.new(product: product_mock,
                                      sales_last_30: 10,
