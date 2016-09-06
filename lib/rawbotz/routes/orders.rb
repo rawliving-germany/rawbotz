@@ -44,6 +44,8 @@ module Rawbotz::RawbotzApp::Routing::Orders
       begin
         RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
       rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
       haml 'order/view'.to_sym
@@ -54,11 +56,13 @@ module Rawbotz::RawbotzApp::Routing::Orders
       @order = Order.find(params[:id])
       params.each do |k,v|
         if k && k.start_with?("item_") && v != ""
+          # @order.order_items.find ?
           OrderItem.find(k[5..-1]).update(num_wished: v.to_i)
         end
       end
       @order.internal_comment = params[:internal_comment]
       @order.save
+
       if params['action'] == 'order'
         @order.update(state: :queued)
         add_flash :success, 'Order queued'
@@ -72,6 +76,8 @@ module Rawbotz::RawbotzApp::Routing::Orders
         begin
           RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
         rescue Exception => e
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
         haml "order/view".to_sym

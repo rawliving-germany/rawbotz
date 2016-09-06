@@ -12,6 +12,8 @@ module Rawbotz::RawbotzApp::Routing::Stock
         @stock_products = Rawbotz::Models::StockProductFactory.create @suppliers
       rescue Exception => e
         @stock_products = []
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         add_flash :error, "Error: #{e.message}"
       end
 
@@ -24,6 +26,8 @@ module Rawbotz::RawbotzApp::Routing::Stock
       begin
         @stock_products = Rawbotz::Models::StockProductFactory.create @suppliers
       rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @stock_products = []
         add_flash :error, "Error: #{e.message}"
       end
@@ -41,6 +45,8 @@ module Rawbotz::RawbotzApp::Routing::Stock
       begin
         @stock_products = Rawbotz::Models::StockProductFactory.create @suppliers
       rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
         @stock_products = []
         add_flash :error, "Error: #{e.message}"
       end
