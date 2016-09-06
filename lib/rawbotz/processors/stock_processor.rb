@@ -28,7 +28,7 @@ module Rawbotz
         end
       end
 
-      if @order.order_items.processible.where("num_stocked IS NULL").count == 0
+      if @order.order_items.processible.ordered.where("num_stocked IS NULL").count == 0
         @order.update(state: 'stocked', stocked_at: DateTime.now)
       else
         @errors << "Not all items stocked"
