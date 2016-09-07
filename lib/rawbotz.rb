@@ -4,6 +4,7 @@ require 'rawgento_db'
 require "rawbotz/version"
 require "rawbotz/remote_shop"
 require "rawbotz/local_shop"
+require "rawbotz/processors/processor"
 require "rawbotz/processors/stock_processor"
 require "rawbotz/processors/order_processor"
 require "rawbotz/processors/order_creator"
