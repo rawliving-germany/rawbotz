@@ -41,7 +41,7 @@ module Rawbotz
       def create_order_items_magento
         RawgentoDB::Query.understocked.each do |product_id, name, min_qty, stock|
           local_product = LocalProduct.find_by(product_id: product_id)
-          if local_product.present? && local_product.supplier == settings.supplier
+          if local_product.present? && local_product.supplier == @order.supplier
             @order.order_items.create(local_product: local_product,
                                       current_stock: stock,
                                       min_stock: min_qty)
