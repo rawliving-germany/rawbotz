@@ -76,8 +76,15 @@ class MailTemplateTest < MiniTest::Test
       OI_BARE
     ]}
     order = OpenStruct.new order
-    result = Rawbotz::MailTemplate.extract_subject(template, order)
+    result = MailTemplate.extract_subject(template, order)
     assert_equal "Order", result
+  end
+
+  def test_split_mail_field
+    simple = MailTemplate.split_mail_field "me@ma.il"
+    assert_equal ["me@ma.il"], simple
+    multi = MailTemplate.split_mail_field "me@ma.il you@po.st"
+    assert_equal ["me@ma.il"], simple
   end
 
   def test_mailto_url_creation

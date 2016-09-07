@@ -46,6 +46,10 @@ module Rawbotz
       end
     end
 
+    def self.split_mail_field adresses_text
+      adresses = (adresses_text.to_s || "").split
+    end
+
     def self.create_mailto_url supplier, order
       mail_preview = self.consume supplier[:order_template], order
       subject = self.extract_subject supplier[:order_template], order
