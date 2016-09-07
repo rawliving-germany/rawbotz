@@ -42,28 +42,27 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       if @supplier.order_template.to_s == ""
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
-      else
-        begin
-          # Order Creator, stock produuct hash
-          # StockProducts?
-          stock_products = Models::StockProductFactory.create @supplier
-          @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
-
-          @products = @order.order_items.map{|oi| oi.local_product}
-        rescue Exception => e
-          STDERR.puts e.message
-          STDERR.puts e.backtrace
-          @stock_products_hash = {}
-          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
-        end
-        @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
-          @supplier.order_template, @order)
-        @mail_preview_text    = Rawbotz::MailTemplate.consume(
-          @supplier.order_template, @order)
-        @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
-          @supplier, @order)
-        haml "order/non_remote".to_sym
       end
+
+      begin
+        # Add Order Creator, stock product hash?
+        stock_products = Models::StockProductFactory.create @supplier
+        @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
+
+        @products = @order.order_items.map{|oi| oi.local_product}
+      rescue Exception => e
+        STDERR.puts e.message
+        STDERR.puts e.backtrace
+        @stock_products_hash = {}
+        add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+      end
+      @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
+        @supplier.order_template, @order)
+      @mail_preview_text    = Rawbotz::MailTemplate.consume(
+        @supplier.order_template, @order)
+      @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
+        @supplier, @order)
+      haml "order/non_remote".to_sym
     end
 
     # app.post '/order/non_remote/:order_id', &show_supplier_order_preview
