@@ -66,7 +66,6 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @supplier = Supplier.find(params[:supplier_id])
       @products = @supplier.local_products
       @order    = Order.find(params[:order_id])
-      @stock    = {}
 
       # Certain orders should not be changed
       if @order.state != 'new'
@@ -77,7 +76,6 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       begin
         stock_products = Models::StockProductFactory.create @supplier
         @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
-        RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
       rescue Exception => e
         STDERR.puts e.message
         STDERR.puts e.backtrace
@@ -85,27 +83,22 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
 
-      params.select{|p| p.start_with?("item_")}.each do |p, val|
-        # why > 0 ?
-        if val && val.to_i > 0
-          qty = val.to_i
-          oi = @order.order_items.where(local_product_id: p[5..-1]).first_or_create
-          oi.update(num_wished: qty)
-        end
-      end
+      order_item_params = OrderItemParams.new(params, @order)
+      order_item_params.create_or_change_order_items
+
       @order.public_comment   = params[:public_comment]
       @order.internal_comment = params[:internal_comment]
 
       @order_mail = Rawbotz::MailTemplate.create(@order)
-
       @order.order_result = @order_mail.body
+
       @order.ordered_at = DateTime.now
       @order.save
+
       if params['action'] == 'fix'
         @order.order_items.find_each do |oi|
-          oi.num_ordered   = oi.num_wished
-          oi.current_stock = @stock[oi.local_product.product_id]
-          oi.save
+          stock = @stock_products_hash[oi.local_product.id]&.current_stock
+          oi.update(num_ordered: oi.num_wished, current_stock: stock)
         end
         @order.update(state: :mailed)
         add_flash :success, "Order marked as mailed"
