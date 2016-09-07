@@ -17,22 +17,14 @@ module Rawbotz::RawbotzApp::Routing::Orders
         add_flash :message, "Already one Order in progress"
         @order = settings.supplier.orders.where(state: 'new').first
       else
-        @order = Order.create(state: :new)
-        @order.supplier     = settings.supplier
-        @order.order_method = :magento
-
-        # There is hell a lot of products missing if with remote order
-        RawgentoDB::Query.understocked.each do |product_id, name, min_qty, stock|
-          local_product = LocalProduct.find_by(product_id: product_id)
-          if local_product.present? && local_product.supplier == settings.supplier
-            @order.order_items.create(local_product: local_product,
-                                      current_stock: stock,
-                                      min_stock: min_qty)
-          end
-          # else none of our business
+        order_creator = OrderCreator.new(supplier).process!
+        # This might create StockProducts that would be nice to have
+        @order = order_creator.order
+        if order_creator.succeeded?
+          add_flash :success, order_creator.messages
+        else
+          add_flash :error, order_creator.messages
         end
-        @order.save
-        add_flash :success, "New Order created"
       end
       redirect "/order/#{@order.id}"
     end
