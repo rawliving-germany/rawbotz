@@ -10,6 +10,11 @@
 = haml "order/_head".to_sym, locals: {order: @order}
 %br
 
+%h2 Content
+= @order.order_items.count
+Items.
+%br
+
 %table.pure-table.pure-table-striped
   %thead
     %tr

@@ -11,6 +11,14 @@
 
 = haml "order/_head".to_sym, locals: {order: @order}
 
+= haml "order/_order_actions".to_sym, locals: {order: @order}
+%br
+
+%h2 Content
+= @order.order_items.count
+Items.
+%br
+
 - if @order.state == "new"
   %form.pure-form.pure-form-aligned(action="" method="post")
     -#%input(type="hidden" name="_method" value="put")
@@ -50,7 +58,7 @@
       Internal Comment
     %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
     %br
-    = haml "order/_order_actions".to_sym, locals: {order: @order}
+    = haml "order/_order_form_actions".to_sym, locals: {order: @order}
 - else
   = haml "order/_order_actions".to_sym, locals: {order: @order}
   %br
