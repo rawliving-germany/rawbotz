@@ -2,6 +2,7 @@ require 'rawbotz/routes'
 require 'pdfkit'
 
 module Rawbotz::RawbotzApp::Routing::Orders
+  include Rawbotz
   include RawgentoModels
 
   def self.registered(app)
@@ -17,7 +18,8 @@ module Rawbotz::RawbotzApp::Routing::Orders
         add_flash :message, "Already one Order in progress"
         @order = settings.supplier.orders.where(state: 'new').first
       else
-        order_creator = OrderCreator.new(supplier).process!
+        order_creator = Processors::OrderCreator.new(settings.supplier)
+        order_creator.process!
         # This might create StockProducts that would be nice to have
         @order = order_creator.order
         if order_creator.succeeded?

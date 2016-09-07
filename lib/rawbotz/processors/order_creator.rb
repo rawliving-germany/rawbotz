@@ -8,22 +8,29 @@ module Rawbotz
       def initialize(supplier)
         @success_message = "New Order created"
         @supplier = supplier
-        super
+        super()
       end
 
       # Returns [errors, order, stock_products(hash)]
       def process!
-        if @supplier.order_method.empty?
+        if @supplier.order_method.blank?
           STDERR.puts "Supplier without order_method found! Assume 'mail'"
         end
 
         @order = Order.create(state: :new, supplier: @supplier,
                               order_method: @supplier.order_method)
 
-        if @order.order_method == "magento"
-          create_order_items_magento
-        else
-          create_order_items_mail
+        begin
+          if @order.order_method == "magento"
+            create_order_items_magento
+          else
+            create_order_items_mail
+          end
+        rescue Exception => e
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
+          @errors << e.message
+          @order.update(state: "error: #{e.message}")
         end
         if !@order.save
           @errors << "Order could not be saved"

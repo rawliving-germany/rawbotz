@@ -15,24 +15,23 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
     # app.get  '/order/non_remote/:supplier_id/new', &create_supplier_order
     create_supplier_order = lambda do
       @supplier = Supplier.find(params[:supplier_id])
+
       if @supplier.order_template.to_s == ""
         add_flash :warning, "You need to set the mailer template to order from this supplier"
         redirect "/supplier/#{@supplier.id}#tab_order_settings"
+      end
+
+      order_creator = Processors::OrderCreator.new(@supplier)
+      order_creator.process!
+      @order = order_creator.order
+      @stock_products_hash = order_creator.stock_products_hash
+
+      if order_creator.succeeded?
+        add_flash :success, order_creator.messages
+        redirect "/order/non_remote/#{@order.id}".to_sym
       else
-        begin
-          # make this survive mysql errors
-          order_creator = OrderCreator.new(@supplier)
-          order_creator.process!
-          @order = order_creator.order
-          @stock_products_hash = order_creator.stock_products_hash
-          add_flash :success, "New Order created"
-          redirect "/order/non_remote/#{@order.id}".to_sym
-        rescue Exception => e
-          STDERR.puts e.message
-          STDERR.puts e.backtrace
-          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
-          redirect "/supplier/#{@supplier.id}".to_sym
-        end
+        add_flash :error, order_creator.messages
+        redirect "/supplier/#{@supplier.id}".to_sym
       end
     end
 
