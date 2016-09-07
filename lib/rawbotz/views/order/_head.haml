@@ -6,7 +6,7 @@
       %dt
         Supplier
       %dd
-        = order.supplier.try(:name)
+        = supplier_link order.supplier
       %dt
         Created at
       %dd
@@ -63,7 +63,3 @@
   .public_comment
     %h3 Public Comment
     = order.public_comment
-
-%h2 Content
-= order.order_items.count
-Items.
