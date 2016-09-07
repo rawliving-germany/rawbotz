@@ -45,7 +45,6 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       end
 
       begin
-        # Add Order Creator, stock product hash?
         stock_products = Models::StockProductFactory.create @supplier
         @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
 
