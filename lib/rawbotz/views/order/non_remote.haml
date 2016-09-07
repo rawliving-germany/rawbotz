@@ -145,15 +145,16 @@
 -#Edit supplier ...
 
 %br
-- if @mail_preview_text.to_s != ""
+- if @order_mail.body != ""
   %table.pure-table
     %tr
       %td
         %h2 Mail preview
-        %pre~ "SUBJECT: #{@mail_preview_subject}"
-        %pre~ "TO: #{@supplier.email}"
-        %pre~ @mail_preview_text
-        %a{:href => @mailto_url, :target => 'rawbotz_mail_order'}
+        %pre~ "SUBJECT: #{@order_mail.subject}"
+        %pre~ "TO: #{@order_mail.to}"
+        %pre~ "CC: #{@order_mail.cc.join(' ')}"
+        %pre~ @order_mail.body
+        %a{:href => @order_mail.mailto_url, :target => 'rawbotz_mail_order'}
           Open mail
       %td
         %h2 Mail template

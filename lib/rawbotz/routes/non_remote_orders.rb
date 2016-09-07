@@ -55,12 +55,9 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
         @stock_products_hash = {}
         add_flash :error, "Cannot connect to MySQL database (#{e.message})"
       end
-      @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
-        @supplier.order_template, @order)
-      @mail_preview_text    = Rawbotz::MailTemplate.consume(
-        @supplier.order_template, @order)
-      @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
-        @supplier, @order)
+
+      @order_mail = Rawbotz::MailTemplate.create(@order)
+
       haml "order/non_remote".to_sym
     end
 
@@ -99,14 +96,9 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       @order.public_comment   = params[:public_comment]
       @order.internal_comment = params[:internal_comment]
 
-      @mail_preview_subject = Rawbotz::MailTemplate.extract_subject(
-        @supplier.order_template, @order)
-      @mail_preview_text    = Rawbotz::MailTemplate.consume(
-        @supplier.order_template, @order)
-      @mailto_url           = Rawbotz::MailTemplate.create_mailto_url(
-        @supplier, @order)
+      @order_mail = Rawbotz::MailTemplate.create(@order)
 
-      @order.order_result = @mail_preview_text
+      @order.order_result = @order_mail.body
       @order.ordered_at = DateTime.now
       @order.save
       if params['action'] == 'fix'
