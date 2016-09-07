@@ -21,16 +21,17 @@
           %th Qty
           %th(title="Packsize")
             = packsize_icon
-          %th
-            Avg. sales / m
-            = sales_icon
-          %th
-            Stock
-            = stock_icon
-          %th
-            Missing
-          %th
-            Expected Duration in days
+          - if @stock_products_hash.any?
+            %th
+              Avg. sales / m
+              = sales_icon
+            %th
+              Stock
+              = stock_icon
+            %th
+              Missing
+            %th
+              Expected Duration in days
           %th
             Purchase Price
             -#= price_icon
@@ -62,17 +63,18 @@
                 = product.packsize
               - else
                 %i.fa.fa-ban
-            %td(title="Monthly sales of product (based on ... days)")
-              - if stock_product.sales_per_day
-                = friendly_float stock_product.sales_per_day * 30.0
-              = "(#{stock_product.sales_per_day_base})"
-            %td(title="Product Stock (live)")
-              = stock_product.current_stock
-            %td(title="Predicted quantity missing to stock for 30 days")
-              - if stock_product.missing && stock_product.missing > 0.0
-                = friendly_float stock_product.missing
-            %td(title="Expected Stock duration in days")
-              = friendly_float stock_product.expected_stock_lifetime
+            - if stock_product
+              %td(title="Monthly sales of product (based on ... days)")
+                - if stock_product.sales_per_day
+                  = friendly_float stock_product.sales_per_day * 30.0
+                = "(#{stock_product.sales_per_day_base})"
+              %td(title="Product Stock (live)")
+                = stock_product.current_stock
+              %td(title="Predicted quantity missing to stock for 30 days")
+                - if stock_product.missing && stock_product.missing > 0.0
+                  = friendly_float stock_product.missing
+              %td(title="Expected Stock duration in days")
+                = friendly_float stock_product.expected_stock_lifetime
             %td(title="Purchase Price")
               - if product.purchase_price
                 = product.purchase_price
