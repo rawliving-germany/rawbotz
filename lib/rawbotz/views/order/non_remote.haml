@@ -64,7 +64,7 @@
               - else
                 %i.fa.fa-ban
             - if stock_product
-              %td(title="Monthly sales of product (based on ... days)")
+              %td(title="Monthly sales of product (based on #{stock_product.sales_per_day_base} days)")
                 - if stock_product.sales_per_day
                   = friendly_float stock_product.sales_per_day * 30.0
                 = "(#{stock_product.sales_per_day_base})"
