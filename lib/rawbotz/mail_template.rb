@@ -1,5 +1,14 @@
 module Rawbotz
   module MailTemplate
+    def self.create order
+      mail_adresses = split_mail_field order.supplier[:email]
+      Rawbotz::Models::OrderMail.new(to: mail_adresses[0],
+                    cc: mail_adresses[1..-1],
+                    subject: extract_subject(order.supplier[:order_template], order),
+                    body: consume(order.supplier[:order_template], order)
+                   )
+    end
+
     # Substitute certain patterns in template
     def self.consume template, order
       result = ""
