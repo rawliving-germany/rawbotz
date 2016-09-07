@@ -1,7 +1,7 @@
-%h2 Packlist #{@order.supplier.name} from #{@order.created_at}
+%h2 Packlist #{@order.supplier.name} from #{@order.created_at.strftime("%v %R")}
 
 %center
-  Last changed #{@order.updated_at}
+  Last changed #{@order.updated_at.strftime("%v %R")}
   - if @order.remote_order_id.present?
     %br
     Remote Order ID:

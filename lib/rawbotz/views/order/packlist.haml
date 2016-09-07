@@ -1,6 +1,6 @@
 = haml "orders/menu".to_sym
 
-%h2 Packlist for order #{@order.supplier.name} from #{@order.created_at}
+%h2 Packlist for order #{@order.supplier.name} from #{@order.created_at.strftime("%v %R")}
 
 - if @order.supplier == settings.supplier && !@order.remote_order_link.present?
   .ui-state-error
@@ -10,7 +10,7 @@
       Link to a remote order
 
 %center
-  Last changed #{@order.updated_at}
+  Last changed #{@order.updated_at.strftime("%v %R")}
 
 = haml "order/_head".to_sym, locals: {order: @order}
 %br

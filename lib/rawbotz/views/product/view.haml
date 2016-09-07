@@ -141,7 +141,7 @@
       - @product.order_items.where("num_ordered > 0").order(updated_at: :desc).find_each do |order_item|
         %tr
           %td= order_link order_item.order
-          %td= order_item.order.updated_at
+          %td= order_item.order.updated_at.strftime("%v %R")
           %td= order_item.num_ordered
           %td= order_item.num_stocked
 

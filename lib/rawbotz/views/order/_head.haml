@@ -10,11 +10,11 @@
       %dt
         Created at
       %dd
-        = order.created_at
+        = order.created_at.strftime("%v %R")
       %dt
         Updated at
       %dd
-        = order.updated_at
+        = order.updated_at.strftime("%v %R")
   .pure-u-1-2
     %dl
       %dt
