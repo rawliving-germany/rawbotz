@@ -14,6 +14,7 @@ module Rawbotz
           "Product not in database"
         end
       end
+
       def remote_product_link product
         if product.is_a? LocalProduct
           remote_product_link product.remote_product
@@ -27,11 +28,13 @@ module Rawbotz
           "not linked"
         end
       end
+
       def product_link product
         return local_product_link(product) if product.is_a?(LocalProduct)
         return remote_product_link(product) if product.is_a?(RemoteProduct)
         "no product"
       end
+
       def supplier_link supplier
         if supplier.to_s != ""
           "<a href=\"/supplier/#{supplier.id}\">#{supplier.name}</a>"
@@ -39,6 +42,7 @@ module Rawbotz
           "[no supplier]"
         end
       end
+
       def order_link order
         "<a href=\"/order/#{order.id}\">Order #{order.id} (#{order.supplier.try(:name) || "no supplier"})</a>"
       end
