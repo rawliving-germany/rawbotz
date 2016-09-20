@@ -2,6 +2,12 @@
 
 Changelog, History of changes for Rawbotz
 
+## 0.2.1 (released 2016-08-xx)
+  - Added local product search function
+  - Added stock and sales analysis to ordering
+  - Added bio deliveries overview
+  - Lots of bigger and smaller bug fixes
+
 ## 0.2.0 (released 2016-08-25)
   - Vastly improved non-remote (mail) orders, which now get saved
   - Generally improved UI and iconography
@@ -18,5 +24,3 @@ Changelog, History of changes for Rawbotz
 
 ## 0.1.5 (released 2016-07-12)
   - Add new attributes to ease non remote orders.
-
-## glass ball future version 0.3
