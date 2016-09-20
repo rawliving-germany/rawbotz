@@ -37,6 +37,8 @@ module Rawbotz
         end
       end
 
+      private
+
       # Setup order items for an order with magento order method
       def create_order_items_magento
         RawgentoDB::Query.understocked.each do |product_id, name, min_qty, stock|
