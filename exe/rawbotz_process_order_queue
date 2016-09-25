@@ -54,9 +54,11 @@ def main options
     order_processor = Rawbotz::OrderProcessor.new(order, logger)
     order_processor.process!
     order.update(state: :ordered)
-  rescue
-    logger.error("Hit error during order")
+  rescue Exception => e
+    logger.error "Hit error during order"
     order.update(state: :error)
+    logger.error $!.inspect
+    logger.error $@
   end
 
   logger.info("Finished order")
