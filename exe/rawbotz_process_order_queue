@@ -51,7 +51,7 @@ def main options
   logger.info ("#{order.order_items.processible.count} products to order.")
 
   begin
-    order_processor = Rawbotz::OrderProcessor.new(order, logger)
+    order_processor = Rawbotz::Processors::OrderProcessor.new(order, logger)
     order_processor.process!
     order.update(state: :ordered)
   rescue Exception => e

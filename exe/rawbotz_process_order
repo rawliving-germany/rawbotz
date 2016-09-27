@@ -13,7 +13,7 @@ optparse = Rawbotz::OptionParser.new do |opts, options|
     options[:mail] = true
   end
 
-  opts.on("-f", "--force", "Force order even if state is not queued") do |m|
+  opts.on("-f", "--force", "Force order even if state is not new") do |m|
     options[:force] = true
   end
 end
@@ -42,7 +42,7 @@ def main options
 
   Rawbotz::logger.info("#{order.order_items.length} items in Order")
   if order.state != :new
-    Rawbotz::logger.warn("Order in state #{order.state}!")
+    Rawbotz::logger.warn("Order in state #{order.state}! Normally, only a 'new' orders will be processed.")
     if !options[:force]
       Rawbotz::logger.warn("Run with -f,--force flag to ignore")
       exit 6
@@ -51,7 +51,7 @@ def main options
 
   order.update(state: :processing)
 
-  order_processor = Rawbotz::OrderProcessor.new(order, Rawbotz::logger)
+  order_processor = Rawbotz::Processors::OrderProcessor.new(order, Rawbotz::logger)
 
   order_processor.process!
 
