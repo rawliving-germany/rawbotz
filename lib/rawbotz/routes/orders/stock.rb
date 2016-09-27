@@ -31,7 +31,7 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
       @order.remote_order_id   = params[:remote_order_id]
       @order.remote_order_link = params[:remote_order_link]
 
-      stock_processor = Rawbotz::StockProcessor.new @order, params
+      stock_processor = Rawbotz::Processors::StockProcessor.new @order, params
       errors = stock_processor.process!
 
       if errors.empty?
