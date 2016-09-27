@@ -20,6 +20,10 @@ module Rawbotz
       def messages
         succeeded? ? [@success_message] : @errors
       end
+
+      # entry point for processing
+      def process!
+      end
     end
   end
 end
