@@ -9,17 +9,16 @@ module Rawbotz
       attr_accessor :term, :fields, :products
 
       def perform!
-        # Live could be so easy with AR5 #or
+        # Life could be so easy with AR5 #or
         constraints = []
         if [*@fields].include?(:name) || [*@fields].include?(:all)
-          constraints << LocalProduct.name_ilike(@term).arel.constraints
-          puts constraints[0].inspect
+          constraints << LocalProduct.unscoped.name_ilike(@term).arel.constraints
         end
         if [*@fields].include?(:id) || [*@fields].include?(:all)
-          constraints << LocalProduct.where(id: @term.to_i).arel.constraints
+          constraints << LocalProduct.unscoped.where(id: @term.to_i).arel.constraints
         end
         if [*@fields].include?(:product_id) || [*@fields].include?(:all)
-          constraints << LocalProduct.where(product_id: @term.to_i).arel.constraints
+          constraints << LocalProduct.unscoped.where(product_id: @term.to_i).arel.constraints
         end
         arel = constraints[0]
 
@@ -33,7 +32,7 @@ module Rawbotz
           [LocalProduct.arel_table[:product_id].as("TEXT")]
         )
 
-        @products = LocalProduct.where(
+        @products = LocalProduct.unscoped.where(
           id_code.matches("%#{@term}%"
           ).or(product_id_code.matches("%#{@term}%")
           ).or(
