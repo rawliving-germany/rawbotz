@@ -7,3 +7,7 @@
   - @products.each do |product|
     %li
       = highlight(product_link(product), @term)
+      - if product.hidden? || !product.active?
+        ( hidden
+        %i.fa.fa-ban
+        )
