@@ -14,7 +14,7 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
         redirect "/order/#{@order.id}/link_to_remote"
       else
         if @order.supplier == settings.supplier
-          order_linker = Rawbotz::OrderLinker.new @order
+          order_linker = Rawbotz::Processors::OrderLinker.new @order
           # TODO will be: process!
           order_linker.link!
           @orphans = order_linker.orphans
@@ -42,7 +42,7 @@ module Rawbotz::RawbotzApp::Routing::Orders::Stock
 
       @refunds = {}
       if @order.supplier == settings.supplier
-        order_linker = Rawbotz::OrderLinker.new @order
+        order_linker = Rawbotz::Processors::OrderLinker.new @order
         # TODO will be: process!
         order_linker.link!
         @orphans = order_linker.orphans
