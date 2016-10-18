@@ -40,7 +40,7 @@ module Rawbotz::CLI
           [p.local_product.remote_product.name[0..35], q]
         end
         out << Terminal::Table.new(title: "Missing (?)",
-          headings: ['Product', 'In Cart'],
+          headings: ['Product', 'Wished'],
           rows:     missing_items,
           style:    {width:60}).to_s
         out << "\n\n"
