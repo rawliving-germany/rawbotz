@@ -70,7 +70,7 @@ module Rawbotz
               diff[:modified] << [item, qty.to_i]
             end
           else
-            diff[:miss] << [item, nil]
+            diff[:miss] << [item, item.num_wished]
             # probably not available
           end
         end
