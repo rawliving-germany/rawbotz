@@ -68,7 +68,6 @@ module Rawbotz
         end
       end
 
-      end
     end
   end
 end

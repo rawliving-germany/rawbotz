@@ -118,7 +118,6 @@ module Rawbotz
           @local_products[p.product_id] = l
         end
       end
-    end
 
       # This works at least for magento 1.7, later versions might require
       # attribute name update
