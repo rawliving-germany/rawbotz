@@ -33,7 +33,7 @@
           %th
             Missing
           %th
-            Expected Duration in days
+            Days left
           %th
             Purchase Price
             -#= price_icon
@@ -70,6 +70,7 @@
               - if product.purchase_price
                 = product.purchase_price
                 €
+    %br
     %label(for="internal_comment")
       Internal Comment
     %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
