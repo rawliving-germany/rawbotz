@@ -1,9 +1,7 @@
 = haml "orders/menu".to_sym
 
 :javascript
-  $( function() {
-    $( document ).tooltip();
-  });
+  #{js_tooltip_init}
 
 -# order by name, and use a striped table
 %h1 Stock Order from #{@order.supplier.name}
