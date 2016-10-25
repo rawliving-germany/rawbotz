@@ -6,6 +6,7 @@ require 'ostruct'
 
 require 'rawgento_db'
 require 'rawbotz/models/stock_product'
+require 'rawbotz/models/stock_product_factory'
 
 class StockProductTest < MiniTest::Test
   include Rawbotz::Models
@@ -185,5 +186,15 @@ class StockProductTest < MiniTest::Test
     assert_equal 8.0, stock_product.corrected_sales(60, per_days: 1)
     assert_equal 8.0, stock_product.corrected_sales(60, per_days: 1)
     assert_equal 480.0, stock_product.corrected_sales(60)
+  end
+
+  def test_set_0_sales
+    # Actually, need ProductQty
+    sales_30    = { 1 => nil, 2 => ProductQty.new(2, 2), 3 => nil}
+    first_sales = { 1 => Date.today - 100, 2 => Date.today - 40 , 3 => Date.today }
+    StockProductFactory.set_0_sales 30, sales_30, first_sales
+    assert_equal ProductQty.new(1, 0), sales_30[1] # corrected
+    assert_equal ProductQty.new(2, 2), sales_30[2]
+    assert_equal nil,                  sales_30[3]
   end
 end
