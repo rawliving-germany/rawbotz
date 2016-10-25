@@ -63,7 +63,8 @@
                 = stock_product.current_stock
               %td(title="Predicted quantity missing to stock for 30 days")
                 - if stock_product.missing && stock_product.missing > 0.0
-                  = friendly_float stock_product.missing
+                  .missing-count(onclick="$('#item_#{product.id}').val(#{stock_product.opt_refill_qty});")
+                    = friendly_float stock_product.missing
               %td(title="Expected Stock duration in days")
                 = friendly_float stock_product.expected_stock_lifetime
             %td(title="Purchase Price")
