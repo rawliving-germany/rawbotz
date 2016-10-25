@@ -188,6 +188,19 @@ class StockProductTest < MiniTest::Test
     assert_equal 480.0, stock_product.corrected_sales(60)
   end
 
+  def test_opt_refill_qty
+    product_mock = mock_product 15, Date.today - 31
+    def product_mock.packsize
+      13
+    end
+    stock_product = StockProduct.new(product: product_mock,
+                                     sales_last_30: 60,
+                                     current_stock: 30
+                                    )
+    assert_equal 90.0, stock_product.missing
+    assert_equal 7 * 13, stock_product.opt_refill_qty
+  end
+
   def test_set_0_sales
     # Actually, need ProductQty
     sales_30    = { 1 => nil, 2 => ProductQty.new(2, 2), 3 => nil}
@@ -196,5 +209,15 @@ class StockProductTest < MiniTest::Test
     assert_equal ProductQty.new(1, 0), sales_30[1] # corrected
     assert_equal ProductQty.new(2, 2), sales_30[2]
     assert_equal nil,                  sales_30[3]
+  end
+
+  def test_missing_calc
+    product_mock = mock_product 10, Date.today - 100
+
+    stock_product = StockProduct.new(product: product_mock,
+                                     sales_last_30: 10,
+                                     current_stock: 100
+                                    )
+    assert_equal -85.0, stock_product.missing
   end
 end

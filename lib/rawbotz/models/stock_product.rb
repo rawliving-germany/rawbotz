@@ -125,6 +125,14 @@ module Rawbotz
         end
       end
 
+      def opt_refill_qty
+        if product.packsize.to_i == 0 || missing == 0
+          missing.ceil.to_i
+        else
+          (missing / product.packsize).ceil.to_i * product.packsize
+        end
+      end
+
       private
 
       # For easier memoization
