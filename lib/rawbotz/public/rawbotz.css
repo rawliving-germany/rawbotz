@@ -94,6 +94,8 @@ th {
 }
 .wished_qty_input .order-none {
   display: table-cell;
+  padding-left:  10px;
+  padding-right: 10px;
 }
 .pure-control-group .hint {
   font-size: 80%;
