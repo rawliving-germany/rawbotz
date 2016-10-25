@@ -1,0 +1,85 @@
+= haml "orders/menu".to_sym
+
+:javascript
+  #{js_tooltip_init}
+
+#modal-plot.modal-plot
+
+%h1 View Order
+
+= haml "order/_head".to_sym, locals: {order: @order}
+= haml "order/_order_actions".to_sym, locals: {order: @order}
+
+%br
+
+%h2 Content
+
+%center
+  %form.pure-form.pure-form-aligned(action="" method="post")
+    %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
+    %table.pure-table.pure-table-striped
+      %thead
+        %tr
+          %th
+          %th Name
+          %th Chart
+          %th Qty
+          %th(title="Packsize")
+            = packsize_icon
+          %th
+            Avg. sales / m
+            = sales_icon
+          %th
+            Stock
+            = stock_icon
+          %th
+            Missing
+          %th
+            Expected Duration in days
+          %th
+            Purchase Price
+            -#= price_icon
+      %tbody
+        -# find_each destroys order
+        - @order.order_items.to_a.sort_by{|oi| @stock_products_hash[oi.local_product.id]&.expected_stock_lifetime || 0.0}.each_with_index do |order_item, idx|
+          - product = order_item.local_product
+          - stock_product = @stock_products_hash[product.id]
+          %tr
+            %td=idx
+            %td
+              = product_link product
+              = haml "order/_product_supplier_side".to_sym, locals: {product: product}
+              = haml "order/_product_order_info".to_sym, locals: {product: product}
+            %td
+              - stock_url = "/product/#{product.id}/stock_sales_plot"
+              %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}
+                Stock / Sales
+            %td(title="Quantity to order")
+              = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
+            %td(title="Packsize of product")
+              - if product.packsize.present?
+                = product.packsize
+              - else
+                %i.fa.fa-ban
+            - if stock_product
+              %td(title="Monthly sales of product (based on #{stock_product.sales_per_day_base} days)")
+                - if stock_product.sales_per_day
+                  = friendly_float stock_product.sales_per_day * 30.0
+                = "(#{stock_product.sales_per_day_base})"
+              %td(title="Product Stock (live)")
+                = stock_product.current_stock
+              %td(title="Predicted quantity missing to stock for 30 days")
+                - if stock_product.missing && stock_product.missing > 0.0
+                  = friendly_float stock_product.missing
+              %td(title="Expected Stock duration in days")
+                = friendly_float stock_product.expected_stock_lifetime
+            %td(title="Purchase Price")
+              - if product.purchase_price
+                = product.purchase_price
+                €
+    %label(for="internal_comment")
+      Internal Comment
+    %textarea#internal_comment(name="internal_comment")~ @order.internal_comment
+    %br
+    = haml "order/_order_form_actions".to_sym, locals: {order: @order}
+
