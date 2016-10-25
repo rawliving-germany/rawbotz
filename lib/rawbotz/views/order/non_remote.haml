@@ -17,8 +17,6 @@
         %tr
           %th Name
           %th Qty
-          %th(title="Packsize")
-            = packsize_icon
           - if @stock_products_hash.any?
             %th
               Avg. sales / m
@@ -29,7 +27,7 @@
             %th
               Missing
             %th
-              Expected Duration in days
+              Days left
           %th
             Purchase Price
             -#= price_icon
@@ -56,11 +54,6 @@
                 = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
               - else
                 %input.qty{readonly: true, value: order_item.num_wished, size: 2}
-            %td(title="Packsize of product")
-              - if product.packsize.present?
-                = product.packsize
-              - else
-                %i.fa.fa-ban
             - if stock_product
               %td(title="Monthly sales of product (based on #{stock_product.sales_per_day_base} days)")
                 - if stock_product.sales_per_day
