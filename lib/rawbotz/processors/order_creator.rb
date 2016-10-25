@@ -21,11 +21,7 @@ module Rawbotz
                               order_method: @supplier.order_method)
 
         begin
-          if @order.order_method == "magento"
-            create_order_items_magento
-          else
-            create_order_items_mail
-          end
+          create_order_items
         rescue Exception => e
           STDERR.puts e.message
           STDERR.puts e.backtrace
@@ -39,20 +35,8 @@ module Rawbotz
 
       private
 
-      # Setup order items for an order with magento order method
-      def create_order_items_magento
-        RawgentoDB::Query.understocked.each do |product_id, name, min_qty, stock|
-          local_product = LocalProduct.find_by(product_id: product_id)
-          if local_product.present? && local_product.supplier == @order.supplier
-            @order.order_items.create(local_product: local_product,
-                                      current_stock: stock,
-                                      min_stock: min_qty)
-           end
-        end
-      end
-
       # Setup order items for an order with mail order method
-      def create_order_items_mail
+      def create_order_items
         @stock_products = Models::StockProductFactory.create @supplier
 
         @stock_products.each do |stock_product|
