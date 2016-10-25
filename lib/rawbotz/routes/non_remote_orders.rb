@@ -24,7 +24,6 @@ module Rawbotz::RawbotzApp::Routing::NonRemoteOrders
       order_creator = Processors::OrderCreator.new(@supplier)
       order_creator.process!
       @order = order_creator.order
-      @stock_products_hash = order_creator.stock_products_hash
 
       if order_creator.succeeded?
         add_flash :success, order_creator.messages
