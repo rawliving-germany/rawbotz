@@ -23,6 +23,7 @@ dialog --menu "Rawbotz Menu" 18 30 8 \
   3 "Look for new remote products" \
   4 "Save current stock data" \
   5 "Trigger Order queue processing" \
+  6 "rackup" \
   2> tmp
 
 if [ "$?" = 0 ]
@@ -45,7 +46,10 @@ then
     rawbotz_stock_update -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Saving current stock data" $PROGRESS_HEIGHT $PROGRESS_WIDTH
   elif [ "$_ret" = "5" ]
   then
-    rawbotz_process_order_queue -v -c "$RAWBOTZ_CONF" | dialog --progressbox "Processing Order Queue" $PROGRESS_HEIGHT $PROGRESS_WIDTH
+    rawbotz_process_order_queue -c "$RAWBOTZ_CONF" -m | dialog --progressbox "Processing Order Queue" $PROGRESS_HEIGHT $PROGRESS_WIDTH
+  elif [ "$_ret" = "6" ]
+  then
+    rackup | dialog --programbox "rackup" $PROGRESS_HEIGHT $PROGRESS_WIDTH
   else
     echo "Bad choice."
     exit 1
