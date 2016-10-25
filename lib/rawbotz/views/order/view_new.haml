@@ -24,8 +24,6 @@
           %th Name
           %th Chart
           %th Qty
-          %th(title="Packsize")
-            = packsize_icon
           %th
             Avg. sales / m
             = sales_icon
@@ -56,11 +54,6 @@
                 Stock / Sales
             %td(title="Quantity to order")
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
-            %td(title="Packsize of product")
-              - if product.packsize.present?
-                = product.packsize
-              - else
-                %i.fa.fa-ban
             - if stock_product
               %td(title="Monthly sales of product (based on #{stock_product.sales_per_day_base} days)")
                 - if stock_product.sales_per_day
