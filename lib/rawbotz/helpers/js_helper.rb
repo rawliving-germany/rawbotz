@@ -20,6 +20,19 @@ module Rawbotz
         });
         JS_CODE
       end
+
+      # Initialize js tooltips.
+      # in haml, use like this:
+      # :javascript
+      #   #{js_tooltip_init}
+      def js_tooltip_init
+        # ruby 2.3 unindented squiggly heredoc praise
+        <<~JS_CODE
+        $(function() {
+          $(document).tooltip();
+        });
+        JS_CODE
+      end
     end
   end
 end
