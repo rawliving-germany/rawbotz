@@ -17,18 +17,20 @@ module Rawbotz::RawbotzApp::Routing::Orders
       if settings.supplier.orders.where(state: 'new').present?
         add_flash :message, "Already one Order in progress"
         @order = settings.supplier.orders.where(state: 'new').first
-      else
-        order_creator = Processors::OrderCreator.new(settings.supplier)
-        order_creator.process!
-        # This might create StockProducts that would be nice to have
-        @order = order_creator.order
-        if order_creator.succeeded?
-          add_flash :success, order_creator.messages
-        else
-          add_flash :error, order_creator.messages
-        end
+        redirect "/order/#{@order.id}"
       end
-      redirect "/order/#{@order.id}"
+
+      order_creator = Processors::OrderCreator.new(settings.supplier)
+      order_creator.process!
+      @order = order_creator.order
+
+      if order_creator.succeeded?
+        add_flash :success, order_creator.messages
+        redirect "/order/#{@order.id}"
+      else
+        add_flash :error, order_creator.messages
+        redirect back
+      end
     end
 
     # app.get '/order/:id',          &show_order
