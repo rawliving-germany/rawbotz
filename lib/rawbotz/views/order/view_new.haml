@@ -48,6 +48,20 @@
               = product_link product
               = haml "order/_product_supplier_side".to_sym, locals: {product: product}
               = haml "order/_product_order_info".to_sym, locals: {product: product}
+              %br
+              - last_oi = order_item.order_item_same_product_last_wished
+              - if last_oi
+                = (Date.today - last_oi.created_at.to_date).to_i
+                days ago:
+                - if last_oi.num_ordered == 0
+                  .ui-state-error(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                    wanted #{last_oi.num_wished} but was out of stock
+                - elsif last_oi.num_wished == last_oi.num_ordered
+                  .ui-state-default(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                    ordered #{last_oi.num_wished}
+                - else
+                  .ui-state-highlight(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                    wanted #{last_oi.num_wished} but got #{last_oi.num_ordered}
             %td
               - stock_url = "/product/#{product.id}/stock_sales_plot"
               %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}}

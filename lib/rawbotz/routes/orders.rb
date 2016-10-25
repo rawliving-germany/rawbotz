@@ -35,16 +35,37 @@ module Rawbotz::RawbotzApp::Routing::Orders
 
     # app.get '/order/:id',          &show_order
     show_order = lambda do
-      @order = Order.find(params[:id])
-      @stock = {}
-      begin
-        RawgentoDB::Query.stock.each {|s| @stock[s.product_id] = s.qty}
-      rescue Exception => e
-        STDERR.puts e.message
-        STDERR.puts e.backtrace
-        add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+      # Template does depend on Orders state.
+      @order    = Order.includes(order_items: [:local_product]).find(params[:id])
+      @supplier = @order.supplier
+
+
+      if @order.state == "new"
+        # Do we need to rescue from Factory usage ?
+        begin
+          stock_products = Models::StockProductFactory.create @supplier
+          @stock_products_hash = stock_products.map{|s| [s.product.id, s]}.to_h
+
+          #@products = @order.order_items.map{|oi| oi.local_product}
+        rescue Exception => e
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
+          @stock_products_hash = {}
+          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+        end
+        haml "order/view_new".to_sym
+      else
+        @stock = {}
+        # TODO: for remote and linked orders, show 'refund'-values
+        begin
+          @stock = Rawbotz::Models::Stock.all_stock
+        rescue Exception => e
+          STDERR.puts e.message
+          STDERR.puts e.backtrace
+          add_flash :error, "Cannot connect to MySQL database (#{e.message})"
+        end
+        haml "order/view".to_sym
       end
-      haml 'order/view'.to_sym
     end
 
     # app.post '/order/:id/',         &act_on_order
