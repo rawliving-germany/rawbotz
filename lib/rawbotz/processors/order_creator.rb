@@ -39,9 +39,12 @@ module Rawbotz
       def create_order_items
         @stock_products = Models::StockProductFactory.create @supplier
 
+        min_stocks = RawgentoDB::Query.notify_stock_qty_for(@supplier.local_products.pluck(:product_id)).to_h
+
         @stock_products.each do |stock_product|
           @order.order_items.create(local_product: stock_product.product,
-                                    current_stock: stock_product.current_stock)
+                                    current_stock: stock_product.current_stock,
+                                    min_stock: min_stocks[stock_product.product.product_id])
         end
         @stock_products_hash = @stock_products.map{|s| [s.product.id, s]}.to_h
       end
