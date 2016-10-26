@@ -71,12 +71,9 @@ module Rawbotz::RawbotzApp::Routing::Orders
     # app.post '/order/:id/',         &act_on_order
     act_on_order = lambda do
       @order = Order.find(params[:id])
-      params.each do |k,v|
-        if k && k.start_with?("item_") && v != ""
-          # @order.order_items.find ?
-          OrderItem.find(k[5..-1]).update(num_wished: v.to_i)
-        end
-      end
+      order_item_params = OrderItemParams.new(params, @order)
+      order_item_params.create_or_change_order_items
+
       @order.internal_comment = params[:internal_comment]
       @order.save
 
@@ -97,7 +94,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
           STDERR.puts e.backtrace
           add_flash :error, "Cannot connect to MySQL database (#{e.message})"
         end
-        haml "order/view".to_sym
+        redirect "/order/#{@order.id}"
       end
     end
 
