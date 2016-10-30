@@ -37,7 +37,7 @@ end
 
 product_count = RawgentoModels::LocalProduct.unscoped.count
 
-updater = Rawbotz::Processor::ProductUpdater.new logger
+updater = Rawbotz::Processors::ProductUpdater.new logger
 updater.sync(options[:dry_run])
 
 logger.info("Finished updating local products.")
