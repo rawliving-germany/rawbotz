@@ -65,14 +65,14 @@
                 = stock_product.current_stock
               %td(title="Monthly sales of product (based on #{stock_product.sales_per_day_base} days)")
                 - if stock_product.sales_per_day
-                  = friendly_float stock_product.sales_per_day * 30.0
+                  = (stock_product.sales_per_day * 30.0).round
                 = "(#{stock_product.sales_per_day_base})"
               %td(title="Predicted quantity missing to stock for 30 days")
                 - if stock_product.missing && stock_product.missing > 0.0
                   .missing-count.magic-copy(onclick="$('#item_#{product.id}').val(#{stock_product.opt_refill_qty});")
-                    = friendly_float stock_product.missing
+                    = friendly_float stock_product.missing.round
               %td(title="Expected Stock duration in days")
-                = friendly_float stock_product.expected_stock_lifetime
+                = stock_product.expected_stock_lifetime.round
             %td(title="Minimum (warn) stock value, declared in magento")
               = order_item.min_stock
             %td(title="Purchase Price")
