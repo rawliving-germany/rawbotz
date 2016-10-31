@@ -59,13 +59,13 @@
                 = (Date.today - last_oi.created_at.to_date).to_i
                 days ago:
                 - if last_oi.num_ordered == 0
-                  .ui-state-error(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                  .ui-state-error.magic-copy(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
                     wanted #{last_oi.num_wished} but was out of stock
                 - elsif last_oi.num_wished == last_oi.num_ordered
-                  .ui-state-default(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                  .ui-state-default.magic-copy(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
                     ordered #{last_oi.num_wished}
                 - else
-                  .ui-state-highlight(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
+                  .ui-state-highlight.magic-copy(onclick="$('#item_#{product.id}').val(#{last_oi.num_wished});")
                     wanted #{last_oi.num_wished} but got #{last_oi.num_ordered}
             %td(title="Stock and Sales Data / Chart")
               - stock_url = "/product/#{product.id}/stock_sales_plot"
@@ -82,7 +82,7 @@
                 = "(#{stock_product.sales_per_day_base})"
               %td(title="Predicted quantity missing to stock for 30 days")
                 - if stock_product.missing && stock_product.missing > 0.0
-                  .missing-count(onclick="$('#item_#{product.id}').val(#{stock_product.opt_refill_qty});")
+                  .missing-count.magic-copy(onclick="$('#item_#{product.id}').val(#{stock_product.opt_refill_qty});")
                     = friendly_float stock_product.missing
               %td(title="Expected Stock duration in days")
                 = friendly_float stock_product.expected_stock_lifetime

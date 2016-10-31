@@ -139,3 +139,11 @@ th.tablesorter-headerAsc:before {
   content: "\f0de";
   font-family: FontAwesome;
 }
+
+.magic-copy:hover {
+  cursor: copy;
+}
+.magic-copy:before {
+  content: "\f0d0";
+  font-family: FontAwesome;
+}
