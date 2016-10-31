@@ -1,0 +1,17 @@
+- last_ordering = order_item.order_item_same_product_last_wished
+- if last_ordering
+  - js_update_call = "$('#item_#{product.id}').val(#{last_ordering.num_wished});"
+  %br
+  - age = "(#{(Date.today - last_ordering.created_at.to_date).to_i} days ago)"
+  - if last_ordering.num_ordered == 0
+    .ui-state-error.magic-copy(onclick=js_update_call)
+      wanted #{last_ordering.num_wished} but was out of stock
+      %em=age
+  - elsif last_ordering.num_wished == last_ordering.num_ordered
+    .ui-state-default.magic-copy(onclick=js_update_call)
+      ordered #{last_ordering.num_wished}
+      %em=age
+  - else
+    .ui-state-highlight.magic-copy(onclick=js_update_call)
+      wanted #{last_ordering.num_wished} but got #{last_ordering.num_ordered}
+      %em=age
