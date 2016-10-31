@@ -41,7 +41,7 @@
             Min stock
           %th
             Purchase Price
-            -#= price_icon
+            = price_icon
       %tbody
         -# find_each destroys order
         - @order.order_items.to_a.sort_by{|oi| @stock_products_hash[oi.local_product.id]&.expected_stock_lifetime || 0.0}.each_with_index do |order_item, idx|

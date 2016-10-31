@@ -46,6 +46,9 @@ module Rawbotz
       def products_icon tooltip_text: nil
         icon "cubes", tooltip_text: tooltip_text
       end
+      def price_icon tooltip_text: nil
+        icon "tag", tooltip_text: tooltip_text
+      end
       def remote_icon tooltip_text: nil
         icon "globe", tooltip_text: tooltip_text
       end
