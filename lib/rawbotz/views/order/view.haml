@@ -60,7 +60,7 @@ Items.
 - else
   = haml "order/_order_actions".to_sym, locals: {order: @order}
   %br
-  %table.pure-table
+  %table.pure-table#order_item_table
     %thead
       %tr
         %th
@@ -101,3 +101,8 @@ Items.
               = @stock[item.local_product.product_id]
   %br
   = haml "order/_order_actions".to_sym, locals: {order: @order}
+  :javascript
+    $(document).ready(function() {
+      $("#order_item_table").tablesorter( {headerTemplate: ""} );
+    });
+
