@@ -1,0 +1,19 @@
+%center
+  %h2 Actions
+  - if !["new", "deleted"].include? order.state
+    %a.pure-button(href="/order/#{order.id}/packlist")
+      = view_icon
+      = packlist_icon
+      Packlist
+    %a.pure-button(href="/order/#{order.id}/packlist/pdf")
+      %i.fa.fa-file-pdf-o
+      Download Packlist
+  - if !["stocked", "deleted", "new"].include? order.state
+    %a.pure-button(href="/order/#{order.id}/stock")
+      = stock_icon
+      Stock
+  - if order.state != "deleted"
+    %button.pure-button.pure-button-primary(name="action" value="delete")
+      = delete_icon
+      Delete
+

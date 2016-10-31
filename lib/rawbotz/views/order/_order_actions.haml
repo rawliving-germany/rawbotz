@@ -1,2 +1,2 @@
 %form(action="/order/#{order.id}" method="post")
-  = haml "order/_order_form_actions".to_sym, locals: {order: order}
+  = haml "order/_simple_order_actions".to_sym, locals: {order: order}
