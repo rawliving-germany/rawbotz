@@ -15,6 +15,7 @@ These are
 - Pure CSS (http://purecss.io) in `lib/rawbotz/public/pure-min.css`
 - Chart.JS (http://chartjs.org) in `lib/rawbotz/public/Chart.min.js`
 - jquery and jquery-ui (http://jquery.com, http://jqueryui.com) in `lib/rawbotz/public/jquery-2.2.0.min.js` and `lib/rawbotz/public/jui`
+- Motties tablesorter fork (https://mottie.github.io/tablesorter) in `lib/rawbotz/public/jquery.tablesorter.min.js` (MIT, Christian Bach)
 
 The copyright and license information is contained in the respective file headers. All other files are Copyright 2016 Felix Wolfsteller and licensed under the AGPLv3 (or any later).
 

@@ -17,7 +17,7 @@
 %center
   %form.pure-form.pure-form-aligned(action="" method="post")
     %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
-    %table.pure-table.pure-table-striped
+    %table.pure-table.pure-table-striped.sortable#order_item_table
       %thead
         %tr
           %th
@@ -99,3 +99,7 @@
     %br
     = haml "order/_order_form_actions".to_sym, locals: {order: @order}
 
+:javascript
+  $(document).ready(function() {
+    $("#order_item_table").tablesorter( {headerTemplate: ""} );
+  });
