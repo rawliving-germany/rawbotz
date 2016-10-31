@@ -127,3 +127,15 @@ th {
   background-color: #bbb;
   padding: .5em 1em;
 }
+th.tablesorter-headerUnSorted:before {
+  content: "\f0dc";
+  font-family: FontAwesome;
+}
+th.tablesorter-headerDesc:before {
+  content: "\f0dd";
+  font-family: FontAwesome;
+}
+th.tablesorter-headerAsc:before {
+  content: "\f0de";
+  font-family: FontAwesome;
+}
