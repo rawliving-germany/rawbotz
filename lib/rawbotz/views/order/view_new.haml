@@ -55,9 +55,7 @@
               = haml "order/_product_order_info".to_sym, locals: {product: product}
               = haml "order/view_new/_last_order_magic_block".to_sym, locals: {order_item: order_item, product: product}
             %td(title="Stock and Sales Data / Chart")
-              - stock_url = "/product/#{product.id}/stock_sales_plot"
-              %a.stock_show_action{:href => "", :data => {url: stock_url, product: product.name}, :title => "Stock and Sales data (opens in popup)"}
-                %i.fa.fa-bar-chart
+              = haml "widgets/_stock_popup_link".to_sym, locals: { product: product }
             %td(title="Quantity to order")
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
             - if stock_product

@@ -1,0 +1,5 @@
+- stock_url = "/product/#{product.id}/stock_sales_plot"
+%a.stock_show_action{:href => "",  |
+  :data => {url: stock_url, product: product.name}, |
+  :title => "Stock and Sales data (opens in popup)"}
+  %i.fa.fa-bar-chart{:data => {url: stock_url, product: product.name}}
