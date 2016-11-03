@@ -12,7 +12,7 @@
 %center
   %form#non_remote_order.pure-form(action="" method="post")
     %input(name="supplier_id" type="hidden" value="#{@supplier.id}")
-    %table.pure-table.pure-table-striped
+    %table.pure-table.pure-table-striped.sortable#order_item_table
       %thead
         %tr
           %th Name
@@ -161,3 +161,8 @@
   %a.pure-button(href="/supplier/#{@supplier.id}#tab_order_settings")
     Edit template
   %br
+
+:javascript
+  $(document).ready(function() {
+    $("#order_item_table").tablesorter( {headerTemplate: ""} );
+  });
