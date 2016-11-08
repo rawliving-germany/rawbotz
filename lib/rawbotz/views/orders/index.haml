@@ -33,7 +33,7 @@
     - Supplier.find_each do |s|
       - if s.orders.count != 0
         %li
-          %a(href="#tab_by_supplier_#{s.id}") By Supplier: #{s.name}
+          %a(href="#tab_by_supplier_#{s.id}") #{s.name} (#{s.orders.count})
   - Supplier.find_each do |s|
     - if s.orders.count != 0
       %div(id="tab_by_supplier_#{s.id}")
