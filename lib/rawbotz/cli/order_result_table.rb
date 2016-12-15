@@ -1,5 +1,19 @@
 module Rawbotz::CLI
   module OrderResultTable
+
+    # In good world, returns name of remote product,
+    # stripped for ascii table display.
+    def self.strip_name product_entry
+      if !(local_product=product_entry.local_product)
+        text = "unknown product!"
+      elsif !(remote_product=local_product.remote_product)
+        text = "unlinked: #{local_product.name}"
+      else
+        text = remote_product.name
+      end
+      text[0..35]
+    end
+
     def self.tables diffs
       out = ""
       if !diffs[:error].empty?
@@ -15,7 +29,7 @@ module Rawbotz::CLI
 
       if !diffs[:perfect].empty?
         perfect_items = diffs[:perfect].map do |p, q|
-          [p.local_product.remote_product.name[0..35], q]
+          [strip_name(p), q]
         end
         out << Terminal::Table.new(title: "Perfect",
           headings: ['Product', 'In Cart'],
@@ -26,7 +40,7 @@ module Rawbotz::CLI
 
       if !diffs[:modified].empty?
         modified_items = diffs[:modified].map do |p,q|
-          [p.local_product.remote_product.name[0..35], p.num_wished, q]
+          [strip_name(p), p.num_wished, q]
         end
         out << Terminal::Table.new(title: "Modified",
           headings: ['Product', 'Wished', 'In Cart'],
@@ -37,7 +51,7 @@ module Rawbotz::CLI
 
       if !diffs[:miss].empty?
         missing_items = diffs[:miss].map do |p,q|
-          [p.local_product.remote_product.name[0..35], q]
+          [strip_name(p), q]
         end
         out << Terminal::Table.new(title: "Missing (?)",
           headings: ['Product', 'Wished'],
@@ -48,7 +62,7 @@ module Rawbotz::CLI
 
       if !diffs[:under_avail].empty?
         under_avail_items = diffs[:under_avail].map do |p,q|
-          [p.local_product.remote_product.name[0..35], p.num_wished, q]
+          [strip_name(p), p.num_wished, q]
         end
         out << Terminal::Table.new(title: "Not available as such",
           headings: ['Product', 'Wanted', 'In Cart'],
