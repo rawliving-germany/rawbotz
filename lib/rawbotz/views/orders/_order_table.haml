@@ -76,5 +76,5 @@
               of
               = order.order_items.where("num_wished > ?", 0).count
               (
-              = "%.2f" % (order.order_items.where("num_ordered > ?", 0).count.to_f / order.order_items.where("num_wished > ?", 0).count)
+              = "%.2f" % (100 * order.order_items.where("num_ordered > ?", 0).count.to_f / order.order_items.where("num_wished > ?", 0).count)
               \%)
