@@ -118,6 +118,15 @@ th {
 #flash {
   padding-left: 0.5em;
 }
+#flash.ui-state-error {
+  font-size: 150%;
+  -moz-box-shadow:    10px  0px 108px 70px #cc2322,
+                      10px -0px 108px 70px #cc2322;
+  -webkit-box-shadow: 10px  0px 108px 70px #cc2322,
+                      10px -0px 108px 70px #cc2322;
+  box-shadow:         10px  0px 108px 70px #cc2322,
+                      10px -0px 108px 70px #cc2322;
+}
 .pure-table > tbody > tr > td.left-bordered {
   border-left: 2px solid;
 }
