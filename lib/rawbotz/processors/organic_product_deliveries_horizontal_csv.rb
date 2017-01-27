@@ -10,7 +10,7 @@ module Rawbotz
       orders = []
 
       # product as row, order as col, by date
-      supplier.orders.order(stocked_at: :asc).each do |order|
+      supplier.orders.where(state: :stocked).order(stocked_at: :asc).each do |order|
         if order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").present?
           orders << order
         end

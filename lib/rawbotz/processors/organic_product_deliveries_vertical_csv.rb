@@ -21,7 +21,7 @@ module Rawbotz
     end
 
     def self.supplier_lines supplier, csv
-      supplier.orders.find_each do |order|
+      supplier.orders.where(state: stocked).find_each do |order|
         # only organic (includes(:local_product).where('local_product.organic = ?', true)
         if order.order_items.includes(:local_product).where('local_products.organic = ?', true).where("num_stocked > 0").present?
           order_lines order, csv
