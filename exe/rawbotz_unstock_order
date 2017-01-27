@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+require "rawbotz"
+require "rawbotz/option_parser"
+
+optparse = Rawbotz::OptionParser.new do |opts, options|
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
+  opts.separator ""
+
+  opts.on("-d", "--[no-]dry-run", "simulate, log potential changes but do not save them") do |d|
+    options[:dry_run] = d
+  end
+end
+optparse.parse!
+options = optparse.options
+
+logger = Logger.new(STDOUT)
+logger.level = optparse.options[:verbose] ? Logger::DEBUG : Logger::INFO
+
+logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
+
+if ARGV.length != 1
+  STDERR.puts "Need id of an order as argument"
+  exit 1
+end
+
+begin
+  order = RawgentoModels::Order.find ARGV.first
+
+  if !order
+    STDERR.puts "Order with id #{ARGV.first} not found"
+    exit 1
+  end
+
+  items = order.order_items.processible.ordered.where("num_stocked IS NOT NULL")
+
+  logger.info items.count
+  logger.debug items
+
+  items.each do |item|
+    logger.info "Unstocking #{item.local_product.name}: #{-item.num_stocked}"
+    RawgentoDB::Query.update_stock item.local_product.product_id, -item.num_stocked
+    RawgentoDB::Query.set_available_on_stock item.local_product.product_id
+    item.update(num_stocked: 0, state: :unstocked)
+  end
+
+  logger.info "Setting Order to state unstocked"
+  order.update(state: :unstocked)
+rescue Exception => e
+  logger.error "Error"
+  logger.error $!.inspect
+  logger.error $@
+  exit 1
+end
+
+exit 0
