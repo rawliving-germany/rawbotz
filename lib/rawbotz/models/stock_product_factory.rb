@@ -37,10 +37,10 @@ module Rawbotz
         stock = Query.stock.find {|s| s.product_id = product_id}.qty
         StockProduct.new(product: LocalProduct.unscoped.find_by(product_id: product_id),
                          current_stock: stock[product_id],
-                         sales_last_30: sales_30[product_id]&.qty ,
-                         sales_last_60: sales_60[product_id]&.qty ,
-                         sales_last_90: sales_90[product_id]&.qty ,
-                         sales_last_365: sales_365[product_id]&.qty ,
+                         sales_last_30: sales_30[product_id]&.qty,
+                         sales_last_60: sales_60[product_id]&.qty,
+                         sales_last_90: sales_90[product_id]&.qty,
+                         sales_last_365: sales_365[product_id]&.qty,
                          num_days_first_sale: Date.today - first_sales[product_id].to_date
                         )
 
