@@ -46,6 +46,11 @@ begin
 
   logger.info "Setting Order to state unstocked"
   order.update(state: :unstocked)
+
+  logger.info "Firing up magento reindexer"
+  magento_shell_path = YAML.load_file(Rawbotz.conf_file_path)["local_shop"]["magento_shell_path"]
+  reindex_status = system("php #{magento_shell_path} --reindex cataloginventory_stock")
+  logger.info "reply: #{reindex_status}"
 rescue Exception => e
   logger.error "Error"
   logger.error $!.inspect
