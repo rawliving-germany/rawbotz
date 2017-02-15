@@ -17,7 +17,7 @@ module Rawbotz::RawbotzApp::Routing::Search
         search = Models::Search.new(term: @term, fields: :all)
         @products = search.perform!
         @remote_products = search.perform_for_remote!
-        haml "products/search_results2".to_sym
+        haml "search/product_search_results".to_sym
       end
     end
 
