@@ -1,0 +1,19 @@
+= haml "products/menu".to_sym
+
+%h1 Product Search results for "#{@term}"
+
+-# find_each would destroy order and fail on arrays
+%h2 Local Products
+%ul
+  - @products.each do |product|
+    %li
+      = highlight(product_link(product), @term)
+      - if product.hidden? || !product.active?
+        ( hidden
+        %i.fa.fa-ban
+        )
+%h2 Remote Products
+%ul
+  - @remote_products.each do |product|
+    %li
+      = highlight(product_link(product), @term)
