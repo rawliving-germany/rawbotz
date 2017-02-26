@@ -69,6 +69,10 @@ Where stock does not last for 10 days.
           - sales_warn = info_icon tooltip_text: "Not enough sales data (first sale #{p.num_days_first_sale.to_i} days ago)!"
           %td
             = product_link p.product
+            - if p.product.order_info.present?
+              #flash.ui-state-highlight
+                = info_icon
+                %small= p.product.order_info
           %td(title="Current Stock")
             = p.current_stock
           %td(title="#{predicted_stock_title} based on last #{p.sales_per_day_base} days sales")
