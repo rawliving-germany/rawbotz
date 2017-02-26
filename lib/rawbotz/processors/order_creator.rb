@@ -42,6 +42,7 @@ module Rawbotz
         min_stocks = RawgentoDB::Query.notify_stock_qty_for(@supplier.local_products.pluck(:product_id)).to_h
 
         @stock_products.each do |stock_product|
+          next if(!stock_product.product.active || stock_product.product.hidden)
           @order.order_items.create(local_product: stock_product.product,
                                     current_stock: stock_product.current_stock,
                                     min_stock: min_stocks[stock_product.product.product_id])
