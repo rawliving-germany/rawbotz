@@ -69,7 +69,8 @@ module Rawbotz
         Query.stock.each {|s| stock[s.product_id] = s.qty}
 
         product_ids.map do |product_id|
-          StockProduct.new(product: LocalProduct.unscoped.find_by(product_id: product_id),
+          local_product = LocalProduct.unscoped.find_by(product_id: product_id)
+          StockProduct.new(product: local_product,
                            current_stock: stock[product_id],
                            sales_last_30: sales_30[product_id]&.qty,
                            sales_last_60: sales_60[product_id]&.qty,
