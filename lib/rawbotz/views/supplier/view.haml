@@ -33,6 +33,10 @@
   #tab_products
     %h2 Products of #{@supplier.name}
     = haml "products/table".to_sym, locals: {products: @supplier.local_products.all}
+    %h2 Hidden Products of #{@supplier.name}
+    = haml "products/table".to_sym, locals: {products: @supplier.local_products.unscope(where: :hidden).where(hidden: true).all}
+    %h2 Inactive Products of #{@supplier.name}
+    = haml "products/table".to_sym, locals: {products: @supplier.local_products.unscope(where: :active).where(active: false).all}
   #tab_orders
     %h2 Orders of #{@supplier.name}
     - if @supplier != settings.supplier && !@supplier.order_template.present?
