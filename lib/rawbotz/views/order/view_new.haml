@@ -56,7 +56,7 @@
               = haml "order/view_new/_last_order_magic_block".to_sym, locals: {order_item: order_item, product: product}
             %td(title="Stock and Sales Data / Chart")
               = haml "widgets/_stock_popup_link".to_sym, locals: { product: product }
-            %td(title="Quantity to order")
+            %td.qty_to_order(title="Quantity to order")
               = haml "widgets/_qty_wished_input".to_sym, locals: {product: product, input_id_num: product.id, num_wished: order_item.num_wished}
             - if stock_product
               %td(title="Product Stock (live)")
