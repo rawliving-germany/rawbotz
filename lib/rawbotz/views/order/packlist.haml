@@ -39,6 +39,9 @@ Items.
       %th
         = stock_icon
         Quantity Stocked
+      %th
+        = stock_icon
+        Current Stock (DB)
   %tbody
     - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
       %tr
@@ -55,9 +58,10 @@ Items.
             - if remote_line = @refunds[p.local_product.product_id]
               = @refunds[p.local_product.product_id].qty_refunded
         %td=p.num_stocked
+        %td=@stock[p.local_product.product_id]
     - if !@orphans.empty?
       %tr
-        %td(colspan=4)
+        %td(colspan=5)
           %center
             %b
               = error_icon

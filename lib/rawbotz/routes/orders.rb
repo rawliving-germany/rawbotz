@@ -101,6 +101,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
     # app.get '/order/:id/packlist', &show_order_packlist
     show_order_packlist = lambda do
       @order = Order.find(params[:id])
+      @stock = Rawbotz::Models::Stock.all_stock
       @orphans = []
       @refunds = {}
       if @order.supplier == settings.supplier && @order.remote_order_link.present?
@@ -117,6 +118,7 @@ module Rawbotz::RawbotzApp::Routing::Orders
     show_pdf_packlist = lambda do
       attachment "packlist_order.pdf"
       @order = Order.find(params[:id])
+      @stock = Rawbotz::Models::Stock.all_stock
       html = haml "order/packlist.pdf".to_sym, layout: :pdf_layout
       PDFKit.configure do |config|
         config.verbose = false

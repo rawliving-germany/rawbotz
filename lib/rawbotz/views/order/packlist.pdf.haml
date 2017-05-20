@@ -30,6 +30,9 @@ Items.
       %th
         = stock_icon
         Quantity Stocked
+      %th
+        = stock_icon
+        Current Stock (DB)
   %tbody
     - @order.order_items.where("num_ordered > 0").sort_by{|i| i.local_product.name}.each do |p|
       %tr
@@ -37,4 +40,5 @@ Items.
         %td=p.local_product.shelve_nr
         %td=p.num_ordered
         %td=p.num_stocked
+        %td=@stock[p.local_product.product_id]
 %br
