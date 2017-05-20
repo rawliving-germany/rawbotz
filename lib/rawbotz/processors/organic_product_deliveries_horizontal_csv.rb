@@ -19,7 +19,7 @@ module Rawbotz
       headings = headings(orders)
       CSV.generate do |csv|
         csv << headings
-        supplier.local_products.where(organic: true). each do |product|
+        supplier.local_products.where(organic: true).each do |product|
           csv << row(product, orders)
         end
       end
