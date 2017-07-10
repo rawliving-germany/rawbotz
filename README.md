@@ -6,7 +6,7 @@ Its main purpose is to somewhat **automate orders from suppliers**, such that th
 
 In this shop, products are supplied by different suppliers, of which one offers a magento-shop itself.
 
-Rawbotz couples the `rawgento_db`, `rawgento_models` and `magento_remote` gems to make it easy to order items from this particular other shop and provides further functionality, e.g. accessing stock and sales history information.
+Rawbotz couples the [`rawgento_db`](https://github.com/rawliving-germany/rawgento_db), [`rawgento_models`](https://github.com/rawliving-germany/rawgento_db) and [`magento_remote`](https://github.com/fwolfst/magento_remote) gems to make it easy to order items from this particular other shop and provides further functionality, e.g. accessing stock and sales history information.
 
 Note that this git repository includes software components whose Copyright and License differ from the other parts.
 
@@ -239,6 +239,6 @@ Orders get created as `new` and then go into `queued` or `mailed` state. From ev
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rawbotz. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rawliving-germany/rawbotz. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 Feel free to get in contact with me.
