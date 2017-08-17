@@ -1,0 +1,27 @@
+%h2 Products updated
+%table(border=1)
+  %thead
+    %tr
+      %th
+        Field
+      %th
+        Old Value
+      %th
+        New Value
+      %th
+        Action
+  %tbody
+    - products.values.select(&:changed?).each do |product|
+      %tr(bgcolor="grey")
+        %td(colspan=3)
+          - if product.changes.key? :product_id
+            Neu: 
+          = product.name
+      - product.changes.each do |k,v|
+        %tr
+          %td
+            = k
+          %td
+            = v[0].to_s == '' ? '-' : v[0]
+          %td
+            = v[1].to_s

@@ -3,6 +3,9 @@
 require "rawbotz"
 require "rawbotz/option_parser"
 
+require 'action_view'
+require 'haml'
+
 optparse = Rawbotz::OptionParser.new do |opts, options|
   opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
   opts.separator ""
@@ -42,7 +45,10 @@ updater.sync(options[:dry_run])
 
 logger.info("Finished updating local products.")
 
-logger.info("Found #{RawgentoModels::LocalProduct.unscoped.count - product_count}  new products")
+logger.info("Found #{RawgentoModels::LocalProduct.unscoped.count - product_count} new products")
+
+engine = Haml::Engine.new(File.read('lib/rawbotz/views/mail/local_product_changes.haml'))
+html_table = engine.render(Object.new, products: updater.local_products)
 
 if options[:mail]
   logger.debug("Sending mail")
