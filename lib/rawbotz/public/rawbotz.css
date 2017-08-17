@@ -159,3 +159,16 @@ th.tablesorter-headerAsc:before {
   content: "\f0d0";
   font-family: FontAwesome;
 }
+
+.rotator {
+  -webkit-animation: rotation 2s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
