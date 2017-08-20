@@ -15,11 +15,8 @@ options = { sleep_time: 1,
             conf_file: 'remote-shop.yml'}
 def options.print_default(sym); "(default: #{self[sym]})" end
 
-program_name = File.basename __FILE__
-$program_name = program_name
-
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: #{program_name} [OPTIONS]"
+  opts.banner = "Usage: #{$PROGRAM_NAME} [OPTIONS]"
   opts.separator ""
   opts.separator "Scrapes remote shop and 'imports' products from it."
   opts.separator ""
@@ -69,7 +66,7 @@ optparse = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "General"
   opts.on_tail('--version', 'Show version.') do
-    puts "#{program_name} #{Rawbotz::VERSION}"
+    puts "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
     exit 0
   end
   opts.on_tail('-h', '--help', 'Show this help.') do
@@ -91,7 +88,7 @@ def main options
   logger = Logger.new(STDOUT)
   logger.level = options[:verbose] ? Logger::DEBUG : Logger::INFO
 
-  logger.debug "#{$program_name} #{Rawbotz::VERSION}"
+  logger.debug "#{$PROGRAM_NAME} #{Rawbotz::VERSION}"
 
   mech_config = (YAML.load_file options[:config])["remote_shop"]
   logger.debug(mech_config)
