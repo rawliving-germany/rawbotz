@@ -89,6 +89,7 @@ Create a `rawbotz.conf` YAML-file with the unified keys needed.  Note that you c
     # Remote Magento Web Interface (for our mech)
     remote_shop:
       base_uri: https://magentoshop.remote
+      admin_subpath: myadmin
       user: mylogin@email.address
       pass: whatnottobenamed
       form_token: 982103978ab8776F98872Lw
