@@ -6,7 +6,7 @@ module Rawbotz
     end
     def self.product_page_backend(product, settings)
       # TODO settings could be memoized
-      "#{settings['local_shop']['base_uri']}index.php/rawadmin/catalog_product/edit/id/#{product.product_id}"
+      "#{settings['local_shop']['base_uri']}rawadmin/catalog/product/edit/id/#{product.product_id}"
     end
   end
 end
