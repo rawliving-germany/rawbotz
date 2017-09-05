@@ -137,7 +137,7 @@ Finally, configure the remote shops credentials (`magento_remote`)
 
 ## Setup
 
-Note that a script with basic support for maintenance-tasks is underway (exe/rawbotz_maintenance.sh).
+Note that a skeleton for a script with basic support for maintenance-tasks exists in `exe/rawbotz_maintenance.sh`.
 
 #### Setup the database
 
