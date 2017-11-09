@@ -38,6 +38,8 @@ module Rawbotz
           super()
       end
 
+      # Update LocalProducts based on data found in the Magento DB.
+      # if dry_run is set to true, does not save the changes (but list them).
       def sync(dry_run=false)
         ensure_existence
 
