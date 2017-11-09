@@ -45,8 +45,8 @@ module Rawbotz
 
         @logger.info "#{@local_products.count} products"
         # Name
-        #update_attribute(@name_attribute_id, :name)
-        update_names
+        #update_names() # Deprecated in magento2 versions
+        update_attribute(@name_attribute_id, :name)
         # Supplier
         update_supplier_from_option(@supplier_attribute_id)
         # Shelve
