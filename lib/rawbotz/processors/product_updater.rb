@@ -28,12 +28,12 @@ module Rawbotz
         @logger.debug "Attribute-ids: Name: #{@name_attribute_id}, "\
           "Supplier: #{@supplier_attribute_id}, "\
           "Shelve-Nr: #{@shelve_attribute_id}, "\
-          "Packsize: #{@packsize_attribute_id}"\
-          "Order Info: #{@order_info_attribute_id}"\
-          "Purchase Price: #{@purchase_price_attribute_id}"\
-          "Active: #{@active_attribute_id}"\
-          "Supplier-SKU: #{@supplier_sku_attribute_id}"\
-          "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}"\
+          "Packsize: #{@packsize_attribute_id}, "\
+          "Order Info: #{@order_info_attribute_id}, "\
+          "Purchase Price: #{@purchase_price_attribute_id}, "\
+          "Active: #{@active_attribute_id}, "\
+          "Supplier-SKU: #{@supplier_sku_attribute_id}, "\
+          "Supplier-Prod-Name: #{@supplier_prod_name_attribute_id}, "\
           "Organic: #{@organic_attribute_id}"
           super()
       end
