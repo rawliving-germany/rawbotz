@@ -136,6 +136,10 @@ module Rawbotz
       def update_attribute attribute_id, attribute_sym, type=:varchar
         RawgentoDB::Query.attribute_varchar(attribute_id).each do |product_id, value|
           p = @local_products[product_id]
+          if p.nil?
+            @logger.info "update_attribute: product with id: #{product_id} not found, cannot update attribute #{attribute_id} to #{value}"
+            next
+          end
           if type == :integer && !value.nil? && value.to_s != ""
             p.assign_attributes(attribute_sym => value.to_i)
           else
@@ -159,6 +163,10 @@ module Rawbotz
       def update_supplier_from_option attribute_id
         RawgentoDB::Query.attribute_option(attribute_id).each do |product_id, value|
           p = @local_products[product_id]
+          if p.nil?
+            @logger.info "update_attribute: product with id: #{product_id} not found, cannot update supplier to #{value}"
+            next
+          end
           supplier = RawgentoModels::Supplier.find_or_create_by(name: value)
           p.supplier = supplier
           #logger.info "Updating supplier of #{product_id}: #{value}"
