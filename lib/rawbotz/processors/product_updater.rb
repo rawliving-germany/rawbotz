@@ -137,7 +137,7 @@ module Rawbotz
         RawgentoDB::Query.attribute_varchar(attribute_id).each do |product_id, value|
           p = @local_products[product_id]
           if p.nil?
-            @logger.info "update_attribute: product with id: #{product_id} not found, cannot update attribute #{attribute_id} to #{value}"
+            @logger.info "update_attribute: product with id: #{product_id} not found, cannot update attribute #{attribute_id}(#{attribute_sym}) to #{value}"
             next
           end
           if type == :integer && !value.nil? && value.to_s != ""
@@ -154,6 +154,10 @@ module Rawbotz
         # need to unhide re-activated products!
         RawgentoDB::Query.attribute_int(attribute_id).each do |product_id, value|
           p = @local_products[product_id]
+          if p.nil?
+            @logger.info "update_attribute_int_bool: product with id: #{product_id} not found, cannot update attribute #{attribute_id}(#{attribute_sym}) to #{value}"
+            next
+          end
           if !value.nil? && value.to_s != ""
             p.assign_attributes(attribute_sym => (value.to_i == 1))
           end
@@ -164,7 +168,7 @@ module Rawbotz
         RawgentoDB::Query.attribute_option(attribute_id).each do |product_id, value|
           p = @local_products[product_id]
           if p.nil?
-            @logger.info "update_attribute: product with id: #{product_id} not found, cannot update supplier to #{value}"
+            @logger.info "update_supplier_from_option: product with id: #{product_id} not found, cannot update supplier to #{value}"
             next
           end
           supplier = RawgentoModels::Supplier.find_or_create_by(name: value)
