@@ -177,8 +177,21 @@ module Rawbotz
         end
       end
 
+      def format_changes change_map
+        "{" +
+        change_map.map do |k,v|
+          old_value = v[0]
+          new_value = v[1]
+          [old_value, new_value].each do |value|
+            value = value.to_f if value.is_a? BigDecimal
+          end
+          "\"#{k}\" => ['#{old_value}' -> '#{new_value}']"
+        end.join(',') +
+        "}"
+      end
+
       def product_change_line product
-        "Changes for #{product.product_id} (#{product.name}): #{product.changes}"
+        "Changes for #{product.product_id} (#{product.name}): #{format_changes product.changes}"
       end
     end
   end
