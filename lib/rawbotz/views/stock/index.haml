@@ -117,6 +117,8 @@ Where stock does not last for 10 days.
               New Product! (First sale #{p.num_days_first_sale.to_i} days ago)
             - if p.days_since_first_stock_date.to_i < 30
               Not enough stock data (first stock recorded by rawbotz is #{p.days_since_first_stock_date.to_i} days ago)
+            - if p.product.order_info.present?
+              %small= p.product.order_info
 
   %br
   %center
